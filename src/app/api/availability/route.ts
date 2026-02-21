@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 import { availabilityQuerySchema } from "@/lib/validators/booking";
 import { findAvailableRooms } from "@/lib/db/availability";
 
+export const dynamic = "force-dynamic";
+
 export async function GET(request: NextRequest) {
   try {
     const searchParams = request.nextUrl.searchParams;

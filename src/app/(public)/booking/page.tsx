@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { Suspense, useState, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 
 interface AvailableRoom {
@@ -20,6 +20,14 @@ function formatCurrency(amount: number) {
 }
 
 export default function BookingPage() {
+  return (
+    <Suspense fallback={<div className="flex items-center justify-center h-64"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-navy-900" /></div>}>
+      <BookingContent />
+    </Suspense>
+  );
+}
+
+function BookingContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
