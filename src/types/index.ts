@@ -202,13 +202,13 @@ export interface BookingFormData {
 export interface PriceCalculation {
   stayType: StayType;
   nights: number;
-  units: number; // nights for daily, weeks for weekly, months for monthly
+  units: number;
   basePrice: number;
-  taxAmount: number;
+  tax: number;
   serviceFee: number;
-  discountAmount: number;
-  totalAmount: number;
-  depositAmount: number;
+  discount: number;
+  total: number;
+  deposit: number;
   rate: Rate;
 }
 
@@ -222,12 +222,10 @@ export interface AvailabilityResult {
 
 export interface AnalyticsData {
   totalRevenue: number;
-  totalBookings: number;
+  pendingRevenue: number;
+  occupiedRooms: number;
+  totalRooms: number;
   occupancyRate: number;
-  averageDailyRate: number;
-  revenueByProperty: { property: string; revenue: number }[];
-  revenueByMethod: { method: string; count: number; amount: number }[];
-  bookingsByStatus: { status: string; count: number }[];
-  paymentsByStatus: { status: string; count: number; amount: number }[];
-  monthlyRevenue: { month: string; revenue: number; bookings: number }[];
+  recentBookings: number;
+  paymentBreakdown: Record<string, number>;
 }

@@ -11,6 +11,9 @@ const baseRate: Rate = {
   deposit_percentage: 100,
   tax_percentage: 11,
   service_fee: 25000,
+  is_active: true,
+  valid_from: null,
+  valid_until: null,
   created_at: new Date().toISOString(),
   updated_at: new Date().toISOString(),
 };

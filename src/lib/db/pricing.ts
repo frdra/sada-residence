@@ -57,11 +57,11 @@ export function calculatePrice(
     nights,
     units,
     basePrice,
-    taxAmount,
+    tax: taxAmount,
     serviceFee,
-    discountAmount,
-    totalAmount,
-    depositAmount,
+    discount: discountAmount,
+    total: totalAmount,
+    deposit: depositAmount,
     rate,
   };
 }
