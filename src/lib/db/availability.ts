@@ -1,5 +1,5 @@
 import { createAdminClient } from "@/lib/supabase/server";
-import type { AvailabilityResult, Room, RoomType, Property } from "@/types";
+import type { AvailabilityResult, RoomType, Property } from "@/types";
 
 interface AvailabilityParams {
   checkIn: string;
@@ -10,14 +10,35 @@ interface AvailabilityParams {
 
 /**
  * Find available rooms for given dates.
- * Uses the database function for row-level locking safety.
+ * Uses a single efficient query instead of per-room checks.
  */
 export async function findAvailableRooms(
   params: AvailabilityParams
 ): Promise<AvailabilityResult[]> {
   const supabase = createAdminClient();
 
-  // Get all active rooms with their types and properties
+  // Step 1: Get all room IDs that have conflicting bookings
+  const { data: bookedRoomIds } = await supabase
+    .from("bookings")
+    .select("room_id")
+    .not("status", "in", '("cancelled","no_show","checked_out")')
+    .lt("check_in", params.checkOut)
+    .gt("check_out", params.checkIn);
+
+  // Step 2: Get all room IDs that have availability blocks
+  const { data: blockedRoomIds } = await supabase
+    .from("availability_blocks")
+    .select("room_id")
+    .lt("start_date", params.checkOut)
+    .gt("end_date", params.checkIn);
+
+  // Combine unavailable room IDs
+  const unavailableIds = new Set<string>([
+    ...(bookedRoomIds?.map((r) => r.room_id) || []),
+    ...(blockedRoomIds?.map((r) => r.room_id) || []),
+  ]);
+
+  // Step 3: Get all active available rooms, excluding unavailable ones
   let query = supabase
     .from("rooms")
     .select(
@@ -37,47 +58,23 @@ export async function findAvailableRooms(
     query = query.eq("room_type_id", params.roomTypeId);
   }
 
-  const { data: rooms, error } = await query;
+  // Exclude unavailable rooms
+  if (unavailableIds.size > 0) {
+    query = query.not("id", "in", `(${Array.from(unavailableIds).join(",")})`);
+  }
+
+  const { data: rooms, error } = await query.order("room_number").limit(50);
 
   if (error) throw new Error(`Failed to fetch rooms: ${error.message}`);
   if (!rooms) return [];
 
-  // Check each room's availability against bookings and blocks
-  const results: AvailabilityResult[] = [];
-
-  for (const room of rooms) {
-    // Check for conflicting bookings
-    const { count: bookingConflicts } = await supabase
-      .from("bookings")
-      .select("id", { count: "exact", head: true })
-      .eq("room_id", room.id)
-      .not("status", "in", '("cancelled","no_show","checked_out")')
-      .lt("check_in", params.checkOut)
-      .gt("check_out", params.checkIn);
-
-    // Check for availability blocks
-    const { count: blockConflicts } = await supabase
-      .from("availability_blocks")
-      .select("id", { count: "exact", head: true })
-      .eq("room_id", room.id)
-      .lt("start_date", params.checkOut)
-      .gt("end_date", params.checkIn);
-
-    const isAvailable =
-      (bookingConflicts ?? 0) === 0 && (blockConflicts ?? 0) === 0;
-
-    if (isAvailable) {
-      results.push({
-        roomId: room.id,
-        roomNumber: room.room_number,
-        roomType: room.room_type as unknown as RoomType,
-        property: room.property as unknown as Property,
-        isAvailable: true,
-      });
-    }
-  }
-
-  return results;
+  return rooms.map((room) => ({
+    roomId: room.id,
+    roomNumber: room.room_number,
+    roomType: room.room_type as unknown as RoomType,
+    property: room.property as unknown as Property,
+    isAvailable: true,
+  }));
 }
 
 /**
