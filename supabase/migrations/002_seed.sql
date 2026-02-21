@@ -48,11 +48,11 @@ INSERT INTO rates (room_type_id, stay_type, price, min_stay, deposit_percentage,
 -- Persada: 30 rooms (20 standard, 8 deluxe, 2 suite)
 INSERT INTO rooms (property_id, room_type_id, room_number, floor)
 SELECT
-  'a1000000-0000-0000-0000-000000000001',
+  'a1000000-0000-0000-0000-000000000001'::uuid,
   CASE
-    WHEN n <= 20 THEN 'b1000000-0000-0000-0000-000000000001'
-    WHEN n <= 28 THEN 'b1000000-0000-0000-0000-000000000002'
-    ELSE 'b1000000-0000-0000-0000-000000000003'
+    WHEN n <= 20 THEN 'b1000000-0000-0000-0000-000000000001'::uuid
+    WHEN n <= 28 THEN 'b1000000-0000-0000-0000-000000000002'::uuid
+    ELSE 'b1000000-0000-0000-0000-000000000003'::uuid
   END,
   'P' || lpad(n::text, 3, '0'),
   CASE WHEN n <= 10 THEN 1 WHEN n <= 20 THEN 2 ELSE 3 END
@@ -61,11 +61,11 @@ FROM generate_series(1, 30) AS n;
 -- Udayana: 33 rooms (22 standard, 9 deluxe, 2 suite)
 INSERT INTO rooms (property_id, room_type_id, room_number, floor)
 SELECT
-  'a1000000-0000-0000-0000-000000000002',
+  'a1000000-0000-0000-0000-000000000002'::uuid,
   CASE
-    WHEN n <= 22 THEN 'b1000000-0000-0000-0000-000000000001'
-    WHEN n <= 31 THEN 'b1000000-0000-0000-0000-000000000002'
-    ELSE 'b1000000-0000-0000-0000-000000000003'
+    WHEN n <= 22 THEN 'b1000000-0000-0000-0000-000000000001'::uuid
+    WHEN n <= 31 THEN 'b1000000-0000-0000-0000-000000000002'::uuid
+    ELSE 'b1000000-0000-0000-0000-000000000003'::uuid
   END,
   'U' || lpad(n::text, 3, '0'),
   CASE WHEN n <= 11 THEN 1 WHEN n <= 22 THEN 2 ELSE 3 END
@@ -74,11 +74,11 @@ FROM generate_series(1, 33) AS n;
 -- Taman Griya: 33 rooms (22 standard, 9 deluxe, 2 suite)
 INSERT INTO rooms (property_id, room_type_id, room_number, floor)
 SELECT
-  'a1000000-0000-0000-0000-000000000003',
+  'a1000000-0000-0000-0000-000000000003'::uuid,
   CASE
-    WHEN n <= 22 THEN 'b1000000-0000-0000-0000-000000000001'
-    WHEN n <= 31 THEN 'b1000000-0000-0000-0000-000000000002'
-    ELSE 'b1000000-0000-0000-0000-000000000003'
+    WHEN n <= 22 THEN 'b1000000-0000-0000-0000-000000000001'::uuid
+    WHEN n <= 31 THEN 'b1000000-0000-0000-0000-000000000002'::uuid
+    ELSE 'b1000000-0000-0000-0000-000000000003'::uuid
   END,
   'TG' || lpad(n::text, 3, '0'),
   CASE WHEN n <= 11 THEN 1 WHEN n <= 22 THEN 2 ELSE 3 END
