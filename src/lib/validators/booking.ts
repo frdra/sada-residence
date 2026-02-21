@@ -1,11 +1,12 @@
 import { z } from "zod";
 
 export const bookingFormSchema = z.object({
-  propertyId: z.string().uuid("Invalid property"),
-  roomTypeId: z.string().uuid("Invalid room type"),
+  roomId: z.string().uuid("Invalid room"),
+  propertyId: z.string().uuid("Invalid property").optional(),
+  roomTypeId: z.string().uuid("Invalid room type").optional(),
   checkIn: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "Invalid check-in date"),
   checkOut: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "Invalid check-out date"),
-  stayType: z.enum(["daily", "weekly", "monthly"]),
+  stayType: z.enum(["daily", "weekly", "monthly"]).optional(),
   numGuests: z.number().int().min(1).max(10),
   specialRequests: z.string().max(500).optional(),
   guest: z.object({
