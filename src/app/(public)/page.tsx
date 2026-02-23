@@ -81,14 +81,10 @@ export default async function HomePage() {
                 ]
             ).map((property: any) => (
               <div key={property.slug} className="card group hover:shadow-lg transition-shadow">
-                <div className="h-48 bg-gradient-to-br from-navy-800 to-navy-600 flex items-center justify-center relative overflow-hidden">
-                  <iframe
-                    src={`https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d1500!2d${property.lng}!3d${property.lat}!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4t5!5e0!3m2!1sen!2sid`}
-                    className="absolute inset-0 w-full h-full border-0"
-                    loading="lazy"
-                    referrerPolicy="no-referrer-when-downgrade"
-                    allowFullScreen
-                  />
+                <div className="h-48 bg-gradient-to-br from-navy-800 to-navy-600 flex items-center justify-center">
+                  <span className="font-display text-white text-2xl font-bold opacity-80">
+                    {property.name.split(" ").pop()}
+                  </span>
                 </div>
                 <div className="p-6">
                   <h3 className="font-display text-xl font-bold mb-2">{property.name}</h3>
@@ -243,13 +239,12 @@ export default async function HomePage() {
             <p className="text-gray-600">Empat lokasi strategis di kawasan Jimbaran, Kuta Selatan, Badung, Bali</p>
           </div>
 
-          {/* Overview map showing all locations */}
+          {/* Overview map showing Jimbaran area */}
           <div className="rounded-xl overflow-hidden shadow-lg h-96 mb-12">
             <iframe
-              src="https://www.google.com/maps/embed?pb=!1m16!1m12!1m3!1d25000!2d115.17!3d-8.797!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4t5!5e0!3m2!1sen!2sid!4m2!3m1!1s0x0:0x0"
+              src="https://maps.google.com/maps?q=-8.797,115.170&z=13&output=embed"
               className="w-full h-full border-0"
               loading="lazy"
-              referrerPolicy="no-referrer-when-downgrade"
               allowFullScreen
             />
           </div>
@@ -265,10 +260,9 @@ export default async function HomePage() {
               <div key={loc.slug} className="card overflow-hidden hover:shadow-lg transition-shadow">
                 <div className="h-48 relative">
                   <iframe
-                    src={`https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d1500!2d${loc.lng}!3d${loc.lat}!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4t5!5e0!3m2!1sen!2sid`}
+                    src={encodeURI(`https://maps.google.com/maps?q=${loc.lat},${loc.lng}&z=16&output=embed`)}
                     className="absolute inset-0 w-full h-full border-0"
                     loading="lazy"
-                    referrerPolicy="no-referrer-when-downgrade"
                     allowFullScreen
                   />
                 </div>
