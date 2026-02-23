@@ -298,7 +298,10 @@ export default function StaffTasksPage() {
             </div>
 
             {Object.entries(grouped)
-              .sort(([, a], [, b]) => (a[0]?.checklist_item?.sort_order || 0) - (b[0]?.checklist_item?.sort_order || 0))
+              .sort(([a], [b]) => {
+                const order: Record<string, number> = { kamar_tidur: 1, kamar_mandi: 2, area_umum: 3, perlengkapan: 4 };
+                return (order[a] || 9) - (order[b] || 9);
+              })
               .map(([category, items]) => (
               <div key={category} className="mb-4">
                 <h4 className="text-xs font-semibold text-gray-500 uppercase mb-2">
