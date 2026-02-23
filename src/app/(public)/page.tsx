@@ -60,16 +60,17 @@ export default async function HomePage() {
           <div className="text-center mb-12">
             <h2 className="section-title mb-4">Properti Kami</h2>
             <p className="text-gray-600 max-w-2xl mx-auto">
-              Tiga lokasi strategis di kawasan Jimbaran untuk memenuhi kebutuhan akomodasi Anda.
+              Empat lokasi strategis di kawasan Jimbaran untuk memenuhi kebutuhan akomodasi Anda.
             </p>
           </div>
-          <div className="grid md:grid-cols-3 gap-8">
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
             {(properties.length > 0
               ? properties
               : [
                   { name: "Sada Residence Persada", slug: "persada", description: "Akomodasi modern dan nyaman dengan fasilitas lengkap di kawasan Jimbaran.", total_rooms: 30 },
                   { name: "Sada Residence Udayana", slug: "udayana", description: "Lokasi strategis dekat kampus Udayana, ideal untuk mahasiswa dan profesional.", total_rooms: 33 },
                   { name: "Sada Residence Taman Griya", slug: "taman-griya", description: "Konsep taman asri dengan suasana tenang, cocok untuk keluarga dan wisatawan.", total_rooms: 33 },
+                  { name: "Sada Residence Goa Gong", slug: "goa-gong", description: "Hunian eksklusif di kawasan Goa Gong dengan akses mudah ke pantai dan pusat kuliner.", total_rooms: 24 },
                 ]
             ).map((property, i) => (
               <div key={property.slug} className="card group hover:shadow-lg transition-shadow">

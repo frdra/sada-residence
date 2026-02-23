@@ -2,7 +2,7 @@
 -- Sada Residence — Seed Data
 -- ============================================
 
--- Properties (3 buildings)
+-- Properties (4 buildings)
 INSERT INTO properties (id, name, slug, description, address, total_rooms, sort_order) VALUES
   ('a1000000-0000-0000-0000-000000000001', 'Sada Residence Persada', 'persada',
    'Akomodasi modern dan nyaman dengan fasilitas lengkap di kawasan Jimbaran.',
@@ -12,7 +12,10 @@ INSERT INTO properties (id, name, slug, description, address, total_rooms, sort_
    'Jl. Kampus Udayana, Jimbaran, Kuta Selatan, Badung, Bali', 33, 2),
   ('a1000000-0000-0000-0000-000000000003', 'Sada Residence Taman Griya', 'taman-griya',
    'Konsep taman asri dengan suasana tenang, cocok untuk keluarga dan wisatawan.',
-   'Jl. Taman Griya, Jimbaran, Kuta Selatan, Badung, Bali', 33, 3);
+   'Jl. Taman Griya, Jimbaran, Kuta Selatan, Badung, Bali', 33, 3),
+  ('a1000000-0000-0000-0000-000000000004', 'Sada Residence Goa Gong', 'goa-gong',
+   'Hunian eksklusif di kawasan Goa Gong dengan akses mudah ke pantai dan pusat kuliner.',
+   'Jl. Goa Gong, Jimbaran, Kuta Selatan, Badung, Bali', 24, 4);
 
 -- Room Types
 INSERT INTO room_types (id, name, slug, description, max_guests, bed_type, room_size_sqm, amenities, sort_order) VALUES
@@ -83,3 +86,16 @@ SELECT
   'TG' || lpad(n::text, 3, '0'),
   CASE WHEN n <= 11 THEN 1 WHEN n <= 22 THEN 2 ELSE 3 END
 FROM generate_series(1, 33) AS n;
+
+-- Goa Gong: 24 rooms (16 standard, 6 deluxe, 2 suite)
+INSERT INTO rooms (property_id, room_type_id, room_number, floor)
+SELECT
+  'a1000000-0000-0000-0000-000000000004'::uuid,
+  CASE
+    WHEN n <= 16 THEN 'b1000000-0000-0000-0000-000000000001'::uuid
+    WHEN n <= 22 THEN 'b1000000-0000-0000-0000-000000000002'::uuid
+    ELSE 'b1000000-0000-0000-0000-000000000003'::uuid
+  END,
+  'GG' || lpad(n::text, 3, '0'),
+  CASE WHEN n <= 8 THEN 1 WHEN n <= 16 THEN 2 ELSE 3 END
+FROM generate_series(1, 24) AS n;
