@@ -1,17 +1,18 @@
 "use client";
 
-import { Suspense, useState } from "react";
+import { Suspense, useState, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 
-interface AvailableRoom {
-  roomId: string;
-  roomNumber: string;
-  roomType: { id: string; name: string; slug: string };
-  property: { id: string; name: string; slug: string };
-  isAvailable: boolean;
+type StayType = "daily" | "weekly" | "monthly";
+
+interface PropertyAvailability {
+  propertyId: string;
+  propertyName: string;
+  slug: string;
+  available: number;
 }
 
-type StayType = "daily" | "weekly" | "monthly";
+// ── Helpers ──
 
 function addDays(date: string, days: number): string {
   const d = new Date(date);
@@ -38,6 +39,8 @@ function formatDate(date: string): string {
   });
 }
 
+// ── Main ──
+
 export default function BookingPage() {
   return (
     <Suspense
@@ -56,19 +59,20 @@ function BookingContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  const [step, setStep] = useState(1); // 1: stay type & dates, 2: select room, 3: guest info
+  const [step, setStep] = useState(1);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  // Step 1: Stay type & dates
-  const [stayType, setStayType] = useState<StayType>("daily");
+  // Step 1: Property
+  const [selectedPropertyId, setSelectedPropertyId] = useState("");
+  const [selectedPropertyName, setSelectedPropertyName] = useState("");
+
+  // Step 2: Stay type & dates
+  const [stayType, setStayType] = useState<StayType>("monthly");
   const [checkIn, setCheckIn] = useState("");
   const [checkOut, setCheckOut] = useState("");
-  const [duration, setDuration] = useState(1); // weeks or months count
-
-  // Step 2: Available rooms
-  const [availableRooms, setAvailableRooms] = useState<AvailableRoom[]>([]);
-  const [selectedRoom, setSelectedRoom] = useState<AvailableRoom | null>(null);
+  const [duration, setDuration] = useState(1);
+  const [availableCount, setAvailableCount] = useState<number | null>(null);
 
   // Step 3: Guest info
   const [guestName, setGuestName] = useState("");
@@ -77,24 +81,53 @@ function BookingContent() {
   const [numGuests, setNumGuests] = useState(1);
   const [specialRequests, setSpecialRequests] = useState("");
 
-  // Auto-calculate checkout when check-in or duration changes
+  // Fetch properties on load
+  const [properties, setProperties] = useState<
+    { id: string; name: string; slug: string; description: string; total_rooms: number }[]
+  >([]);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const res = await fetch("/api/properties");
+        if (res.ok) {
+          const data = await res.json();
+          if (data.properties) setProperties(data.properties);
+        }
+      } catch {
+        // Fallback handled below
+      }
+    })();
+  }, []);
+
+  // Pre-select from URL
+  useEffect(() => {
+    const prop = searchParams.get("property");
+    if (prop && properties.length > 0) {
+      const found = properties.find((p) => p.slug === prop);
+      if (found) {
+        setSelectedPropertyId(found.id);
+        setSelectedPropertyName(found.name);
+      }
+    }
+  }, [searchParams, properties]);
+
+  const nights = checkIn && checkOut ? diffDays(checkIn, checkOut) : 0;
+  const today = new Date().toISOString().split("T")[0];
+
+  // ── Handlers ──
+
   const handleCheckInChange = (date: string) => {
     setCheckIn(date);
-    if (stayType === "monthly") {
-      setCheckOut(addMonths(date, duration));
-    } else if (stayType === "weekly") {
-      setCheckOut(addDays(date, duration * 7));
-    }
+    if (stayType === "monthly") setCheckOut(addMonths(date, duration));
+    else if (stayType === "weekly") setCheckOut(addDays(date, duration * 7));
   };
 
   const handleDurationChange = (val: number) => {
     setDuration(val);
     if (checkIn) {
-      if (stayType === "monthly") {
-        setCheckOut(addMonths(checkIn, val));
-      } else if (stayType === "weekly") {
-        setCheckOut(addDays(checkIn, val * 7));
-      }
+      if (stayType === "monthly") setCheckOut(addMonths(checkIn, val));
+      else if (stayType === "weekly") setCheckOut(addDays(checkIn, val * 7));
     }
   };
 
@@ -102,26 +135,21 @@ function BookingContent() {
     setStayType(type);
     setCheckOut("");
     setDuration(1);
+    setAvailableCount(null);
     if (checkIn) {
-      if (type === "monthly") {
-        setCheckOut(addMonths(checkIn, 1));
-      } else if (type === "weekly") {
-        setCheckOut(addDays(checkIn, 7));
-      }
+      if (type === "monthly") setCheckOut(addMonths(checkIn, 1));
+      else if (type === "weekly") setCheckOut(addDays(checkIn, 7));
     }
   };
 
-  // Computed info
-  const nights = checkIn && checkOut ? diffDays(checkIn, checkOut) : 0;
-
-  // Search availability
-  const handleSearchAvailability = async () => {
+  // Check availability for selected property & dates
+  const handleCheckAvailability = async () => {
     if (!checkIn || !checkOut) {
       setError("Silakan pilih tanggal check-in");
       return;
     }
     if (nights <= 0) {
-      setError("Tanggal check-out harus setelah tanggal check-in");
+      setError("Tanggal check-out harus setelah check-in");
       return;
     }
 
@@ -129,13 +157,25 @@ function BookingContent() {
     setError("");
 
     try {
-      const params = new URLSearchParams({ checkIn, checkOut });
+      const params = new URLSearchParams({
+        checkIn,
+        checkOut,
+        propertyId: selectedPropertyId,
+        mode: "summary",
+      });
       const res = await fetch(`/api/availability?${params}`);
       const data = await res.json();
-      if (!res.ok) throw new Error(data.error || "Gagal mencari kamar");
+      if (!res.ok) throw new Error(data.error || "Gagal cek ketersediaan");
 
-      setAvailableRooms(data.available || []);
-      setStep(2);
+      const propData = data.properties?.find(
+        (p: PropertyAvailability) => p.propertyId === selectedPropertyId
+      );
+      const count = propData?.available || 0;
+      setAvailableCount(count);
+
+      if (count === 0) {
+        setError("Maaf, tidak ada kamar tersedia di properti ini untuk tanggal yang dipilih. Silakan coba tanggal atau properti lain.");
+      }
     } catch (err: any) {
       setError(err.message);
     } finally {
@@ -143,9 +183,21 @@ function BookingContent() {
     }
   };
 
-  // Submit booking
+  const handleGoToStep3 = () => {
+    if (availableCount === null) {
+      setError("Silakan cek ketersediaan terlebih dahulu");
+      return;
+    }
+    if (availableCount === 0) {
+      setError("Tidak ada kamar tersedia. Silakan pilih tanggal atau properti lain.");
+      return;
+    }
+    setError("");
+    setStep(3);
+  };
+
+  // Submit booking (auto-assign room)
   const handleSubmitBooking = async () => {
-    if (!selectedRoom) return;
     if (!guestName || !guestEmail || !guestPhone) {
       setError("Silakan lengkapi data tamu");
       return;
@@ -155,11 +207,28 @@ function BookingContent() {
     setError("");
 
     try {
+      // Get available rooms for this property to auto-assign
+      const params = new URLSearchParams({
+        checkIn,
+        checkOut,
+        propertyId: selectedPropertyId,
+      });
+      const availRes = await fetch(`/api/availability?${params}`);
+      const availData = await availRes.json();
+      const rooms = availData.available || [];
+
+      if (rooms.length === 0) {
+        throw new Error("Maaf, kamar sudah tidak tersedia. Silakan coba lagi.");
+      }
+
+      // Auto-pick the first available room
+      const autoRoom = rooms[0];
+
       const res = await fetch("/api/bookings", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          roomId: selectedRoom.roomId,
+          roomId: autoRoom.roomId,
           checkIn,
           checkOut,
           stayType,
@@ -188,12 +257,16 @@ function BookingContent() {
     }
   };
 
-  const today = new Date().toISOString().split("T")[0];
-
   const stayTypeOptions = [
-    { value: "daily" as StayType, label: "Harian", icon: "🌙", desc: "Minimal 1 malam" },
-    { value: "weekly" as StayType, label: "Mingguan", icon: "📅", desc: "Minimal 1 minggu" },
-    { value: "monthly" as StayType, label: "Bulanan", icon: "🏠", desc: "Minimal 1 bulan" },
+    { value: "monthly" as StayType, label: "Bulanan", icon: "🏠", desc: "Mulai 1 bulan" },
+    { value: "weekly" as StayType, label: "Mingguan", icon: "📅", desc: "Mulai 1 minggu" },
+    { value: "daily" as StayType, label: "Harian", icon: "🌙", desc: "Mulai 1 malam" },
+  ];
+
+  const stepLabels = [
+    { n: 1, label: "Pilih Properti" },
+    { n: 2, label: "Tanggal & Durasi" },
+    { n: 3, label: "Data Tamu" },
   ];
 
   return (
@@ -201,25 +274,27 @@ function BookingContent() {
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
         <h1 className="section-title mb-2">Booking Kamar</h1>
         <p className="text-gray-600 mb-8">
-          Pilih durasi tinggal dan tanggal yang Anda inginkan.
+          Pilih properti, tentukan tanggal, dan lengkapi data Anda.
         </p>
 
         {/* Progress steps */}
         <div className="flex items-center gap-2 mb-8">
-          {[
-            { n: 1, label: "Durasi & Tanggal" },
-            { n: 2, label: "Pilih Kamar" },
-            { n: 3, label: "Data Tamu" },
-          ].map((s) => (
+          {stepLabels.map((s) => (
             <div key={s.n} className="flex items-center gap-2">
               <div
-                className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold ${
+                className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold transition-colors ${
                   step >= s.n
                     ? "bg-navy-900 text-white"
                     : "bg-gray-200 text-gray-500"
                 }`}
               >
-                {s.n}
+                {step > s.n ? (
+                  <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" />
+                  </svg>
+                ) : (
+                  s.n
+                )}
               </div>
               <span
                 className={`text-sm hidden sm:inline ${
@@ -239,10 +314,95 @@ function BookingContent() {
           </div>
         )}
 
-        {/* Step 1: Stay type & dates */}
+        {/* ════ STEP 1: Pilih Properti ════ */}
         {step === 1 && (
+          <div className="space-y-4">
+            <div className="card p-8">
+              <h2 className="font-display text-xl font-bold mb-2">Pilih Lokasi Properti</h2>
+              <p className="text-sm text-gray-500 mb-6">Kami memiliki 4 lokasi di kawasan Jimbaran, Bali</p>
+
+              <div className="grid sm:grid-cols-2 gap-4">
+                {(properties.length > 0
+                  ? properties
+                  : [
+                      { id: "1", name: "Sada Residence Persada", slug: "persada", description: "Jl. Raya Jimbaran", total_rooms: 30 },
+                      { id: "2", name: "Sada Residence Udayana", slug: "udayana", description: "Jl. Kampus Udayana", total_rooms: 33 },
+                      { id: "3", name: "Sada Residence Taman Griya", slug: "taman-griya", description: "Jl. Taman Griya", total_rooms: 33 },
+                      { id: "4", name: "Sada Residence Goa Gong", slug: "goa-gong", description: "Jl. Goa Gong", total_rooms: 24 },
+                    ]
+                ).map((prop) => (
+                  <button
+                    key={prop.id}
+                    onClick={() => {
+                      setSelectedPropertyId(prop.id);
+                      setSelectedPropertyName(prop.name);
+                      setAvailableCount(null);
+                      setError("");
+                    }}
+                    className={`p-5 rounded-xl border-2 text-left transition-all ${
+                      selectedPropertyId === prop.id
+                        ? "border-brand-400 bg-brand-50 shadow-sm"
+                        : "border-gray-200 hover:border-gray-300 hover:shadow-sm"
+                    }`}
+                  >
+                    <div className="flex items-start justify-between mb-2">
+                      <h3 className="font-semibold text-navy-900 leading-tight">
+                        {prop.name.replace("Sada Residence ", "")}
+                      </h3>
+                      <div
+                        className={`w-5 h-5 rounded-full border-2 flex-shrink-0 flex items-center justify-center ml-2 ${
+                          selectedPropertyId === prop.id
+                            ? "border-brand-400 bg-brand-400"
+                            : "border-gray-300"
+                        }`}
+                      >
+                        {selectedPropertyId === prop.id && (
+                          <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" />
+                          </svg>
+                        )}
+                      </div>
+                    </div>
+                    <p className="text-xs text-gray-500">{prop.description}</p>
+                    <p className="text-xs text-brand-500 font-medium mt-2">{prop.total_rooms} kamar</p>
+                  </button>
+                ))}
+              </div>
+
+              <button
+                onClick={() => {
+                  if (!selectedPropertyId) {
+                    setError("Silakan pilih properti terlebih dahulu");
+                    return;
+                  }
+                  setError("");
+                  setStep(2);
+                }}
+                className="btn-primary w-full mt-6"
+              >
+                Lanjutkan
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* ════ STEP 2: Stay Type & Dates ════ */}
+        {step === 2 && (
           <div className="space-y-6">
-            {/* Stay type selector */}
+            <button
+              onClick={() => { setStep(1); setAvailableCount(null); }}
+              className="text-sm text-navy-600 hover:underline"
+            >
+              &larr; Ubah Properti
+            </button>
+
+            {/* Selected property badge */}
+            <div className="bg-navy-50 rounded-lg px-4 py-3 flex items-center gap-2">
+              <span className="text-sm text-gray-600">Properti:</span>
+              <span className="text-sm font-semibold text-navy-900">{selectedPropertyName}</span>
+            </div>
+
+            {/* Stay type */}
             <div className="card p-8">
               <h2 className="font-display text-xl font-bold mb-4">Jenis Booking</h2>
               <div className="grid grid-cols-3 gap-3">
@@ -264,17 +424,14 @@ function BookingContent() {
               </div>
             </div>
 
-            {/* Date selection */}
+            {/* Dates */}
             <div className="card p-8">
               <h2 className="font-display text-xl font-bold mb-4">Pilih Tanggal</h2>
 
               {stayType === "daily" ? (
-                /* Daily: user picks both dates */
                 <div className="grid sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Check-in
-                    </label>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Check-in</label>
                     <input
                       type="date"
                       className="input-field"
@@ -283,44 +440,38 @@ function BookingContent() {
                       onChange={(e) => {
                         setCheckIn(e.target.value);
                         if (checkOut && e.target.value >= checkOut) setCheckOut("");
+                        setAvailableCount(null);
                       }}
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Check-out
-                    </label>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Check-out</label>
                     <input
                       type="date"
                       className="input-field"
                       value={checkOut}
                       min={checkIn ? addDays(checkIn, 1) : today}
-                      onChange={(e) => setCheckOut(e.target.value)}
+                      onChange={(e) => { setCheckOut(e.target.value); setAvailableCount(null); }}
                     />
                   </div>
                 </div>
               ) : (
-                /* Weekly/Monthly: pick check-in + duration, auto checkout */
                 <div className="space-y-4">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Tanggal Check-in
-                    </label>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Tanggal Check-in</label>
                     <input
                       type="date"
                       className="input-field"
                       value={checkIn}
                       min={today}
-                      onChange={(e) => handleCheckInChange(e.target.value)}
+                      onChange={(e) => { handleCheckInChange(e.target.value); setAvailableCount(null); }}
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Durasi
-                    </label>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Durasi</label>
                     <div className="flex items-center gap-3">
                       <button
-                        onClick={() => duration > 1 && handleDurationChange(duration - 1)}
+                        onClick={() => { if (duration > 1) { handleDurationChange(duration - 1); setAvailableCount(null); } }}
                         className="w-10 h-10 rounded-lg border border-gray-300 flex items-center justify-center text-lg font-bold hover:bg-gray-50 disabled:opacity-40"
                         disabled={duration <= 1}
                       >
@@ -329,174 +480,128 @@ function BookingContent() {
                       <div className="flex-1 text-center">
                         <span className="text-2xl font-bold text-navy-900">{duration}</span>
                         <span className="text-gray-500 ml-2">
-                          {stayType === "weekly" ? (duration === 1 ? "minggu" : "minggu") : (duration === 1 ? "bulan" : "bulan")}
+                          {stayType === "weekly" ? "minggu" : "bulan"}
                         </span>
                       </div>
                       <button
-                        onClick={() => handleDurationChange(duration + 1)}
+                        onClick={() => { handleDurationChange(duration + 1); setAvailableCount(null); }}
                         className="w-10 h-10 rounded-lg border border-gray-300 flex items-center justify-center text-lg font-bold hover:bg-gray-50"
                       >
                         +
                       </button>
                     </div>
                   </div>
-                  {checkIn && checkOut && (
-                    <div className="bg-brand-50 rounded-lg p-4 text-sm">
-                      <div className="flex justify-between">
-                        <span className="text-gray-600">Check-in</span>
-                        <span className="font-medium">{formatDate(checkIn)}</span>
-                      </div>
-                      <div className="flex justify-between mt-1">
-                        <span className="text-gray-600">Check-out</span>
-                        <span className="font-medium">{formatDate(checkOut)}</span>
-                      </div>
-                      <div className="flex justify-between mt-1 pt-2 border-t border-brand-200">
-                        <span className="text-gray-600">Total</span>
-                        <span className="font-semibold text-navy-900">{nights} malam</span>
-                      </div>
-                    </div>
-                  )}
                 </div>
               )}
 
-              {/* Summary for daily */}
-              {stayType === "daily" && checkIn && checkOut && nights > 0 && (
-                <div className="bg-brand-50 rounded-lg p-4 text-sm mt-4">
+              {/* Date summary */}
+              {checkIn && checkOut && nights > 0 && (
+                <div className="bg-brand-50 rounded-lg p-4 text-sm mt-4 space-y-1">
                   <div className="flex justify-between">
-                    <span className="text-gray-600">Durasi</span>
+                    <span className="text-gray-600">Check-in</span>
+                    <span className="font-medium">{formatDate(checkIn)}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-gray-600">Check-out</span>
+                    <span className="font-medium">{formatDate(checkOut)}</span>
+                  </div>
+                  <div className="flex justify-between pt-2 border-t border-brand-200">
+                    <span className="text-gray-600">Total</span>
                     <span className="font-semibold text-navy-900">{nights} malam</span>
                   </div>
                 </div>
               )}
 
-              <button
-                onClick={handleSearchAvailability}
-                disabled={loading || !checkIn || !checkOut}
-                className="btn-primary w-full mt-6"
-              >
-                {loading ? "Mencari..." : "Cek Ketersediaan"}
-              </button>
-            </div>
-          </div>
-        )}
-
-        {/* Step 2: Select Room */}
-        {step === 2 && (
-          <div>
-            <button
-              onClick={() => { setStep(1); setSelectedRoom(null); }}
-              className="text-sm text-navy-600 mb-4 hover:underline"
-            >
-              &larr; Ubah Tanggal
-            </button>
-
-            <div className="bg-gray-50 rounded-lg p-4 mb-6 text-sm">
-              <div className="flex flex-wrap gap-4">
-                <div>
-                  <span className="text-gray-500">Jenis: </span>
-                  <span className="font-medium capitalize">
-                    {stayType === "daily" ? "Harian" : stayType === "weekly" ? "Mingguan" : "Bulanan"}
-                  </span>
-                </div>
-                <div>
-                  <span className="text-gray-500">Check-in: </span>
-                  <span className="font-medium">{formatDate(checkIn)}</span>
-                </div>
-                <div>
-                  <span className="text-gray-500">Check-out: </span>
-                  <span className="font-medium">{formatDate(checkOut)}</span>
-                </div>
-                <div>
-                  <span className="text-gray-500">Durasi: </span>
-                  <span className="font-medium">{nights} malam</span>
-                </div>
-              </div>
-            </div>
-
-            <p className="text-sm text-gray-500 mb-4">
-              {availableRooms.length} kamar tersedia
-            </p>
-
-            {availableRooms.length === 0 ? (
-              <div className="card p-8 text-center">
-                <p className="text-gray-500 mb-4">
-                  Maaf, tidak ada kamar tersedia untuk tanggal yang dipilih.
-                </p>
-                <button onClick={() => setStep(1)} className="btn-outline text-sm">
-                  Coba Tanggal Lain
-                </button>
-              </div>
-            ) : (
-              <div className="space-y-4">
-                {availableRooms.map((room) => (
-                  <div
-                    key={room.roomId}
-                    onClick={() => setSelectedRoom(room)}
-                    className={`card p-6 cursor-pointer transition-all ${
-                      selectedRoom?.roomId === room.roomId
-                        ? "ring-2 ring-brand-400 shadow-md"
-                        : "hover:shadow-md"
-                    }`}
-                  >
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <h3 className="font-semibold">{room.roomType.name}</h3>
-                        <p className="text-sm text-gray-500">
-                          {room.property.name} &middot; Kamar {room.roomNumber}
-                        </p>
-                      </div>
-                      <div
-                        className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
-                          selectedRoom?.roomId === room.roomId
-                            ? "border-brand-400 bg-brand-400"
-                            : "border-gray-300"
-                        }`}
-                      >
-                        {selectedRoom?.roomId === room.roomId && (
-                          <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
-                            <path d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" />
-                          </svg>
-                        )}
-                      </div>
-                    </div>
+              {/* Availability result */}
+              {availableCount !== null && availableCount > 0 && (
+                <div className="bg-green-50 border border-green-200 rounded-lg p-4 text-sm mt-4 flex items-center gap-3">
+                  <div className="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center flex-shrink-0">
+                    <svg className="w-5 h-5 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                    </svg>
                   </div>
-                ))}
+                  <div>
+                    <p className="font-semibold text-green-800">
+                      {availableCount} kamar tersedia
+                    </p>
+                    <p className="text-green-600 text-xs">
+                      di {selectedPropertyName} untuk tanggal yang dipilih
+                    </p>
+                  </div>
+                </div>
+              )}
 
+              <div className="flex gap-3 mt-6">
                 <button
-                  onClick={() => {
-                    if (selectedRoom) {
-                      setStep(3);
-                      setError("");
-                    } else {
-                      setError("Silakan pilih kamar terlebih dahulu");
-                    }
-                  }}
-                  className="btn-primary w-full"
+                  onClick={handleCheckAvailability}
+                  disabled={loading || !checkIn || !checkOut}
+                  className={`flex-1 py-3 rounded-xl font-semibold text-sm transition-all ${
+                    availableCount !== null && availableCount > 0
+                      ? "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                      : "btn-primary"
+                  }`}
                 >
-                  Lanjutkan
+                  {loading ? "Mencari..." : availableCount !== null ? "Cek Ulang" : "Cek Ketersediaan"}
                 </button>
+
+                {availableCount !== null && availableCount > 0 && (
+                  <button onClick={handleGoToStep3} className="flex-1 btn-primary">
+                    Lanjutkan Booking
+                  </button>
+                )}
               </div>
-            )}
+            </div>
           </div>
         )}
 
-        {/* Step 3: Guest Info */}
+        {/* ════ STEP 3: Guest Info ════ */}
         {step === 3 && (
           <div>
             <button
               onClick={() => setStep(2)}
               className="text-sm text-navy-600 mb-4 hover:underline"
             >
-              &larr; Pilih Kamar Lain
+              &larr; Ubah Tanggal
             </button>
 
+            {/* Booking summary card */}
+            <div className="bg-navy-50 rounded-xl p-5 mb-6 space-y-2 text-sm">
+              <h3 className="font-display font-bold text-navy-900 mb-3">Ringkasan Booking</h3>
+              <div className="flex justify-between">
+                <span className="text-gray-600">Properti</span>
+                <span className="font-medium">{selectedPropertyName}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-gray-600">Jenis</span>
+                <span className="font-medium">
+                  {stayType === "daily" ? "Harian" : stayType === "weekly" ? "Mingguan" : "Bulanan"}
+                </span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-gray-600">Check-in</span>
+                <span className="font-medium">{formatDate(checkIn)}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-gray-600">Check-out</span>
+                <span className="font-medium">{formatDate(checkOut)}</span>
+              </div>
+              <div className="flex justify-between pt-2 border-t border-navy-200">
+                <span className="text-gray-600">Durasi</span>
+                <span className="font-bold text-navy-900">{nights} malam</span>
+              </div>
+              <p className="text-xs text-gray-500 pt-2">
+                Kamar akan dipilihkan otomatis oleh sistem.
+              </p>
+            </div>
+
+            {/* Guest form */}
             <div className="card p-8">
               <h2 className="font-display text-xl font-bold mb-6">Data Tamu</h2>
 
               <div className="space-y-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Nama Lengkap *
+                    Nama Lengkap <span className="text-red-500">*</span>
                   </label>
                   <input
                     type="text"
@@ -508,7 +613,7 @@ function BookingContent() {
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Email *
+                    Email <span className="text-red-500">*</span>
                   </label>
                   <input
                     type="email"
@@ -520,7 +625,7 @@ function BookingContent() {
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    No. Telepon *
+                    No. WhatsApp / Telepon <span className="text-red-500">*</span>
                   </label>
                   <input
                     type="tel"
@@ -539,51 +644,22 @@ function BookingContent() {
                     value={numGuests}
                     onChange={(e) => setNumGuests(parseInt(e.target.value))}
                   >
-                    {[1, 2, 3, 4].map((n) => (
-                      <option key={n} value={n}>
-                        {n} orang
-                      </option>
+                    {[1, 2].map((n) => (
+                      <option key={n} value={n}>{n} orang</option>
                     ))}
                   </select>
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Permintaan Khusus
+                    Catatan / Permintaan Khusus
                   </label>
                   <textarea
                     className="input-field"
                     rows={3}
                     value={specialRequests}
                     onChange={(e) => setSpecialRequests(e.target.value)}
-                    placeholder="Opsional"
+                    placeholder="Opsional — mis. lantai atas, dekat parkir, dll."
                   />
-                </div>
-              </div>
-
-              {/* Booking summary */}
-              <div className="bg-gray-50 rounded-lg p-4 mt-6 text-sm space-y-2">
-                <h3 className="font-semibold text-navy-900 mb-2">Ringkasan Booking</h3>
-                <div className="flex justify-between">
-                  <span className="text-gray-500">Kamar</span>
-                  <span>{selectedRoom?.roomType.name} — {selectedRoom?.roomNumber}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-gray-500">Properti</span>
-                  <span>{selectedRoom?.property.name}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-gray-500">Check-in</span>
-                  <span>{formatDate(checkIn)}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-gray-500">Check-out</span>
-                  <span>{formatDate(checkOut)}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-gray-500">Durasi</span>
-                  <span className="font-medium">
-                    {nights} malam ({stayType === "daily" ? "Harian" : stayType === "weekly" ? "Mingguan" : "Bulanan"})
-                  </span>
                 </div>
               </div>
 
@@ -592,8 +668,12 @@ function BookingContent() {
                 disabled={loading}
                 className="btn-primary w-full mt-6"
               >
-                {loading ? "Memproses..." : "Konfirmasi & Bayar"}
+                {loading ? "Memproses Booking..." : "Konfirmasi & Bayar"}
               </button>
+
+              <p className="text-xs text-gray-400 text-center mt-3">
+                Dengan melanjutkan, Anda menyetujui syarat dan ketentuan Sada Residence.
+              </p>
             </div>
           </div>
         )}

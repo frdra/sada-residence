@@ -22,6 +22,34 @@ export async function GET(request: NextRequest) {
     }
 
     const results = await findAvailableRooms(parsed.data);
+
+    // If summary mode, return count per property
+    const mode = searchParams.get("mode");
+    if (mode === "summary") {
+      const propertyMap: Record<
+        string,
+        { propertyId: string; propertyName: string; slug: string; available: number }
+      > = {};
+
+      for (const room of results) {
+        const pid = room.property.id;
+        if (!propertyMap[pid]) {
+          propertyMap[pid] = {
+            propertyId: pid,
+            propertyName: room.property.name,
+            slug: room.property.slug,
+            available: 0,
+          };
+        }
+        propertyMap[pid].available++;
+      }
+
+      return NextResponse.json({
+        properties: Object.values(propertyMap),
+        totalAvailable: results.length,
+      });
+    }
+
     return NextResponse.json({ available: results });
   } catch (error: any) {
     console.error("Availability check error:", error);
