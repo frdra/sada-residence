@@ -78,11 +78,11 @@ export async function POST(request: NextRequest) {
 
   // Upload photos if any
   const photos: File[] = [];
-  for (const [key, value] of formData.entries()) {
+  formData.forEach((value, key) => {
     if (key.startsWith("photo") && value instanceof File) {
       photos.push(value);
     }
-  }
+  });
 
   const photoRecords = [];
   for (const photo of photos) {
