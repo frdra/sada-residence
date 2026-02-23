@@ -98,6 +98,7 @@ export interface Guest {
   phone: string;
   id_type: string | null;
   id_number: string | null;
+  id_photo_url: string | null;
   address: string | null;
   city: string | null;
   country: string;

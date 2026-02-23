@@ -1,7 +1,16 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import Link from "next/link";
+import { useEffect, useState, useRef } from "react";
+
+interface Guest {
+  id: string;
+  full_name: string;
+  email: string;
+  phone: string;
+  id_type: string | null;
+  id_number: string | null;
+  id_photo_url: string | null;
+}
 
 interface Booking {
   id: string;
@@ -14,7 +23,8 @@ interface Booking {
   total_amount: number;
   paid_amount: number;
   created_at: string;
-  guest: { full_name: string; email: string; phone: string };
+  guest: Guest;
+  guest_id: string;
   room: {
     room_number: string;
     room_type: { name: string };
@@ -46,6 +56,333 @@ const paymentColors: Record<string, string> = {
   refunded: "bg-purple-100 text-purple-700",
 };
 
+const statusLabels: Record<string, string> = {
+  pending: "Menunggu",
+  confirmed: "Dikonfirmasi",
+  checked_in: "Check In",
+  checked_out: "Check Out",
+  cancelled: "Dibatalkan",
+  no_show: "No Show",
+};
+
+const paymentLabels: Record<string, string> = {
+  unpaid: "Belum Bayar",
+  partial: "Sebagian",
+  paid: "Lunas",
+  refunded: "Refund",
+};
+
+// ── Check-In Modal ──
+function CheckInModal({
+  booking,
+  onClose,
+  onSuccess,
+}: {
+  booking: Booking;
+  onClose: () => void;
+  onSuccess: () => void;
+}) {
+  const [idType, setIdType] = useState(booking.guest?.id_type || "KTP");
+  const [idNumber, setIdNumber] = useState(booking.guest?.id_number || "");
+  const [idPhoto, setIdPhoto] = useState<File | null>(null);
+  const [preview, setPreview] = useState<string | null>(null);
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState("");
+  const fileRef = useRef<HTMLInputElement>(null);
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      if (file.size > 5 * 1024 * 1024) {
+        setError("Ukuran foto maksimal 5MB");
+        return;
+      }
+      setIdPhoto(file);
+      setPreview(URL.createObjectURL(file));
+      setError("");
+    }
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!idNumber.trim()) {
+      setError("Nomor ID wajib diisi");
+      return;
+    }
+    if (!idPhoto && !booking.guest?.id_photo_url) {
+      setError("Foto ID wajib diupload");
+      return;
+    }
+
+    setSubmitting(true);
+    setError("");
+
+    try {
+      const formData = new FormData();
+      formData.append("bookingId", booking.id);
+      formData.append("guestId", booking.guest_id || booking.guest?.id);
+      formData.append("idType", idType);
+      formData.append("idNumber", idNumber);
+      if (idPhoto) formData.append("idPhoto", idPhoto);
+
+      const res = await fetch("/api/admin/checkin", {
+        method: "POST",
+        body: formData,
+      });
+
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Gagal check-in");
+
+      onSuccess();
+    } catch (err: any) {
+      setError(err.message);
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  return (
+    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+      <div className="bg-white rounded-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto">
+        <div className="p-6 border-b">
+          <div className="flex items-center justify-between">
+            <h2 className="text-lg font-bold">Check-In Tamu</h2>
+            <button onClick={onClose} className="text-gray-400 hover:text-gray-600 text-2xl leading-none">&times;</button>
+          </div>
+        </div>
+
+        <form onSubmit={handleSubmit} className="p-6 space-y-5">
+          {/* Guest Info Summary */}
+          <div className="bg-gray-50 rounded-xl p-4 space-y-2">
+            <div className="flex justify-between">
+              <span className="text-sm text-gray-500">Kode Booking</span>
+              <span className="text-sm font-mono font-bold">{booking.booking_code}</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-sm text-gray-500">Nama Tamu</span>
+              <span className="text-sm font-medium">{booking.guest?.full_name}</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-sm text-gray-500">Telepon</span>
+              <span className="text-sm">{booking.guest?.phone}</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-sm text-gray-500">Email</span>
+              <span className="text-sm">{booking.guest?.email}</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-sm text-gray-500">Kamar</span>
+              <span className="text-sm font-medium">{booking.room?.room_number} — {booking.room?.property?.name}</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-sm text-gray-500">Tanggal</span>
+              <span className="text-sm">
+                {new Date(booking.check_in).toLocaleDateString("id-ID")} — {new Date(booking.check_out).toLocaleDateString("id-ID")}
+              </span>
+            </div>
+          </div>
+
+          {/* ID Type */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Tipe Identitas</label>
+            <select
+              className="input-field"
+              value={idType}
+              onChange={(e) => setIdType(e.target.value)}
+            >
+              <option value="KTP">KTP</option>
+              <option value="SIM">SIM</option>
+              <option value="Paspor">Paspor</option>
+              <option value="KITAS">KITAS</option>
+            </select>
+          </div>
+
+          {/* ID Number */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Nomor {idType} <span className="text-red-500">*</span>
+            </label>
+            <input
+              type="text"
+              className="input-field"
+              placeholder={`Masukkan nomor ${idType}`}
+              value={idNumber}
+              onChange={(e) => setIdNumber(e.target.value)}
+              required
+            />
+          </div>
+
+          {/* ID Photo Upload */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Foto {idType} <span className="text-red-500">*</span>
+            </label>
+            <input
+              ref={fileRef}
+              type="file"
+              accept="image/*"
+              capture="environment"
+              onChange={handleFileChange}
+              className="hidden"
+            />
+            {preview || booking.guest?.id_photo_url ? (
+              <div className="relative">
+                <img
+                  src={preview || booking.guest?.id_photo_url || ""}
+                  alt="ID Preview"
+                  className="w-full h-48 object-cover rounded-xl border"
+                />
+                <button
+                  type="button"
+                  onClick={() => fileRef.current?.click()}
+                  className="absolute bottom-2 right-2 bg-white/90 text-sm px-3 py-1 rounded-lg shadow hover:bg-white transition-colors"
+                >
+                  Ganti Foto
+                </button>
+              </div>
+            ) : (
+              <button
+                type="button"
+                onClick={() => fileRef.current?.click()}
+                className="w-full h-48 border-2 border-dashed border-gray-300 rounded-xl flex flex-col items-center justify-center gap-2 hover:border-brand-400 hover:bg-brand-50/50 transition-colors cursor-pointer"
+              >
+                <svg className="w-10 h-10 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
+                </svg>
+                <span className="text-sm text-gray-500">Klik untuk foto atau upload {idType}</span>
+                <span className="text-xs text-gray-400">JPG, PNG (maks. 5MB)</span>
+              </button>
+            )}
+          </div>
+
+          {error && (
+            <div className="bg-red-50 text-red-600 text-sm p-3 rounded-lg">{error}</div>
+          )}
+
+          {/* Actions */}
+          <div className="flex gap-3 pt-2">
+            <button
+              type="button"
+              onClick={onClose}
+              className="flex-1 px-4 py-2.5 border border-gray-300 rounded-xl text-sm font-medium hover:bg-gray-50 transition-colors"
+            >
+              Batal
+            </button>
+            <button
+              type="submit"
+              disabled={submitting}
+              className="flex-1 btn-primary !py-2.5 text-sm disabled:opacity-50"
+            >
+              {submitting ? "Memproses..." : "Check-In Tamu"}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
+}
+
+// ── Guest Detail Modal ──
+function GuestDetailModal({
+  guestId,
+  onClose,
+}: {
+  guestId: string;
+  onClose: () => void;
+}) {
+  const [guest, setGuest] = useState<Guest | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const res = await fetch(`/api/admin/checkin?guestId=${guestId}`);
+        const data = await res.json();
+        setGuest(data.guest);
+      } catch {
+        // ignore
+      } finally {
+        setLoading(false);
+      }
+    })();
+  }, [guestId]);
+
+  return (
+    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+      <div className="bg-white rounded-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto">
+        <div className="p-6 border-b">
+          <div className="flex items-center justify-between">
+            <h2 className="text-lg font-bold">Detail Tamu</h2>
+            <button onClick={onClose} className="text-gray-400 hover:text-gray-600 text-2xl leading-none">&times;</button>
+          </div>
+        </div>
+
+        <div className="p-6">
+          {loading ? (
+            <p className="text-center text-gray-400 py-8">Memuat...</p>
+          ) : !guest ? (
+            <p className="text-center text-gray-400 py-8">Data tamu tidak ditemukan.</p>
+          ) : (
+            <div className="space-y-5">
+              {/* Guest Info */}
+              <div className="space-y-3">
+                <div className="flex justify-between items-center py-2 border-b">
+                  <span className="text-sm text-gray-500">Nama Lengkap</span>
+                  <span className="text-sm font-semibold">{guest.full_name}</span>
+                </div>
+                <div className="flex justify-between items-center py-2 border-b">
+                  <span className="text-sm text-gray-500">Email</span>
+                  <span className="text-sm">{guest.email}</span>
+                </div>
+                <div className="flex justify-between items-center py-2 border-b">
+                  <span className="text-sm text-gray-500">Telepon</span>
+                  <span className="text-sm font-medium">{guest.phone}</span>
+                </div>
+                <div className="flex justify-between items-center py-2 border-b">
+                  <span className="text-sm text-gray-500">Tipe ID</span>
+                  <span className="text-sm">{guest.id_type || "—"}</span>
+                </div>
+                <div className="flex justify-between items-center py-2 border-b">
+                  <span className="text-sm text-gray-500">Nomor ID</span>
+                  <span className="text-sm font-mono">{guest.id_number || "—"}</span>
+                </div>
+              </div>
+
+              {/* ID Photo */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Foto Identitas</label>
+                {guest.id_photo_url ? (
+                  <a href={guest.id_photo_url} target="_blank" rel="noopener noreferrer">
+                    <img
+                      src={guest.id_photo_url}
+                      alt={`${guest.id_type} ${guest.full_name}`}
+                      className="w-full h-56 object-cover rounded-xl border hover:opacity-90 transition-opacity cursor-pointer"
+                    />
+                    <p className="text-xs text-center text-brand-500 mt-2">Klik untuk lihat ukuran penuh</p>
+                  </a>
+                ) : (
+                  <div className="w-full h-40 bg-gray-100 rounded-xl flex items-center justify-center">
+                    <p className="text-sm text-gray-400">Belum ada foto ID (upload saat check-in)</p>
+                  </div>
+                )}
+              </div>
+
+              <button
+                onClick={onClose}
+                className="w-full px-4 py-2.5 border border-gray-300 rounded-xl text-sm font-medium hover:bg-gray-50 transition-colors"
+              >
+                Tutup
+              </button>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ── Main Bookings Page ──
 export default function BookingsPage() {
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [count, setCount] = useState(0);
@@ -54,6 +391,10 @@ export default function BookingsPage() {
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState("");
   const [paymentFilter, setPaymentFilter] = useState("");
+
+  // Modals
+  const [checkInBooking, setCheckInBooking] = useState<Booking | null>(null);
+  const [detailGuestId, setDetailGuestId] = useState<string | null>(null);
 
   const fetchBookings = async () => {
     setLoading(true);
@@ -164,8 +505,13 @@ export default function BookingsPage() {
                   <tr key={b.id} className="hover:bg-gray-50">
                     <td className="px-4 py-3 font-mono text-xs">{b.booking_code}</td>
                     <td className="px-4 py-3">
-                      <p className="font-medium">{b.guest?.full_name}</p>
-                      <p className="text-xs text-gray-400">{b.guest?.phone}</p>
+                      <button
+                        onClick={() => setDetailGuestId(b.guest_id || (b.guest as any)?.id)}
+                        className="text-left hover:text-brand-500 transition-colors"
+                      >
+                        <p className="font-medium">{b.guest?.full_name}</p>
+                        <p className="text-xs text-gray-400">{b.guest?.phone}</p>
+                      </button>
                     </td>
                     <td className="px-4 py-3">
                       <p>{b.room?.room_number}</p>
@@ -177,27 +523,39 @@ export default function BookingsPage() {
                     <td className="px-4 py-3 font-medium">{formatCurrency(b.total_amount)}</td>
                     <td className="px-4 py-3">
                       <span className={`px-2 py-1 rounded text-xs font-medium ${statusColors[b.status] || "bg-gray-100"}`}>
-                        {b.status}
+                        {statusLabels[b.status] || b.status}
                       </span>
                     </td>
                     <td className="px-4 py-3">
                       <span className={`px-2 py-1 rounded text-xs font-medium ${paymentColors[b.payment_status] || "bg-gray-100"}`}>
-                        {b.payment_status}
+                        {paymentLabels[b.payment_status] || b.payment_status}
                       </span>
                     </td>
                     <td className="px-4 py-3">
-                      <select
-                        className="text-xs border rounded px-2 py-1"
-                        value={b.status}
-                        onChange={(e) => handleStatusUpdate(b.id, e.target.value)}
-                      >
-                        <option value="pending">Pending</option>
-                        <option value="confirmed">Confirmed</option>
-                        <option value="checked_in">Checked In</option>
-                        <option value="checked_out">Checked Out</option>
-                        <option value="cancelled">Cancelled</option>
-                        <option value="no_show">No Show</option>
-                      </select>
+                      <div className="flex items-center gap-2">
+                        {/* Check-In Button — only for confirmed/pending bookings */}
+                        {(b.status === "confirmed" || b.status === "pending") && (
+                          <button
+                            onClick={() => setCheckInBooking(b)}
+                            className="px-3 py-1 text-xs font-medium bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors"
+                          >
+                            Check In
+                          </button>
+                        )}
+                        {/* Status dropdown for other actions */}
+                        <select
+                          className="text-xs border rounded px-2 py-1"
+                          value={b.status}
+                          onChange={(e) => handleStatusUpdate(b.id, e.target.value)}
+                        >
+                          <option value="pending">Pending</option>
+                          <option value="confirmed">Confirmed</option>
+                          <option value="checked_in">Checked In</option>
+                          <option value="checked_out">Checked Out</option>
+                          <option value="cancelled">Cancelled</option>
+                          <option value="no_show">No Show</option>
+                        </select>
+                      </div>
                     </td>
                   </tr>
                 ))
@@ -234,6 +592,26 @@ export default function BookingsPage() {
           </div>
         )}
       </div>
+
+      {/* Check-In Modal */}
+      {checkInBooking && (
+        <CheckInModal
+          booking={checkInBooking}
+          onClose={() => setCheckInBooking(null)}
+          onSuccess={() => {
+            setCheckInBooking(null);
+            fetchBookings();
+          }}
+        />
+      )}
+
+      {/* Guest Detail Modal */}
+      {detailGuestId && (
+        <GuestDetailModal
+          guestId={detailGuestId}
+          onClose={() => setDetailGuestId(null)}
+        />
+      )}
     </div>
   );
 }
