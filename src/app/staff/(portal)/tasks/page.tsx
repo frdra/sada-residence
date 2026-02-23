@@ -66,6 +66,15 @@ export default function StaffTasksPage() {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [photoType, setPhotoType] = useState<"before" | "after">("before");
 
+  // Create task state
+  const [showCreate, setShowCreate] = useState(false);
+  const [properties, setProperties] = useState<any[]>([]);
+  const [rooms, setRooms] = useState<any[]>([]);
+  const [selectedProperty, setSelectedProperty] = useState("");
+  const [selectedRoom, setSelectedRoom] = useState("");
+  const [taskType, setTaskType] = useState("occupied_clean");
+  const [creating, setCreating] = useState(false);
+
   const today = new Date().toISOString().split("T")[0];
 
   const loadTasks = async () => {
@@ -85,9 +94,50 @@ export default function StaffTasksPage() {
     }
   };
 
+  const loadProfile = async () => {
+    try {
+      const res = await fetch("/api/staff/profile");
+      const data = await res.json();
+      setProperties(data.properties || []);
+      setRooms(data.rooms || []);
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
   useEffect(() => {
     loadTasks();
+    loadProfile();
   }, [today]);
+
+  const handleCreateTask = async () => {
+    if (!selectedRoom || !selectedProperty) return;
+    setCreating(true);
+    try {
+      const res = await fetch("/api/staff/tasks", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          roomId: selectedRoom,
+          propertyId: selectedProperty,
+          taskType,
+        }),
+      });
+      if (res.ok) {
+        setShowCreate(false);
+        setSelectedProperty("");
+        setSelectedRoom("");
+        setTaskType("occupied_clean");
+        await loadTasks();
+      }
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setCreating(false);
+    }
+  };
+
+  const filteredRooms = rooms.filter((r: any) => r.property_id === selectedProperty);
 
   const handleAction = async (taskId: string, action: string) => {
     setActionLoading(true);
@@ -388,20 +438,109 @@ export default function StaffTasksPage() {
     );
   }
 
+  // Create task form
+  if (showCreate) {
+    return (
+      <div className="p-4 space-y-4">
+        <button onClick={() => setShowCreate(false)} className="flex items-center gap-2 text-blue-600 text-sm font-medium">
+          ← Kembali
+        </button>
+        <h2 className="font-bold text-lg text-gray-900">Buat Tugas Baru</h2>
+
+        <div className="space-y-4">
+          {/* Property */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Building</label>
+            <select
+              value={selectedProperty}
+              onChange={(e) => { setSelectedProperty(e.target.value); setSelectedRoom(""); }}
+              className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-blue-500 text-base"
+            >
+              <option value="">Pilih building</option>
+              {properties.map((p: any) => (
+                <option key={p.id} value={p.id}>{p.name}</option>
+              ))}
+            </select>
+          </div>
+
+          {/* Room */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Kamar</label>
+            <select
+              value={selectedRoom}
+              onChange={(e) => setSelectedRoom(e.target.value)}
+              className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-blue-500 text-base"
+              disabled={!selectedProperty}
+            >
+              <option value="">Pilih kamar</option>
+              {filteredRooms.map((r: any) => (
+                <option key={r.id} value={r.id}>{r.room_number} (Lt. {r.floor})</option>
+              ))}
+            </select>
+          </div>
+
+          {/* Task Type */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">Jenis Tugas</label>
+            <div className="grid grid-cols-2 gap-2">
+              {[
+                { value: "occupied_clean", label: "Harian", icon: "🧹" },
+                { value: "checkout_clean", label: "Checkout", icon: "🚪" },
+                { value: "deep_clean", label: "Deep Clean", icon: "✨" },
+                { value: "inspection", label: "Inspeksi", icon: "🔍" },
+              ].map((t) => (
+                <button
+                  key={t.value}
+                  type="button"
+                  onClick={() => setTaskType(t.value)}
+                  className={`p-3 rounded-xl border text-sm text-center transition-colors ${
+                    taskType === t.value
+                      ? "border-blue-500 bg-blue-50 text-blue-700"
+                      : "border-gray-200 text-gray-600"
+                  }`}
+                >
+                  <span className="text-xl block mb-1">{t.icon}</span>
+                  {t.label}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <button
+            onClick={handleCreateTask}
+            disabled={creating || !selectedRoom}
+            className="w-full py-4 bg-blue-600 text-white font-bold rounded-2xl text-lg hover:bg-blue-700 disabled:opacity-50 transition-colors"
+          >
+            {creating ? "Membuat..." : "🧹 Buat Tugas"}
+          </button>
+        </div>
+      </div>
+    );
+  }
+
   // Task list view
   return (
     <div className="p-4 space-y-4">
       <div className="flex items-center justify-between">
         <h2 className="font-bold text-lg text-gray-900">Tugas Hari Ini</h2>
-        <span className="text-sm text-gray-500">
-          {new Date().toLocaleDateString("id-ID", { weekday: "short", day: "numeric", month: "short" })}
-        </span>
+        <button
+          onClick={() => setShowCreate(true)}
+          className="px-4 py-2 bg-blue-600 text-white text-sm font-semibold rounded-xl hover:bg-blue-700 transition-colors"
+        >
+          + Tugas
+        </button>
       </div>
 
       {tasks.length === 0 ? (
         <div className="text-center py-12">
           <span className="text-4xl">✨</span>
           <p className="text-gray-500 mt-3">Belum ada tugas hari ini</p>
+          <button
+            onClick={() => setShowCreate(true)}
+            className="mt-4 px-6 py-3 bg-blue-600 text-white font-semibold rounded-xl hover:bg-blue-700 transition-colors"
+          >
+            🧹 Buat Tugas Pertama
+          </button>
         </div>
       ) : (
         <div className="space-y-3">
