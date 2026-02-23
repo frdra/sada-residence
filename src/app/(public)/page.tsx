@@ -1,6 +1,13 @@
 import Link from "next/link";
 import { getProperties, getRoomTypes, getRates } from "@/lib/db/queries";
 
+const PROPERTY_COORDS = {
+  persada: { lat: -8.802760, lng: 115.149165 },
+  udayana: { lat: -8.7966184617018, lng: 115.18042708327252 },
+  "taman-griya": { lat: -8.789160596129149, lng: 115.19042491449446 },
+  "goa-gong": { lat: -8.801822363020166, lng: 115.17251562251298 },
+} as const;
+
 function formatCurrency(amount: number) {
   return new Intl.NumberFormat("id-ID", {
     style: "currency",
@@ -65,19 +72,23 @@ export default async function HomePage() {
           </div>
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
             {(properties.length > 0
-              ? properties
+              ? properties.map((p: any) => ({ ...p, lat: PROPERTY_COORDS[p.slug as keyof typeof PROPERTY_COORDS]?.lat, lng: PROPERTY_COORDS[p.slug as keyof typeof PROPERTY_COORDS]?.lng }))
               : [
-                  { name: "Sada Residence Persada", slug: "persada", description: "Akomodasi modern dan nyaman dengan fasilitas lengkap di kawasan Jimbaran.", total_rooms: 30 },
-                  { name: "Sada Residence Udayana", slug: "udayana", description: "Lokasi strategis dekat kampus Udayana, ideal untuk mahasiswa dan profesional.", total_rooms: 33 },
-                  { name: "Sada Residence Taman Griya", slug: "taman-griya", description: "Konsep taman asri dengan suasana tenang, cocok untuk keluarga dan wisatawan.", total_rooms: 33 },
-                  { name: "Sada Residence Goa Gong", slug: "goa-gong", description: "Hunian eksklusif di kawasan Goa Gong dengan akses mudah ke pantai dan pusat kuliner.", total_rooms: 24 },
+                  { name: "Sada Residence Persada", slug: "persada", description: "Akomodasi modern dan nyaman dengan fasilitas lengkap di kawasan Jimbaran.", total_rooms: 30, lat: -8.802760, lng: 115.149165 },
+                  { name: "Sada Residence Udayana", slug: "udayana", description: "Lokasi strategis dekat kampus Udayana, ideal untuk mahasiswa dan profesional.", total_rooms: 33, lat: -8.7966184617018, lng: 115.18042708327252 },
+                  { name: "Sada Residence Taman Griya", slug: "taman-griya", description: "Konsep taman asri dengan suasana tenang, cocok untuk keluarga dan wisatawan.", total_rooms: 33, lat: -8.789160596129149, lng: 115.19042491449446 },
+                  { name: "Sada Residence Goa Gong", slug: "goa-gong", description: "Hunian eksklusif di kawasan Goa Gong dengan akses mudah ke pantai dan pusat kuliner.", total_rooms: 24, lat: -8.801822363020166, lng: 115.17251562251298 },
                 ]
-            ).map((property, i) => (
+            ).map((property: any) => (
               <div key={property.slug} className="card group hover:shadow-lg transition-shadow">
-                <div className="h-48 bg-gradient-to-br from-navy-800 to-navy-600 flex items-center justify-center">
-                  <span className="font-display text-white text-2xl font-bold opacity-80">
-                    {property.name.split(" ").pop()}
-                  </span>
+                <div className="h-48 bg-gradient-to-br from-navy-800 to-navy-600 flex items-center justify-center relative overflow-hidden">
+                  <iframe
+                    src={`https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d1500!2d${property.lng}!3d${property.lat}!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4t5!5e0!3m2!1sen!2sid`}
+                    className="absolute inset-0 w-full h-full border-0"
+                    loading="lazy"
+                    referrerPolicy="no-referrer-when-downgrade"
+                    allowFullScreen
+                  />
                 </div>
                 <div className="p-6">
                   <h3 className="font-display text-xl font-bold mb-2">{property.name}</h3>
@@ -86,12 +97,23 @@ export default async function HomePage() {
                     <span className="text-sm text-brand-500 font-semibold">
                       {property.total_rooms} Kamar
                     </span>
-                    <Link
-                      href={`/rooms?property=${property.slug}`}
-                      className="text-sm text-navy-600 font-semibold hover:text-navy-900 transition-colors"
-                    >
-                      Lihat Kamar &rarr;
-                    </Link>
+                    <div className="flex gap-3">
+                      <a
+                        href={`https://www.google.com/maps?q=${property.lat},${property.lng}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-sm text-gray-400 hover:text-brand-500 transition-colors"
+                        title="Buka di Google Maps"
+                      >
+                        📍
+                      </a>
+                      <Link
+                        href={`/rooms?property=${property.slug}`}
+                        className="text-sm text-navy-600 font-semibold hover:text-navy-900 transition-colors"
+                      >
+                        Lihat Kamar &rarr;
+                      </Link>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -218,12 +240,51 @@ export default async function HomePage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 className="section-title mb-4">Lokasi Kami</h2>
-            <p className="text-gray-600">Kawasan Jimbaran, Kuta Selatan, Badung, Bali</p>
+            <p className="text-gray-600">Empat lokasi strategis di kawasan Jimbaran, Kuta Selatan, Badung, Bali</p>
           </div>
-          <div className="rounded-xl overflow-hidden shadow-lg h-96 bg-gray-200 flex items-center justify-center">
-            <p className="text-gray-500">
-              Google Maps embed akan ditampilkan di sini
-            </p>
+
+          {/* Overview map showing all locations */}
+          <div className="rounded-xl overflow-hidden shadow-lg h-96 mb-12">
+            <iframe
+              src="https://www.google.com/maps/embed?pb=!1m16!1m12!1m3!1d25000!2d115.17!3d-8.797!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4t5!5e0!3m2!1sen!2sid!4m2!3m1!1s0x0:0x0"
+              className="w-full h-full border-0"
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+              allowFullScreen
+            />
+          </div>
+
+          {/* Individual property locations */}
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {[
+              { name: "Sada Residence Persada", slug: "persada", lat: -8.802760, lng: 115.149165 },
+              { name: "Sada Residence Udayana", slug: "udayana", lat: -8.7966184617018, lng: 115.18042708327252 },
+              { name: "Sada Residence Taman Griya", slug: "taman-griya", lat: -8.789160596129149, lng: 115.19042491449446 },
+              { name: "Sada Residence Goa Gong", slug: "goa-gong", lat: -8.801822363020166, lng: 115.17251562251298 },
+            ].map((loc) => (
+              <div key={loc.slug} className="card overflow-hidden hover:shadow-lg transition-shadow">
+                <div className="h-48 relative">
+                  <iframe
+                    src={`https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d1500!2d${loc.lng}!3d${loc.lat}!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4t5!5e0!3m2!1sen!2sid`}
+                    className="absolute inset-0 w-full h-full border-0"
+                    loading="lazy"
+                    referrerPolicy="no-referrer-when-downgrade"
+                    allowFullScreen
+                  />
+                </div>
+                <div className="p-4 text-center">
+                  <h3 className="font-display font-bold text-sm mb-1">{loc.name}</h3>
+                  <a
+                    href={`https://www.google.com/maps?q=${loc.lat},${loc.lng}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-xs text-brand-500 hover:text-brand-600 font-semibold transition-colors"
+                  >
+                    Buka di Google Maps &rarr;
+                  </a>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </section>
