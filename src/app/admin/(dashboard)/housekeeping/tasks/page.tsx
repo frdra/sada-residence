@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 
 const STATUS_LABELS: Record<string, { label: string; color: string }> = {
@@ -13,6 +13,14 @@ const STATUS_LABELS: Record<string, { label: string; color: string }> = {
 };
 
 export default function AdminHousekeepingTasksPage() {
+  return (
+    <Suspense fallback={<div className="flex items-center justify-center h-32"><div className="animate-spin w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full" /></div>}>
+      <TasksContent />
+    </Suspense>
+  );
+}
+
+function TasksContent() {
   const searchParams = useSearchParams();
   const [tasks, setTasks] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
