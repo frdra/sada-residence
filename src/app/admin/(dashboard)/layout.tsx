@@ -9,6 +9,7 @@ const navItems = [
   { href: "/admin/overview", label: "Dashboard", icon: "📊" },
   { href: "/admin/rooms", label: "Kamar", icon: "🏠" },
   { href: "/admin/bookings", label: "Booking", icon: "📋" },
+  { href: "/admin/housekeeping", label: "Housekeeping", icon: "🧹" },
   { href: "/admin/calendar", label: "Kalender", icon: "📅" },
   { href: "/admin/analytics", label: "Keuangan", icon: "💰" },
   { href: "/admin/settings", label: "Pengaturan", icon: "⚙️" },

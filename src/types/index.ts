@@ -230,3 +230,171 @@ export interface AnalyticsData {
   recentBookings: number;
   paymentBreakdown: Record<string, number>;
 }
+
+// ── Housekeeping Types ──
+
+export type TaskType = "checkout_clean" | "occupied_clean" | "deep_clean" | "inspection";
+
+export type TaskStatus =
+  | "pending"
+  | "in_progress"
+  | "completed"
+  | "needs_review"
+  | "approved"
+  | "rejected";
+
+export type PhotoType = "before" | "after" | "issue";
+
+export type IssueType =
+  | "electrical"
+  | "plumbing"
+  | "furniture"
+  | "appliance"
+  | "structural"
+  | "other";
+
+export type IssueSeverity = "low" | "medium" | "high" | "critical";
+
+export type IssueStatus =
+  | "reported"
+  | "acknowledged"
+  | "in_progress"
+  | "resolved"
+  | "closed";
+
+export type LaundryStatus =
+  | "pending"
+  | "picked_up"
+  | "washing"
+  | "done"
+  | "delivered";
+
+export interface StaffProfile {
+  id: string;
+  full_name: string;
+  phone: string | null;
+  employee_id: string | null;
+  assigned_property_id: string | null;
+  shift: "pagi" | "sore";
+  is_active: boolean;
+  created_at: string;
+  updated_at: string;
+  // Joins
+  property?: Property;
+}
+
+export interface CleaningChecklistItem {
+  id: string;
+  category: "kamar_tidur" | "kamar_mandi" | "area_umum" | "perlengkapan";
+  item_name: string;
+  description: string | null;
+  is_required: boolean;
+  sort_order: number;
+  is_active: boolean;
+  created_at: string;
+}
+
+export interface HousekeepingTask {
+  id: string;
+  room_id: string;
+  property_id: string;
+  assigned_to: string | null;
+  task_date: string;
+  task_type: TaskType;
+  status: TaskStatus;
+  started_at: string | null;
+  completed_at: string | null;
+  reviewed_at: string | null;
+  reviewed_by: string | null;
+  checklist_score: number | null;
+  time_score: number | null;
+  photo_score: number | null;
+  admin_rating: number | null;
+  total_score: number | null;
+  admin_notes: string | null;
+  rejection_reason: string | null;
+  created_at: string;
+  updated_at: string;
+  // Joins
+  room?: Room;
+  property?: Property;
+  staff?: StaffProfile;
+  photos?: TaskPhoto[];
+  checklist?: TaskChecklist[];
+}
+
+export interface TaskPhoto {
+  id: string;
+  task_id: string;
+  photo_url: string;
+  photo_type: PhotoType;
+  caption: string | null;
+  uploaded_at: string;
+}
+
+export interface TaskChecklist {
+  id: string;
+  task_id: string;
+  checklist_item_id: string;
+  is_completed: boolean;
+  completed_at: string | null;
+  notes: string | null;
+  // Joins
+  checklist_item?: CleaningChecklistItem;
+}
+
+export interface RoomIssue {
+  id: string;
+  room_id: string;
+  property_id: string;
+  reported_by: string | null;
+  issue_type: IssueType;
+  severity: IssueSeverity;
+  title: string;
+  description: string | null;
+  status: IssueStatus;
+  resolved_at: string | null;
+  resolved_by: string | null;
+  resolution_notes: string | null;
+  created_at: string;
+  updated_at: string;
+  // Joins
+  room?: Room;
+  property?: Property;
+  reporter?: StaffProfile;
+  photos?: IssuePhoto[];
+}
+
+export interface IssuePhoto {
+  id: string;
+  issue_id: string;
+  photo_url: string;
+  caption: string | null;
+  uploaded_at: string;
+}
+
+export interface LaundryItem {
+  name: string;
+  quantity: number;
+}
+
+export interface LaundryRequest {
+  id: string;
+  room_id: string;
+  property_id: string;
+  booking_id: string | null;
+  requested_by: string | null;
+  request_type: "regular" | "express";
+  items: LaundryItem[];
+  total_items: number;
+  status: LaundryStatus;
+  notes: string | null;
+  picked_up_at: string | null;
+  delivered_at: string | null;
+  created_at: string;
+  updated_at: string;
+  // Joins
+  room?: Room;
+  property?: Property;
+  staff?: StaffProfile;
+}

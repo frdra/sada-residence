@@ -29,14 +29,22 @@ export async function updateSession(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser();
 
+  const pathname = request.nextUrl.pathname;
+
   // Protect admin routes
-  if (request.nextUrl.pathname.startsWith("/admin")) {
-    if (
-      !user &&
-      !request.nextUrl.pathname.startsWith("/admin/login")
-    ) {
+  if (pathname.startsWith("/admin")) {
+    if (!user && !pathname.startsWith("/admin/login")) {
       const url = request.nextUrl.clone();
       url.pathname = "/admin/login";
+      return NextResponse.redirect(url);
+    }
+  }
+
+  // Protect staff routes
+  if (pathname.startsWith("/staff")) {
+    if (!user && !pathname.startsWith("/staff/login")) {
+      const url = request.nextUrl.clone();
+      url.pathname = "/staff/login";
       return NextResponse.redirect(url);
     }
   }
