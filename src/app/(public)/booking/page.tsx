@@ -80,6 +80,7 @@ function BookingContent() {
   const [guestPhone, setGuestPhone] = useState("");
   const [numGuests, setNumGuests] = useState(1);
   const [specialRequests, setSpecialRequests] = useState("");
+  const [paymentMethodType, setPaymentMethodType] = useState<"online" | "dp_online" | "pay_at_property">("online");
 
   // Fetch properties on load
   const [properties, setProperties] = useState<
@@ -234,6 +235,7 @@ function BookingContent() {
           stayType,
           numGuests,
           specialRequests,
+          paymentMethodType,
           guest: {
             fullName: guestName,
             email: guestEmail,
@@ -248,6 +250,7 @@ function BookingContent() {
       if (data.paymentUrl) {
         window.location.href = data.paymentUrl;
       } else {
+        // pay_at_property → go directly to confirmation
         router.push(`/booking/${data.booking.id}/confirmation`);
       }
     } catch (err: any) {
@@ -594,6 +597,92 @@ function BookingContent() {
               </p>
             </div>
 
+            {/* Payment method selection */}
+            <div className="card p-8 mb-6">
+              <h2 className="font-display text-xl font-bold mb-2">Metode Pembayaran</h2>
+              <p className="text-sm text-gray-500 mb-5">Pilih cara pembayaran yang paling nyaman untuk Anda</p>
+
+              <div className="space-y-3">
+                {([
+                  {
+                    value: "online" as const,
+                    label: "Bayar Online Penuh",
+                    icon: "💳",
+                    desc: "Bayar seluruh biaya secara online sekarang",
+                    badge: null,
+                  },
+                  {
+                    value: "dp_online" as const,
+                    label: "DP Online + Sisa di Lokasi",
+                    icon: "🏦",
+                    desc: "Bayar DP online, sisa dibayar saat check-in (Cash/QRIS/Transfer)",
+                    badge: "Populer",
+                  },
+                  {
+                    value: "pay_at_property" as const,
+                    label: "Bayar di Lokasi",
+                    icon: "🏠",
+                    desc: "Bayar penuh saat tiba di properti (Cash/QRIS/Transfer Bank)",
+                    badge: null,
+                  },
+                ]).map((opt) => (
+                  <button
+                    key={opt.value}
+                    type="button"
+                    onClick={() => setPaymentMethodType(opt.value)}
+                    className={`w-full p-4 rounded-xl border-2 text-left transition-all flex items-start gap-4 ${
+                      paymentMethodType === opt.value
+                        ? "border-brand-400 bg-brand-50 shadow-sm"
+                        : "border-gray-200 hover:border-gray-300"
+                    }`}
+                  >
+                    <span className="text-2xl mt-0.5">{opt.icon}</span>
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2">
+                        <span className="font-semibold text-sm text-navy-900">{opt.label}</span>
+                        {opt.badge && (
+                          <span className="bg-orange-100 text-orange-700 text-[10px] font-bold px-2 py-0.5 rounded-full">{opt.badge}</span>
+                        )}
+                      </div>
+                      <p className="text-xs text-gray-500 mt-0.5">{opt.desc}</p>
+                    </div>
+                    <div
+                      className={`w-5 h-5 rounded-full border-2 flex-shrink-0 flex items-center justify-center mt-0.5 ${
+                        paymentMethodType === opt.value
+                          ? "border-brand-400 bg-brand-400"
+                          : "border-gray-300"
+                      }`}
+                    >
+                      {paymentMethodType === opt.value && (
+                        <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
+                          <path d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" />
+                        </svg>
+                      )}
+                    </div>
+                  </button>
+                ))}
+              </div>
+
+              {paymentMethodType === "pay_at_property" && (
+                <div className="mt-4 bg-blue-50 border border-blue-200 rounded-lg p-4 text-sm">
+                  <p className="font-medium text-blue-800 mb-1">Metode pembayaran di lokasi:</p>
+                  <div className="flex gap-3 text-blue-700">
+                    <span className="flex items-center gap-1">💵 Cash</span>
+                    <span className="flex items-center gap-1">📱 QRIS</span>
+                    <span className="flex items-center gap-1">🏧 Transfer Bank</span>
+                  </div>
+                  <p className="text-blue-600 text-xs mt-2">Pembayaran dilakukan saat check-in di resepsionis properti.</p>
+                </div>
+              )}
+
+              {paymentMethodType === "dp_online" && (
+                <div className="mt-4 bg-yellow-50 border border-yellow-200 rounded-lg p-4 text-sm">
+                  <p className="font-medium text-yellow-800 mb-1">Informasi DP:</p>
+                  <p className="text-yellow-700 text-xs">Anda akan membayar deposit terlebih dahulu secara online. Sisa pembayaran dilunasi saat check-in di lokasi menggunakan Cash, QRIS, atau Transfer Bank.</p>
+                </div>
+              )}
+            </div>
+
             {/* Guest form */}
             <div className="card p-8">
               <h2 className="font-display text-xl font-bold mb-6">Data Tamu</h2>
@@ -668,7 +757,13 @@ function BookingContent() {
                 disabled={loading}
                 className="btn-primary w-full mt-6"
               >
-                {loading ? "Memproses Booking..." : "Konfirmasi & Bayar"}
+                {loading
+                  ? "Memproses Booking..."
+                  : paymentMethodType === "pay_at_property"
+                  ? "Konfirmasi Booking"
+                  : paymentMethodType === "dp_online"
+                  ? "Konfirmasi & Bayar DP"
+                  : "Konfirmasi & Bayar"}
               </button>
 
               <p className="text-xs text-gray-400 text-center mt-3">

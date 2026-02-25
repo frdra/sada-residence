@@ -32,7 +32,10 @@ export async function POST(request: NextRequest) {
       stayType,
       specialRequests,
       guest,
+      paymentMethodType,
     } = parsed.data;
+
+    const pmType = paymentMethodType || "online";
 
     // 1. Verify room exists
     const room = await getRoomById(roomId);
@@ -77,7 +80,7 @@ export async function POST(request: NextRequest) {
       id_number: guest.idNumber,
     });
 
-    // 5. Create booking
+    // 5. Create booking with payment_method_type
     const booking = await createBooking({
       room_id: roomId,
       guest_id: guestRecord.id,
@@ -93,38 +96,79 @@ export async function POST(request: NextRequest) {
       discount_amount: pricing.discount,
       total_amount: pricing.total,
       deposit_amount: pricing.deposit,
+      payment_method_type: pmType,
     });
 
-    // 6. Create Xendit invoice for deposit
     const appUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
     let invoiceUrl = "";
 
-    try {
-      const invoice = await createXenditInvoice({
-        externalId: `booking-${booking.id}`,
-        amount: pricing.deposit,
-        payerEmail: guest.email,
-        description: `Deposit booking ${booking.booking_code} — Sada Residence`,
-        successRedirectUrl: `${appUrl}/booking/${booking.id}/confirmation`,
-        failureRedirectUrl: `${appUrl}/booking/${booking.id}`,
-        customerName: guest.fullName,
-        customerPhone: guest.phone,
-      });
+    // 6. Handle payment based on payment method type
+    if (pmType === "online") {
+      // Full online payment — charge full amount via Xendit
+      try {
+        const invoice = await createXenditInvoice({
+          externalId: `booking-${booking.id}`,
+          amount: pricing.total,
+          payerEmail: guest.email,
+          description: `Pembayaran booking ${booking.booking_code} — Sada Residence`,
+          successRedirectUrl: `${appUrl}/booking/${booking.id}/confirmation`,
+          failureRedirectUrl: `${appUrl}/booking/${booking.id}`,
+          customerName: guest.fullName,
+          customerPhone: guest.phone,
+        });
 
-      invoiceUrl = invoice.invoice_url;
+        invoiceUrl = invoice.invoice_url;
 
-      // Create payment record
-      await createPayment({
-        booking_id: booking.id,
-        amount: pricing.deposit,
-        method: "bank_transfer", // will be updated by webhook
-        external_id: `booking-${booking.id}`,
-        xendit_invoice_id: invoice.id,
-        xendit_invoice_url: invoice.invoice_url,
-      });
-    } catch (err) {
-      console.error("Xendit invoice creation failed:", err);
-      // Booking still created; payment can be retried
+        await createPayment({
+          booking_id: booking.id,
+          amount: pricing.total,
+          method: "bank_transfer",
+          external_id: `booking-${booking.id}`,
+          xendit_invoice_id: invoice.id,
+          xendit_invoice_url: invoice.invoice_url,
+        });
+      } catch (err) {
+        console.error("Xendit invoice creation failed:", err);
+      }
+    } else if (pmType === "dp_online") {
+      // DP online + remainder at property — charge deposit via Xendit
+      try {
+        const invoice = await createXenditInvoice({
+          externalId: `booking-${booking.id}-dp`,
+          amount: pricing.deposit,
+          payerEmail: guest.email,
+          description: `DP booking ${booking.booking_code} — Sada Residence (sisa bayar di lokasi)`,
+          successRedirectUrl: `${appUrl}/booking/${booking.id}/confirmation`,
+          failureRedirectUrl: `${appUrl}/booking/${booking.id}`,
+          customerName: guest.fullName,
+          customerPhone: guest.phone,
+        });
+
+        invoiceUrl = invoice.invoice_url;
+
+        await createPayment({
+          booking_id: booking.id,
+          amount: pricing.deposit,
+          method: "bank_transfer",
+          external_id: `booking-${booking.id}-dp`,
+          xendit_invoice_id: invoice.id,
+          xendit_invoice_url: invoice.invoice_url,
+        });
+      } catch (err) {
+        console.error("Xendit invoice creation failed:", err);
+      }
+    } else if (pmType === "pay_at_property") {
+      // Full payment at property — no Xendit, booking is confirmed directly
+      // Create a pending payment record for tracking
+      try {
+        await createPayment({
+          booking_id: booking.id,
+          amount: pricing.total,
+          method: "cash", // will be updated when admin records actual payment
+        });
+      } catch (err) {
+        console.error("Payment record creation failed:", err);
+      }
     }
 
     // 7. Send confirmation email
@@ -142,8 +186,9 @@ export async function POST(request: NextRequest) {
           bookingCode: booking.booking_code,
           totalAmount: pricing.total,
           depositAmount: pricing.deposit,
+          paymentMethodType: pmType,
         },
-        paymentUrl: invoiceUrl,
+        paymentUrl: invoiceUrl || null,
       },
       { status: 201 }
     );

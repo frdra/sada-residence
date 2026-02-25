@@ -189,6 +189,7 @@ export async function createBooking(booking: {
   discount_amount: number;
   total_amount: number;
   deposit_amount: number;
+  payment_method_type?: string;
 }): Promise<Booking> {
   const supabase = createAdminClient();
   const { data, error } = await supabase

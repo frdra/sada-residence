@@ -9,6 +9,7 @@ export const bookingFormSchema = z.object({
   stayType: z.enum(["daily", "weekly", "monthly"]).optional(),
   numGuests: z.number().int().min(1).max(10),
   specialRequests: z.string().max(500).optional(),
+  paymentMethodType: z.enum(["online", "dp_online", "pay_at_property"]).optional(),
   guest: z.object({
     fullName: z.string().min(2, "Name is required").max(100),
     email: z.string().email("Invalid email"),

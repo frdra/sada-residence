@@ -14,6 +14,8 @@ export type PaymentStatus = "unpaid" | "partial" | "paid" | "refunded";
 
 export type PaymentMethod = "qris" | "credit_card" | "bank_transfer" | "cash";
 
+export type PaymentMethodType = "online" | "dp_online" | "pay_at_property";
+
 export type StayType = "daily" | "weekly" | "monthly";
 
 export type BlockReason =
@@ -126,6 +128,7 @@ export interface Booking {
   deposit_amount: number;
   payment_status: PaymentStatus;
   paid_amount: number;
+  payment_method_type: PaymentMethodType;
   special_requests: string | null;
   admin_notes: string | null;
   cancelled_at: string | null;
