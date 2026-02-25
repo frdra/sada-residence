@@ -48,7 +48,7 @@ export default function AdminHousekeepingPage() {
       </div>
 
       {/* Quick Nav */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+      <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
         <Link href="/admin/housekeeping/tasks?status=needs_review" className="bg-yellow-50 border border-yellow-200 rounded-xl p-4 hover:bg-yellow-100 transition-colors">
           <div className="text-2xl font-bold text-yellow-600">{today.needsReview}</div>
           <div className="text-xs text-yellow-700 mt-1">Perlu Review</div>
@@ -60,6 +60,10 @@ export default function AdminHousekeepingPage() {
         <Link href="/admin/housekeeping/laundry" className="bg-blue-50 border border-blue-200 rounded-xl p-4 hover:bg-blue-100 transition-colors">
           <div className="text-2xl font-bold text-blue-600">{pendingLaundry}</div>
           <div className="text-xs text-blue-700 mt-1">Laundry Pending</div>
+        </Link>
+        <Link href="/admin/housekeeping/attendance" className="bg-purple-50 border border-purple-200 rounded-xl p-4 hover:bg-purple-100 transition-colors">
+          <div className="text-2xl">📸</div>
+          <div className="text-xs text-purple-700 mt-1">Absensi Staff</div>
         </Link>
         <div className="bg-green-50 border border-green-200 rounded-xl p-4">
           <div className="text-2xl font-bold text-green-600">{periodData.avgScore}</div>
