@@ -78,6 +78,7 @@ export interface Room {
 export interface Rate {
   id: string;
   room_type_id: string;
+  property_id: string | null;
   stay_type: StayType;
   price: number;
   min_stay: number;
@@ -91,6 +92,20 @@ export interface Rate {
   updated_at: string;
   // Joins
   room_type?: RoomType;
+  property?: Property;
+}
+
+export interface RoomRateOverride {
+  id: string;
+  room_id: string;
+  stay_type: StayType;
+  price: number;
+  is_active: boolean;
+  notes: string | null;
+  created_at: string;
+  updated_at: string;
+  // Joins
+  room?: Room;
 }
 
 export interface Guest {

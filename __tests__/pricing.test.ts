@@ -5,6 +5,7 @@ import type { Rate } from "@/types";
 const baseRate: Rate = {
   id: "test-rate-1",
   room_type_id: "rt-1",
+  property_id: null,
   stay_type: "daily",
   price: 350000,
   min_stay: 1,

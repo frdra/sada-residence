@@ -65,18 +65,75 @@ export async function getRates(): Promise<Rate[]> {
   return data ?? [];
 }
 
+/**
+ * Get the effective rate using 3-tier pricing hierarchy:
+ * 1. Room-level override (highest priority)
+ * 2. Property-level rate
+ * 3. Global rate (fallback)
+ */
 export async function getRateByTypeAndStay(
   roomTypeId: string,
-  stayType: string
+  stayType: string,
+  options?: { roomId?: string; propertyId?: string }
 ): Promise<Rate | null> {
   const supabase = createAdminClient();
+
+  // 1. Check room-level override first
+  if (options?.roomId) {
+    const { data: override } = await supabase
+      .from("room_rate_overrides")
+      .select("*")
+      .eq("room_id", options.roomId)
+      .eq("stay_type", stayType)
+      .eq("is_active", true)
+      .maybeSingle();
+
+    if (override) {
+      // Return as a Rate-like object for compatibility
+      return {
+        id: override.id,
+        room_type_id: roomTypeId,
+        property_id: null,
+        stay_type: override.stay_type,
+        price: override.price,
+        min_stay: 1,
+        deposit_percentage: 0,
+        tax_percentage: 0,
+        service_fee: 0,
+        is_active: true,
+        valid_from: null,
+        valid_until: null,
+        created_at: override.created_at,
+        updated_at: override.updated_at,
+      } as Rate;
+    }
+  }
+
+  // 2. Check property-level rate
+  if (options?.propertyId) {
+    const { data: propertyRate } = await supabase
+      .from("rates")
+      .select("*")
+      .eq("room_type_id", roomTypeId)
+      .eq("stay_type", stayType)
+      .eq("property_id", options.propertyId)
+      .eq("is_active", true)
+      .maybeSingle();
+
+    if (propertyRate) return propertyRate;
+  }
+
+  // 3. Fallback to global rate
   const { data, error } = await supabase
     .from("rates")
     .select("*")
     .eq("room_type_id", roomTypeId)
     .eq("stay_type", stayType)
-    .single();
-  if (error && error.code !== "PGRST116") throw new Error(error.message);
+    .is("property_id", null)
+    .eq("is_active", true)
+    .maybeSingle();
+
+  if (error) throw new Error(error.message);
   return data;
 }
 

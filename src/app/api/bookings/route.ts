@@ -57,7 +57,11 @@ export async function POST(request: NextRequest) {
     const resolvedStayType = stayType || suggestStayType(nights);
     const roomTypeId = (room as any).room_type_id || (room as any).room_type?.id;
 
-    const rate = await getRateByTypeAndStay(roomTypeId, resolvedStayType);
+    const propertyId = (room as any).property_id || (room as any).property?.id;
+    const rate = await getRateByTypeAndStay(roomTypeId, resolvedStayType, {
+      roomId,
+      propertyId,
+    });
     if (!rate) {
       return NextResponse.json(
         { error: "No rate found for this room type and stay type" },
@@ -84,7 +88,7 @@ export async function POST(request: NextRequest) {
     const booking = await createBooking({
       room_id: roomId,
       guest_id: guestRecord.id,
-      property_id: (room as any).property_id || (room as any).property?.id,
+      property_id: propertyId,
       check_in: checkIn,
       check_out: checkOut,
       stay_type: resolvedStayType,
