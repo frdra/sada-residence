@@ -8,6 +8,7 @@ import {
   updateBookingStatus,
 } from "@/lib/db/queries";
 import { paymentSuccessEmail, sendEmail } from "@/lib/email/templates";
+import { notifyPaymentReceived } from "@/lib/notifications/service";
 
 export async function POST(request: NextRequest) {
   try {
@@ -89,6 +90,17 @@ export async function POST(request: NextRequest) {
           }
         } catch (err) {
           console.error("Payment success email failed:", err);
+        }
+
+        // Notify admin — payment received
+        try {
+          await notifyPaymentReceived(
+            { id: booking.id, booking_code: booking.booking_code, guest: (booking as any).guest },
+            paid_amount || payment.amount,
+            payment_channel || "online"
+          );
+        } catch (err) {
+          console.error("Payment notification failed:", err);
         }
       }
     }

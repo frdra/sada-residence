@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/server";
+import { notifyCheckIn } from "@/lib/notifications/service";
 
 export async function POST(request: NextRequest) {
   try {
@@ -94,6 +95,21 @@ export async function POST(request: NextRequest) {
         { error: "Gagal update booking: " + bookingError.message },
         { status: 500 }
       );
+    }
+
+    // Notify admin — check-in
+    try {
+      // Fetch booking with guest and room info for notification
+      const { data: fullBooking } = await admin
+        .from("bookings")
+        .select("id, booking_code, guest:guests(full_name), room:rooms(room_number, property:properties(name))")
+        .eq("id", bookingId)
+        .single();
+      if (fullBooking) {
+        await notifyCheckIn(fullBooking as any);
+      }
+    } catch (err) {
+      console.error("Check-in notification failed:", err);
     }
 
     return NextResponse.json({ booking, idPhotoUrl });

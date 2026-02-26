@@ -10,6 +10,7 @@ import {
   bookingConfirmationEmail,
   sendEmail,
 } from "@/lib/email/templates";
+import { notifyNewBooking } from "@/lib/notifications/service";
 import { differenceInDays } from "date-fns";
 
 export async function POST(request: NextRequest) {
@@ -181,6 +182,19 @@ export async function POST(request: NextRequest) {
       await sendEmail(guest.email, emailData.subject, emailData.html);
     } catch (err) {
       console.error("Email send failed:", err);
+    }
+
+    // 8. Notify admin — new booking
+    try {
+      await notifyNewBooking({
+        id: booking.id,
+        booking_code: booking.booking_code,
+        guest: { full_name: guest.fullName },
+        room: { room_number: (room as any).room_number, property: { name: (room as any).property?.name || "" } },
+        total_amount: pricing.total,
+      });
+    } catch (err) {
+      console.error("Notification failed:", err);
     }
 
     return NextResponse.json(

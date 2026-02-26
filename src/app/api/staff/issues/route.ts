@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/server";
 import { requireStaffOrAdmin } from "@/lib/auth/staff";
+import { notifyIssueReported } from "@/lib/notifications/service";
 
 export const dynamic = "force-dynamic";
 
@@ -109,6 +110,21 @@ export async function POST(request: NextRequest) {
         .single();
       if (rec) photoRecords.push(rec);
     }
+  }
+
+  // Notify admin — issue reported
+  try {
+    // Fetch full issue with relations for notification
+    const { data: fullIssue } = await admin
+      .from("room_issues")
+      .select("id, title, severity, room:rooms(room_number), property:properties(name), reporter:staff_profiles(full_name)")
+      .eq("id", issue.id)
+      .single();
+    if (fullIssue) {
+      await notifyIssueReported(fullIssue as any);
+    }
+  } catch (err) {
+    console.error("Issue notification failed:", err);
   }
 
   return NextResponse.json({ issue: { ...issue, photos: photoRecords } });

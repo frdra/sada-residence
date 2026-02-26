@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/server";
 import { getStaffUser } from "@/lib/auth/staff";
+import { notifyStaffLate } from "@/lib/notifications/service";
 
 export const dynamic = "force-dynamic";
 
@@ -173,6 +174,25 @@ export async function POST(request: NextRequest) {
           .select()
           .single();
         if (error) throw new Error(error.message);
+
+        // Notify admin if late
+        if (isLate) {
+          try {
+            const staffName = user.staffProfile?.full_name || "Staff";
+            const { data: prop } = propertyId
+              ? await admin.from("properties").select("name").eq("id", propertyId).single()
+              : { data: null };
+            await notifyStaffLate({
+              id: staffId,
+              full_name: staffName,
+              late_minutes: lateMinutes,
+              property_name: prop?.name,
+            });
+          } catch (err) {
+            console.error("Late notification failed:", err);
+          }
+        }
+
         return NextResponse.json({ attendance: data, message: isLate ? `Terlambat ${lateMinutes} menit` : "Absen masuk berhasil" });
       } else {
         const { data, error } = await admin
@@ -181,6 +201,25 @@ export async function POST(request: NextRequest) {
           .select()
           .single();
         if (error) throw new Error(error.message);
+
+        // Notify admin if late
+        if (isLate) {
+          try {
+            const staffName = user.staffProfile?.full_name || "Staff";
+            const { data: prop } = propertyId
+              ? await admin.from("properties").select("name").eq("id", propertyId).single()
+              : { data: null };
+            await notifyStaffLate({
+              id: staffId,
+              full_name: staffName,
+              late_minutes: lateMinutes,
+              property_name: prop?.name,
+            });
+          } catch (err) {
+            console.error("Late notification failed:", err);
+          }
+        }
+
         return NextResponse.json({ attendance: data, message: isLate ? `Terlambat ${lateMinutes} menit` : "Absen masuk berhasil" });
       }
     }

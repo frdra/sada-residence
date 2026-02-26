@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createAdminClient } from "@/lib/supabase/server";
+import { notifyOnSitePayment } from "@/lib/notifications/service";
 
 export const dynamic = "force-dynamic";
 
@@ -75,6 +76,17 @@ export async function POST(request: NextRequest) {
 
     if (updateError) {
       return NextResponse.json({ error: updateError.message }, { status: 500 });
+    }
+
+    // Notify admin — on-site payment
+    try {
+      await notifyOnSitePayment(
+        { id: bookingId, booking_code: booking.booking_code },
+        amount,
+        onSiteMethod
+      );
+    } catch (err) {
+      console.error("On-site payment notification failed:", err);
     }
 
     return NextResponse.json({

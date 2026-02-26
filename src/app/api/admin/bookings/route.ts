@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/server";
 import { getBookings, updateBookingStatus } from "@/lib/db/queries";
+import { notifyCheckOut } from "@/lib/notifications/service";
 
 export async function GET(request: NextRequest) {
   try {
@@ -36,6 +38,24 @@ export async function PATCH(request: NextRequest) {
     }
 
     const booking = await updateBookingStatus(bookingId, status);
+
+    // Notify admin on check-out
+    if (status === "checked_out") {
+      try {
+        const admin = createAdminClient();
+        const { data: fullBooking } = await admin
+          .from("bookings")
+          .select("id, booking_code, guest:guests(full_name), room:rooms(room_number)")
+          .eq("id", bookingId)
+          .single();
+        if (fullBooking) {
+          await notifyCheckOut(fullBooking as any);
+        }
+      } catch (err) {
+        console.error("Check-out notification failed:", err);
+      }
+    }
+
     return NextResponse.json({ booking });
   } catch (error: any) {
     return NextResponse.json({ error: error.message }, { status: 500 });
