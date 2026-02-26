@@ -10,6 +10,7 @@ const navItems = [
   { href: "/admin/rooms", label: "Kamar", icon: "🏠" },
   { href: "/admin/bookings", label: "Booking", icon: "📋" },
   { href: "/admin/pricing", label: "Harga", icon: "💲" },
+  { href: "/admin/expenses", label: "Pengeluaran", icon: "📤" },
   { href: "/admin/housekeeping", label: "Housekeeping", icon: "🧹" },
   { href: "/admin/calendar", label: "Kalender", icon: "📅" },
   { href: "/admin/analytics", label: "Keuangan", icon: "💰" },

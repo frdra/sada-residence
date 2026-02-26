@@ -391,6 +391,47 @@ export interface IssuePhoto {
   uploaded_at: string;
 }
 
+// ── Expense Types ──
+
+export type ExpensePaymentMethod = "cash" | "transfer" | "qris";
+export type ExpenseStatus = "recorded" | "verified" | "cancelled";
+export type RecurringInterval = "weekly" | "monthly" | "quarterly" | "yearly";
+
+export interface ExpenseCategory {
+  id: string;
+  name: string;
+  icon: string;
+  color: string;
+  sort_order: number;
+  is_active: boolean;
+  created_at: string;
+}
+
+export interface Expense {
+  id: string;
+  category_id: string;
+  property_id: string | null;
+  title: string;
+  description: string | null;
+  amount: number;
+  expense_date: string;
+  payment_method: ExpensePaymentMethod;
+  receipt_url: string | null;
+  is_recurring: boolean;
+  recurring_interval: RecurringInterval | null;
+  recurring_day: number | null;
+  recurring_end_date: string | null;
+  parent_expense_id: string | null;
+  recorded_by: string | null;
+  status: ExpenseStatus;
+  notes: string | null;
+  created_at: string;
+  updated_at: string;
+  // Joins
+  category?: ExpenseCategory;
+  property?: Property;
+}
+
 export interface LaundryItem {
   name: string;
   quantity: number;
