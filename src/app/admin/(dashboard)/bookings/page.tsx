@@ -498,6 +498,246 @@ function GuestDetailModal({ guestId, onClose }: { guestId: string; onClose: () =
   );
 }
 
+// ── Manual Booking Modal ──
+function ManualBookingModal({
+  onClose,
+  onSuccess,
+}: {
+  onClose: () => void;
+  onSuccess: () => void;
+}) {
+  const [properties, setProperties] = useState<{ id: string; name: string }[]>([]);
+  const [rooms, setRooms] = useState<{ id: string; room_number: string; status: string; property: { id: string; name: string } }[]>([]);
+  const [selectedProperty, setSelectedProperty] = useState("");
+  const [selectedRoom, setSelectedRoom] = useState("");
+  const [checkIn, setCheckIn] = useState("");
+  const [checkOut, setCheckOut] = useState("");
+  const [stayType, setStayType] = useState("daily");
+  const [numGuests, setNumGuests] = useState(1);
+  const [guestName, setGuestName] = useState("");
+  const [guestPhone, setGuestPhone] = useState("");
+  const [guestEmail, setGuestEmail] = useState("");
+  const [guestIdNumber, setGuestIdNumber] = useState("");
+  const [specialRequests, setSpecialRequests] = useState("");
+  const [isPaid, setIsPaid] = useState(false);
+  const [paidMethod, setPaidMethod] = useState<"cash" | "qris" | "transfer">("cash");
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
+
+  // Fetch properties
+  useEffect(() => {
+    (async () => {
+      const res = await fetch("/api/properties");
+      const data = await res.json();
+      setProperties(data.properties || data || []);
+    })();
+  }, []);
+
+  // Fetch rooms when property changes
+  useEffect(() => {
+    if (!selectedProperty) { setRooms([]); return; }
+    (async () => {
+      const res = await fetch(`/api/admin/rooms?propertyId=${selectedProperty}&status=available`);
+      const data = await res.json();
+      setRooms(data.rooms || []);
+    })();
+  }, [selectedProperty]);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!selectedRoom || !checkIn || !checkOut || !guestName || !guestPhone) {
+      setError("Harap lengkapi semua field yang wajib diisi");
+      return;
+    }
+    if (new Date(checkOut) <= new Date(checkIn)) {
+      setError("Tanggal check-out harus setelah check-in");
+      return;
+    }
+
+    setSubmitting(true);
+    setError("");
+
+    try {
+      const res = await fetch("/api/admin/bookings/manual", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          roomId: selectedRoom,
+          checkIn,
+          checkOut,
+          stayType,
+          numGuests,
+          guestName,
+          guestPhone,
+          guestEmail: guestEmail || undefined,
+          guestIdNumber: guestIdNumber || undefined,
+          specialRequests: specialRequests || undefined,
+          paymentMethodType: "pay_at_property",
+          isPaid,
+          paidAmount: isPaid ? undefined : 0, // will be calculated server-side
+          paidMethod: isPaid ? paidMethod : undefined,
+        }),
+      });
+
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Gagal membuat booking");
+
+      setSuccess(`Booking berhasil dibuat! Kode: ${data.booking.bookingCode}`);
+      setTimeout(() => onSuccess(), 1500);
+    } catch (err: any) {
+      setError(err.message);
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  const today = new Date().toISOString().split("T")[0];
+
+  return (
+    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+      <div className="bg-white rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+        <div className="p-6 border-b">
+          <div className="flex items-center justify-between">
+            <h2 className="text-lg font-bold">Booking Manual</h2>
+            <button onClick={onClose} className="text-gray-400 hover:text-gray-600 text-2xl leading-none">&times;</button>
+          </div>
+          <p className="text-sm text-gray-500 mt-1">Buat booking langsung dari dashboard admin (walk-in / telepon)</p>
+        </div>
+
+        <form onSubmit={handleSubmit} className="p-6 space-y-5">
+          {/* Room Selection */}
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Building <span className="text-red-500">*</span></label>
+              <select className="input-field" value={selectedProperty} onChange={(e) => { setSelectedProperty(e.target.value); setSelectedRoom(""); }}>
+                <option value="">Pilih building...</option>
+                {properties.map((p) => (
+                  <option key={p.id} value={p.id}>{p.name}</option>
+                ))}
+              </select>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Kamar <span className="text-red-500">*</span></label>
+              <select className="input-field" value={selectedRoom} onChange={(e) => setSelectedRoom(e.target.value)} disabled={!selectedProperty}>
+                <option value="">Pilih kamar...</option>
+                {rooms.map((r) => (
+                  <option key={r.id} value={r.id}>{r.room_number}</option>
+                ))}
+              </select>
+              {selectedProperty && rooms.length === 0 && (
+                <p className="text-xs text-orange-500 mt-1">Tidak ada kamar tersedia</p>
+              )}
+            </div>
+          </div>
+
+          {/* Dates */}
+          <div className="grid grid-cols-3 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Check-In <span className="text-red-500">*</span></label>
+              <input type="date" className="input-field" value={checkIn} onChange={(e) => setCheckIn(e.target.value)} min={today} />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Check-Out <span className="text-red-500">*</span></label>
+              <input type="date" className="input-field" value={checkOut} onChange={(e) => setCheckOut(e.target.value)} min={checkIn || today} />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Tipe Menginap</label>
+              <select className="input-field" value={stayType} onChange={(e) => setStayType(e.target.value)}>
+                <option value="daily">Harian</option>
+                <option value="monthly">Bulanan</option>
+                <option value="yearly">Tahunan</option>
+              </select>
+            </div>
+          </div>
+
+          {/* Guest Info */}
+          <div className="border-t pt-4">
+            <p className="text-sm font-semibold text-gray-700 mb-3">Data Tamu</p>
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Nama Lengkap <span className="text-red-500">*</span></label>
+                <input type="text" className="input-field" value={guestName} onChange={(e) => setGuestName(e.target.value)} placeholder="Nama tamu" />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">No. Telepon <span className="text-red-500">*</span></label>
+                <input type="tel" className="input-field" value={guestPhone} onChange={(e) => setGuestPhone(e.target.value)} placeholder="08xxx" />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                <input type="email" className="input-field" value={guestEmail} onChange={(e) => setGuestEmail(e.target.value)} placeholder="email@contoh.com" />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">No. KTP/Paspor</label>
+                <input type="text" className="input-field" value={guestIdNumber} onChange={(e) => setGuestIdNumber(e.target.value)} placeholder="Nomor identitas" />
+              </div>
+            </div>
+          </div>
+
+          {/* Extra */}
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Jumlah Tamu</label>
+              <input type="number" className="input-field" value={numGuests} onChange={(e) => setNumGuests(Number(e.target.value))} min={1} max={10} />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Permintaan Khusus</label>
+              <input type="text" className="input-field" value={specialRequests} onChange={(e) => setSpecialRequests(e.target.value)} placeholder="Opsional" />
+            </div>
+          </div>
+
+          {/* Payment Toggle */}
+          <div className="border-t pt-4">
+            <label className="flex items-center gap-3 cursor-pointer">
+              <input type="checkbox" checked={isPaid} onChange={(e) => setIsPaid(e.target.checked)} className="w-5 h-5 rounded border-gray-300 text-blue-600" />
+              <div>
+                <p className="text-sm font-medium text-gray-700">Sudah bayar sekarang (walk-in)</p>
+                <p className="text-xs text-gray-400">Centang jika tamu langsung membayar saat booking dibuat</p>
+              </div>
+            </label>
+            {isPaid && (
+              <div className="mt-3">
+                <label className="block text-sm font-medium text-gray-700 mb-2">Metode Pembayaran</label>
+                <div className="grid grid-cols-3 gap-3">
+                  {([
+                    { value: "cash" as const, label: "Cash", icon: "💵" },
+                    { value: "qris" as const, label: "QRIS", icon: "📱" },
+                    { value: "transfer" as const, label: "Transfer", icon: "🏧" },
+                  ]).map((m) => (
+                    <button
+                      key={m.value}
+                      type="button"
+                      onClick={() => setPaidMethod(m.value)}
+                      className={`p-3 rounded-xl border-2 text-center transition-all ${
+                        paidMethod === m.value ? "border-blue-400 bg-blue-50" : "border-gray-200 hover:border-gray-300"
+                      }`}
+                    >
+                      <div className="text-xl mb-1">{m.icon}</div>
+                      <div className="text-xs font-medium">{m.label}</div>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+
+          {error && <div className="bg-red-50 text-red-600 text-sm p-3 rounded-lg">{error}</div>}
+          {success && <div className="bg-green-50 text-green-600 text-sm p-3 rounded-lg">{success}</div>}
+
+          <div className="flex gap-3 pt-2">
+            <button type="button" onClick={onClose} className="flex-1 px-4 py-2.5 border border-gray-300 rounded-xl text-sm font-medium hover:bg-gray-50 transition-colors">
+              Batal
+            </button>
+            <button type="submit" disabled={submitting || !!success} className="flex-1 btn-primary !py-2.5 text-sm disabled:opacity-50">
+              {submitting ? "Memproses..." : "Buat Booking"}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
+}
+
 // ── Main Bookings Page ──
 export default function BookingsPage() {
   const [bookings, setBookings] = useState<Booking[]>([]);
@@ -512,6 +752,7 @@ export default function BookingsPage() {
   const [checkInBooking, setCheckInBooking] = useState<Booking | null>(null);
   const [detailGuestId, setDetailGuestId] = useState<string | null>(null);
   const [recordPaymentBooking, setRecordPaymentBooking] = useState<Booking | null>(null);
+  const [showManualBooking, setShowManualBooking] = useState(false);
 
   const fetchBookings = async () => {
     setLoading(true);
@@ -550,6 +791,12 @@ export default function BookingsPage() {
     <div>
       {/* Filters */}
       <div className="flex flex-wrap gap-3 mb-6">
+        <button
+          onClick={() => setShowManualBooking(true)}
+          className="px-4 py-2 text-sm font-medium bg-navy-900 text-white rounded-lg hover:bg-navy-800 transition-colors"
+        >
+          + Booking Manual
+        </button>
         <form onSubmit={handleSearch} className="flex gap-2">
           <input type="text" className="input-field !w-64" placeholder="Cari kode booking atau nama..." value={search} onChange={(e) => setSearch(e.target.value)} />
           <button type="submit" className="btn-primary !py-2 text-sm">Cari</button>
@@ -685,6 +932,9 @@ export default function BookingsPage() {
       )}
       {recordPaymentBooking && (
         <RecordPaymentModal booking={recordPaymentBooking} onClose={() => setRecordPaymentBooking(null)} onSuccess={() => { setRecordPaymentBooking(null); fetchBookings(); }} />
+      )}
+      {showManualBooking && (
+        <ManualBookingModal onClose={() => setShowManualBooking(false)} onSuccess={() => { setShowManualBooking(false); fetchBookings(); }} />
       )}
     </div>
   );

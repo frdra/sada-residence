@@ -79,6 +79,24 @@ export async function POST(request: NextRequest) {
       }
     }
 
+    // Validate check-in date: must be on or after booking start date
+    const { data: bookingCheck } = await admin
+      .from("bookings")
+      .select("check_in, room_id")
+      .eq("id", bookingId)
+      .single();
+
+    if (bookingCheck) {
+      const today = new Date().toISOString().split("T")[0];
+      const checkInDate = bookingCheck.check_in.split("T")[0];
+      if (today < checkInDate) {
+        return NextResponse.json(
+          { error: `Belum bisa check-in. Check-in baru bisa dilakukan mulai tanggal ${new Date(checkInDate).toLocaleDateString("id-ID")}.` },
+          { status: 400 }
+        );
+      }
+    }
+
     // Update booking status to checked_in
     const { data: booking, error: bookingError } = await admin
       .from("bookings")
@@ -95,6 +113,14 @@ export async function POST(request: NextRequest) {
         { error: "Gagal update booking: " + bookingError.message },
         { status: 500 }
       );
+    }
+
+    // Update room status to "occupied"
+    if (bookingCheck?.room_id) {
+      await admin
+        .from("rooms")
+        .update({ status: "occupied" })
+        .eq("id", bookingCheck.room_id);
     }
 
     // Notify admin — check-in

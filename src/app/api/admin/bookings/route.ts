@@ -39,15 +39,30 @@ export async function PATCH(request: NextRequest) {
 
     const booking = await updateBookingStatus(bookingId, status);
 
-    // Notify admin on check-out
+    // On check-out: update room status back to "available" + notify
     if (status === "checked_out") {
       try {
         const admin = createAdminClient();
         const { data: fullBooking } = await admin
           .from("bookings")
-          .select("id, booking_code, guest:guests(full_name), room:rooms(room_number)")
+          .select("id, booking_code, room_id, guest:guests(full_name), room:rooms(room_number)")
           .eq("id", bookingId)
           .single();
+
+        // Set room back to available
+        if (fullBooking?.room_id) {
+          await admin
+            .from("rooms")
+            .update({ status: "available" })
+            .eq("id", fullBooking.room_id);
+        }
+
+        // Also set checked_out_at timestamp
+        await admin
+          .from("bookings")
+          .update({ checked_out_at: new Date().toISOString() })
+          .eq("id", bookingId);
+
         if (fullBooking) {
           await notifyCheckOut(fullBooking as any);
         }
