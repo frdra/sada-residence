@@ -74,7 +74,7 @@ export async function POST(request: NextRequest) {
           const supabase = createAdminClient();
           await supabase
             .from("payments")
-            .update({ method: mapXenditPaymentMethod(payment_channel) })
+            .update({ payment_method: mapXenditPaymentMethod(payment_channel) })
             .eq("id", payment.id);
         }
 

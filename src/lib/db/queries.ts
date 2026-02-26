@@ -363,9 +363,11 @@ export async function createPayment(payment: {
   xendit_invoice_url?: string;
 }): Promise<Payment> {
   const supabase = createAdminClient();
+  // Map 'method' param to 'payment_method' column name in DB
+  const { method, ...rest } = payment;
   const { data, error } = await supabase
     .from("payments")
-    .insert(payment)
+    .insert({ ...rest, payment_method: method })
     .select()
     .single();
   if (error) throw new Error(error.message);
@@ -456,13 +458,14 @@ export async function getAnalyticsData(
   // Payment method breakdown
   let payMethodQuery = supabase
     .from("payments")
-    .select("method, amount")
+    .select("payment_method, amount")
     .eq("status", "paid");
   const { data: payments } = await payMethodQuery;
 
   const paymentBreakdown: Record<string, number> = {};
-  payments?.forEach((p) => {
-    paymentBreakdown[p.method] = (paymentBreakdown[p.method] || 0) + p.amount;
+  payments?.forEach((p: any) => {
+    const m = p.payment_method || "unknown";
+    paymentBreakdown[m] = (paymentBreakdown[m] || 0) + p.amount;
   });
 
   return {

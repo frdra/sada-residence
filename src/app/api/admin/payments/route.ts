@@ -43,7 +43,7 @@ export async function POST(request: NextRequest) {
       .insert({
         booking_id: bookingId,
         amount,
-        method: onSiteMethod === "transfer" ? "bank_transfer" : onSiteMethod,
+        payment_method: onSiteMethod === "transfer" ? "bank_transfer" : onSiteMethod,
         on_site_method: onSiteMethod,
         status: "paid",
         paid_at: new Date().toISOString(),
