@@ -273,10 +273,13 @@ function BookingContent() {
   ];
 
   return (
-    <div className="py-12">
+    <div className="pt-24 pb-16 bg-[#FAFAF8] min-h-screen">
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h1 className="section-title mb-2">Booking Kamar</h1>
-        <p className="text-gray-600 mb-8">
+        <p className="font-body text-[10px] font-semibold tracking-[0.3em] uppercase text-terracotta-500 mb-3">
+          Reservasi
+        </p>
+        <h1 className="font-display text-3xl md:text-4xl font-light text-charcoal-800 mb-3">Booking Kamar</h1>
+        <p className="font-body text-sm text-charcoal-600 mb-8">
           Pilih properti, tentukan tanggal, dan lengkapi data Anda.
         </p>
 
@@ -288,7 +291,7 @@ function BookingContent() {
                 className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold transition-colors ${
                   step >= s.n
                     ? "bg-charcoal-800 text-white"
-                    : "bg-gray-200 text-gray-500"
+                    : "bg-concrete-200 text-concrete-600"
                 }`}
               >
                 {step > s.n ? (
@@ -301,7 +304,7 @@ function BookingContent() {
               </div>
               <span
                 className={`text-sm hidden sm:inline ${
-                  step >= s.n ? "text-charcoal-800 font-medium" : "text-gray-400"
+                  step >= s.n ? "text-charcoal-800 font-medium" : "text-concrete-600"
                 }`}
               >
                 {s.label}
@@ -322,7 +325,7 @@ function BookingContent() {
           <div className="space-y-4">
             <div className="card p-8">
               <h2 className="font-display text-xl font-bold mb-2">Pilih Lokasi Properti</h2>
-              <p className="text-sm text-gray-500 mb-6">Kami memiliki 4 lokasi di kawasan Jimbaran, Bali</p>
+              <p className="text-sm text-concrete-600 mb-6">Kami memiliki 4 lokasi di kawasan Jimbaran, Bali</p>
 
               <div className="grid sm:grid-cols-2 gap-4">
                 {(properties.length > 0
@@ -345,7 +348,7 @@ function BookingContent() {
                     className={`p-5 rounded-xl border-2 text-left transition-all ${
                       selectedPropertyId === prop.id
                         ? "border-terracotta-400 bg-terracotta-50 shadow-sm"
-                        : "border-gray-200 hover:border-gray-300 hover:shadow-sm"
+                        : "border-concrete-200 hover:border-concrete-300 hover:shadow-sm"
                     }`}
                   >
                     <div className="flex items-start justify-between mb-2">
@@ -356,7 +359,7 @@ function BookingContent() {
                         className={`w-5 h-5 rounded-full border-2 flex-shrink-0 flex items-center justify-center ml-2 ${
                           selectedPropertyId === prop.id
                             ? "border-terracotta-400 bg-terracotta-400"
-                            : "border-gray-300"
+                            : "border-concrete-300"
                         }`}
                       >
                         {selectedPropertyId === prop.id && (
@@ -366,7 +369,7 @@ function BookingContent() {
                         )}
                       </div>
                     </div>
-                    <p className="text-xs text-gray-500">{prop.description}</p>
+                    <p className="text-xs text-concrete-600">{prop.description}</p>
                     <p className="text-xs text-terracotta-500 font-medium mt-2">{prop.total_rooms} kamar</p>
                   </button>
                 ))}
@@ -401,7 +404,7 @@ function BookingContent() {
 
             {/* Selected property badge */}
             <div className="bg-concrete-100 rounded-lg px-4 py-3 flex items-center gap-2">
-              <span className="text-sm text-gray-600">Properti:</span>
+              <span className="text-sm text-charcoal-600">Properti:</span>
               <span className="text-sm font-semibold text-charcoal-800">{selectedPropertyName}</span>
             </div>
 
@@ -416,12 +419,12 @@ function BookingContent() {
                     className={`p-4 rounded-xl border-2 text-center transition-all ${
                       stayType === opt.value
                         ? "border-terracotta-400 bg-terracotta-50 shadow-sm"
-                        : "border-gray-200 hover:border-gray-300"
+                        : "border-concrete-200 hover:border-concrete-300"
                     }`}
                   >
                     <div className="text-2xl mb-1">{opt.icon}</div>
                     <div className="font-semibold text-sm">{opt.label}</div>
-                    <div className="text-xs text-gray-500 mt-1">{opt.desc}</div>
+                    <div className="text-xs text-concrete-600 mt-1">{opt.desc}</div>
                   </button>
                 ))}
               </div>
@@ -434,7 +437,7 @@ function BookingContent() {
               {stayType === "daily" ? (
                 <div className="grid sm:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Check-in</label>
+                    <label className="block text-sm font-medium text-charcoal-800 mb-1">Check-in</label>
                     <input
                       type="date"
                       className="input-field"
@@ -448,7 +451,7 @@ function BookingContent() {
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Check-out</label>
+                    <label className="block text-sm font-medium text-charcoal-800 mb-1">Check-out</label>
                     <input
                       type="date"
                       className="input-field"
@@ -461,7 +464,7 @@ function BookingContent() {
               ) : (
                 <div className="space-y-4">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Tanggal Check-in</label>
+                    <label className="block text-sm font-medium text-charcoal-800 mb-1">Tanggal Check-in</label>
                     <input
                       type="date"
                       className="input-field"
@@ -471,24 +474,24 @@ function BookingContent() {
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Durasi</label>
+                    <label className="block text-sm font-medium text-charcoal-800 mb-1">Durasi</label>
                     <div className="flex items-center gap-3">
                       <button
                         onClick={() => { if (duration > 1) { handleDurationChange(duration - 1); setAvailableCount(null); } }}
-                        className="w-10 h-10 rounded-lg border border-gray-300 flex items-center justify-center text-lg font-bold hover:bg-gray-50 disabled:opacity-40"
+                        className="w-10 h-10 rounded-lg border border-concrete-300 flex items-center justify-center text-lg font-bold hover:bg-concrete-100 disabled:opacity-40"
                         disabled={duration <= 1}
                       >
                         −
                       </button>
                       <div className="flex-1 text-center">
-                        <span className="text-2xl font-bold text-navy-900">{duration}</span>
-                        <span className="text-gray-500 ml-2">
+                        <span className="text-2xl font-bold text-charcoal-800">{duration}</span>
+                        <span className="text-concrete-600 ml-2">
                           {stayType === "weekly" ? "minggu" : "bulan"}
                         </span>
                       </div>
                       <button
                         onClick={() => { handleDurationChange(duration + 1); setAvailableCount(null); }}
-                        className="w-10 h-10 rounded-lg border border-gray-300 flex items-center justify-center text-lg font-bold hover:bg-gray-50"
+                        className="w-10 h-10 rounded-lg border border-concrete-300 flex items-center justify-center text-lg font-bold hover:bg-concrete-100"
                       >
                         +
                       </button>
@@ -501,15 +504,15 @@ function BookingContent() {
               {checkIn && checkOut && nights > 0 && (
                 <div className="bg-terracotta-50 rounded-lg p-4 text-sm mt-4 space-y-1">
                   <div className="flex justify-between">
-                    <span className="text-gray-600">Check-in</span>
+                    <span className="text-charcoal-600">Check-in</span>
                     <span className="font-medium">{formatDate(checkIn)}</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-gray-600">Check-out</span>
+                    <span className="text-charcoal-600">Check-out</span>
                     <span className="font-medium">{formatDate(checkOut)}</span>
                   </div>
                   <div className="flex justify-between pt-2 border-t border-terracotta-200">
-                    <span className="text-gray-600">Total</span>
+                    <span className="text-charcoal-600">Total</span>
                     <span className="font-semibold text-charcoal-800">{nights} malam</span>
                   </div>
                 </div>
@@ -540,7 +543,7 @@ function BookingContent() {
                   disabled={loading || !checkIn || !checkOut}
                   className={`flex-1 py-3 rounded-xl font-semibold text-sm transition-all ${
                     availableCount !== null && availableCount > 0
-                      ? "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                      ? "bg-concrete-100 text-charcoal-600 hover:bg-concrete-200"
                       : "btn-primary"
                   }`}
                 >
@@ -571,28 +574,28 @@ function BookingContent() {
             <div className="bg-concrete-100 rounded-xl p-5 mb-6 space-y-2 text-sm">
               <h3 className="font-display font-normal text-charcoal-800 mb-3">Ringkasan Booking</h3>
               <div className="flex justify-between">
-                <span className="text-gray-600">Properti</span>
+                <span className="text-charcoal-600">Properti</span>
                 <span className="font-medium">{selectedPropertyName}</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-gray-600">Jenis</span>
+                <span className="text-charcoal-600">Jenis</span>
                 <span className="font-medium">
                   {stayType === "daily" ? "Harian" : stayType === "weekly" ? "Mingguan" : "Bulanan"}
                 </span>
               </div>
               <div className="flex justify-between">
-                <span className="text-gray-600">Check-in</span>
+                <span className="text-charcoal-600">Check-in</span>
                 <span className="font-medium">{formatDate(checkIn)}</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-gray-600">Check-out</span>
+                <span className="text-charcoal-600">Check-out</span>
                 <span className="font-medium">{formatDate(checkOut)}</span>
               </div>
               <div className="flex justify-between pt-2 border-t border-concrete-200">
-                <span className="text-gray-600">Durasi</span>
+                <span className="text-charcoal-600">Durasi</span>
                 <span className="font-bold text-charcoal-800">{nights} malam</span>
               </div>
-              <p className="text-xs text-gray-500 pt-2">
+              <p className="text-xs text-concrete-600 pt-2">
                 Kamar akan dipilihkan otomatis oleh sistem.
               </p>
             </div>
@@ -600,7 +603,7 @@ function BookingContent() {
             {/* Payment method selection */}
             <div className="card p-8 mb-6">
               <h2 className="font-display text-xl font-bold mb-2">Metode Pembayaran</h2>
-              <p className="text-sm text-gray-500 mb-5">Pilih cara pembayaran yang paling nyaman untuk Anda</p>
+              <p className="text-sm text-concrete-600 mb-5">Pilih cara pembayaran yang paling nyaman untuk Anda</p>
 
               <div className="space-y-3">
                 {([
@@ -633,7 +636,7 @@ function BookingContent() {
                     className={`w-full p-4 rounded-xl border-2 text-left transition-all flex items-start gap-4 ${
                       paymentMethodType === opt.value
                         ? "border-terracotta-400 bg-terracotta-50 shadow-sm"
-                        : "border-gray-200 hover:border-gray-300"
+                        : "border-concrete-200 hover:border-concrete-300"
                     }`}
                   >
                     <span className="text-2xl mt-0.5">{opt.icon}</span>
@@ -644,13 +647,13 @@ function BookingContent() {
                           <span className="bg-orange-100 text-orange-700 text-[10px] font-bold px-2 py-0.5 rounded-full">{opt.badge}</span>
                         )}
                       </div>
-                      <p className="text-xs text-gray-500 mt-0.5">{opt.desc}</p>
+                      <p className="text-xs text-concrete-600 mt-0.5">{opt.desc}</p>
                     </div>
                     <div
                       className={`w-5 h-5 rounded-full border-2 flex-shrink-0 flex items-center justify-center mt-0.5 ${
                         paymentMethodType === opt.value
                           ? "border-terracotta-400 bg-terracotta-400"
-                          : "border-gray-300"
+                          : "border-concrete-300"
                       }`}
                     >
                       {paymentMethodType === opt.value && (
@@ -689,7 +692,7 @@ function BookingContent() {
 
               <div className="space-y-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-sm font-medium text-charcoal-800 mb-1">
                     Nama Lengkap <span className="text-red-500">*</span>
                   </label>
                   <input
@@ -701,7 +704,7 @@ function BookingContent() {
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-sm font-medium text-charcoal-800 mb-1">
                     Email <span className="text-red-500">*</span>
                   </label>
                   <input
@@ -713,7 +716,7 @@ function BookingContent() {
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-sm font-medium text-charcoal-800 mb-1">
                     No. WhatsApp / Telepon <span className="text-red-500">*</span>
                   </label>
                   <input
@@ -725,7 +728,7 @@ function BookingContent() {
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-sm font-medium text-charcoal-800 mb-1">
                     Jumlah Tamu
                   </label>
                   <select
@@ -739,7 +742,7 @@ function BookingContent() {
                   </select>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className="block text-sm font-medium text-charcoal-800 mb-1">
                     Catatan / Permintaan Khusus
                   </label>
                   <textarea
@@ -766,7 +769,7 @@ function BookingContent() {
                   : "Konfirmasi & Bayar"}
               </button>
 
-              <p className="text-xs text-gray-400 text-center mt-3">
+              <p className="text-xs text-concrete-600 text-center mt-3">
                 Dengan melanjutkan, Anda menyetujui syarat dan ketentuan Sada Residence.
               </p>
             </div>
