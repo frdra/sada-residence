@@ -332,8 +332,8 @@ function BookingContent() {
                   ? properties
                   : [
                       { id: "1", name: "Sada Residence Persada", slug: "persada", description: "Jl. Raya Jimbaran", total_rooms: 30 },
-                      { id: "2", name: "Sada Residence Udayana", slug: "udayana", description: "Jl. Kampus Udayana", total_rooms: 33 },
-                      { id: "3", name: "Sada Residence Taman Griya", slug: "taman-griya", description: "Jl. Taman Griya", total_rooms: 33 },
+                      { id: "2", name: "Sada Residence Udayana", slug: "udayana", description: "Jl. Kampus Udayana", total_rooms: 34 },
+                      { id: "3", name: "Sada Residence Taman Griya", slug: "taman-griya", description: "Jl. Taman Griya", total_rooms: 39 },
                       { id: "4", name: "Sada Residence Goa Gong", slug: "goa-gong", description: "Jl. Goa Gong", total_rooms: 24 },
                     ]
                 ).map((prop) => (
