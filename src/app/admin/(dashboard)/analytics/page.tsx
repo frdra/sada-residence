@@ -134,8 +134,8 @@ export default function AnalyticsPage() {
       {/* Header */}
       <div className="flex items-center justify-between flex-wrap gap-3">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Laporan Keuangan</h1>
-          <p className="text-sm text-gray-500 mt-1">
+          <h1 className="text-2xl font-bold text-charcoal-800">Laporan Keuangan</h1>
+          <p className="text-sm text-concrete-600 mt-1">
             Pemasukan, pengeluaran (OPEX), dan profit bersih
           </p>
         </div>
@@ -143,11 +143,11 @@ export default function AnalyticsPage() {
 
       {/* View toggle + Filters */}
       <div className="flex items-center gap-3 flex-wrap">
-        <div className="bg-gray-100 rounded-lg p-1 flex">
+        <div className="bg-concrete-100 rounded-lg p-1 flex">
           <button
             onClick={() => setView("monthly")}
             className={`px-4 py-2 text-sm font-medium rounded-md transition-colors ${
-              view === "monthly" ? "bg-white text-gray-900 shadow-sm" : "text-gray-500"
+              view === "monthly" ? "bg-white text-charcoal-800 shadow-sm" : "text-concrete-600"
             }`}
           >
             Bulanan
@@ -155,7 +155,7 @@ export default function AnalyticsPage() {
           <button
             onClick={() => setView("yearly")}
             className={`px-4 py-2 text-sm font-medium rounded-md transition-colors ${
-              view === "yearly" ? "bg-white text-gray-900 shadow-sm" : "text-gray-500"
+              view === "yearly" ? "bg-white text-charcoal-800 shadow-sm" : "text-concrete-600"
             }`}
           >
             Tahunan
@@ -167,13 +167,13 @@ export default function AnalyticsPage() {
             type="month"
             value={currentMonth}
             onChange={(e) => setCurrentMonth(e.target.value)}
-            className="text-sm border border-gray-300 rounded-lg px-3 py-2"
+            className="text-sm border border-concrete-300 rounded-lg px-3 py-2"
           />
         ) : (
           <select
             value={currentYear}
             onChange={(e) => setCurrentYear(parseInt(e.target.value))}
-            className="text-sm border border-gray-300 rounded-lg px-3 py-2"
+            className="text-sm border border-concrete-300 rounded-lg px-3 py-2"
           >
             {[2024, 2025, 2026, 2027].map((y) => (
               <option key={y} value={y}>{y}</option>
@@ -184,7 +184,7 @@ export default function AnalyticsPage() {
         <select
           value={filterProperty}
           onChange={(e) => setFilterProperty(e.target.value)}
-          className="text-sm border border-gray-300 rounded-lg px-3 py-2"
+          className="text-sm border border-concrete-300 rounded-lg px-3 py-2"
         >
           <option value="">Semua Building</option>
           {properties.map((p) => (
@@ -195,7 +195,7 @@ export default function AnalyticsPage() {
 
       {loading ? (
         <div className="flex items-center justify-center py-20">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600" />
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-terracotta-500" />
         </div>
       ) : view === "monthly" && monthlyData ? (
         <MonthlyView
@@ -211,7 +211,7 @@ export default function AnalyticsPage() {
           profitBg={profitBg}
         />
       ) : (
-        <div className="text-center py-10 text-gray-400">Tidak ada data</div>
+        <div className="text-center py-10 text-concrete-600">Tidak ada data</div>
       )}
     </div>
   );
@@ -271,8 +271,8 @@ function MonthlyView({
       </div>
 
       {/* Income vs Expense visual bar */}
-      <div className="bg-white rounded-xl border border-gray-200 p-6">
-        <h3 className="font-semibold text-gray-800 mb-4">Pemasukan vs Pengeluaran</h3>
+      <div className="bg-white rounded-xl border border-concrete-200 p-6">
+        <h3 className="font-semibold text-charcoal-800 mb-4">Pemasukan vs Pengeluaran</h3>
         <div className="space-y-4">
           <BarRow
             label="Pemasukan"
@@ -286,8 +286,8 @@ function MonthlyView({
             maxAmount={Math.max(data.totalIncome, data.totalExpenses)}
             color="bg-red-500"
           />
-          <div className="border-t border-gray-100 pt-3 flex items-center justify-between">
-            <span className="text-sm font-semibold text-gray-700">Profit Bersih</span>
+          <div className="border-t border-concrete-100 pt-3 flex items-center justify-between">
+            <span className="text-sm font-semibold text-charcoal-800">Profit Bersih</span>
             <span className={`text-lg font-bold ${profitColor(data.netProfit)}`}>
               {formatCurrency(data.netProfit)}
             </span>
@@ -297,8 +297,8 @@ function MonthlyView({
 
       {/* OPEX Breakdown by Category */}
       {data.expenseByCategory.length > 0 && (
-        <div className="bg-white rounded-xl border border-gray-200 p-6">
-          <h3 className="font-semibold text-gray-800 mb-4">Rincian OPEX per Kategori</h3>
+        <div className="bg-white rounded-xl border border-concrete-200 p-6">
+          <h3 className="font-semibold text-charcoal-800 mb-4">Rincian OPEX per Kategori</h3>
           <div className="space-y-3">
             {data.expenseByCategory.map((cat) => {
               const pct = data.totalExpenses > 0 ? (cat.total / data.totalExpenses) * 100 : 0;
@@ -312,19 +312,19 @@ function MonthlyView({
                   </span>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center justify-between text-sm mb-1">
-                      <span className="font-medium text-gray-700 truncate">{cat.name}</span>
-                      <span className="text-gray-900 font-semibold ml-2 whitespace-nowrap">
+                      <span className="font-medium text-charcoal-800 truncate">{cat.name}</span>
+                      <span className="text-charcoal-800 font-semibold ml-2 whitespace-nowrap">
                         {formatCurrency(cat.total)}
                       </span>
                     </div>
-                    <div className="bg-gray-100 rounded-full h-2 overflow-hidden">
+                    <div className="bg-concrete-100 rounded-full h-2 overflow-hidden">
                       <div
                         className="h-full rounded-full transition-all"
                         style={{ width: `${pct}%`, backgroundColor: cat.color }}
                       />
                     </div>
                   </div>
-                  <span className="text-xs text-gray-400 w-12 text-right shrink-0">
+                  <span className="text-xs text-concrete-600 w-12 text-right shrink-0">
                     {pct.toFixed(1)}%
                   </span>
                 </div>
@@ -336,24 +336,24 @@ function MonthlyView({
 
       {/* Per-Property P&L */}
       {propertyBreakdown.length > 0 && (
-        <div className="bg-white rounded-xl border border-gray-200 p-6">
-          <h3 className="font-semibold text-gray-800 mb-4">P&amp;L per Building</h3>
+        <div className="bg-white rounded-xl border border-concrete-200 p-6">
+          <h3 className="font-semibold text-charcoal-800 mb-4">P&amp;L per Building</h3>
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
-                <tr className="border-b bg-gray-50">
-                  <th className="text-left px-4 py-3 font-medium text-gray-600">Building</th>
+                <tr className="border-b bg-concrete-100">
+                  <th className="text-left px-4 py-3 font-medium text-charcoal-600">Building</th>
                   <th className="text-right px-4 py-3 font-medium text-green-600">Pemasukan</th>
                   <th className="text-right px-4 py-3 font-medium text-red-600">OPEX Langsung</th>
                   <th className="text-right px-4 py-3 font-medium text-orange-600">Biaya Umum</th>
                   <th className="text-right px-4 py-3 font-medium text-red-600">Total OPEX</th>
-                  <th className="text-right px-4 py-3 font-medium text-gray-700">Profit</th>
+                  <th className="text-right px-4 py-3 font-medium text-charcoal-800">Profit</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-100">
                 {propertyBreakdown.map((pb) => (
-                  <tr key={pb.propertyId} className="hover:bg-gray-50">
-                    <td className="px-4 py-3 font-medium text-gray-900">{pb.propertyName}</td>
+                  <tr key={pb.propertyId} className="hover:bg-concrete-100">
+                    <td className="px-4 py-3 font-medium text-charcoal-800">{pb.propertyName}</td>
                     <td className="px-4 py-3 text-right text-green-600">{formatCurrency(pb.income)}</td>
                     <td className="px-4 py-3 text-right text-red-500">{formatCurrency(pb.directExpenses)}</td>
                     <td className="px-4 py-3 text-right text-orange-500">{formatCurrency(pb.generalExpenseShare)}</td>
@@ -363,7 +363,7 @@ function MonthlyView({
                     </td>
                   </tr>
                 ))}
-                <tr className="bg-gray-50 font-semibold">
+                <tr className="bg-concrete-100 font-semibold">
                   <td className="px-4 py-3">Total</td>
                   <td className="px-4 py-3 text-right text-green-600">
                     {formatCurrency(propertyBreakdown.reduce((s, p) => s + p.income, 0))}
@@ -384,7 +384,7 @@ function MonthlyView({
               </tbody>
             </table>
           </div>
-          <p className="text-xs text-gray-400 mt-3">
+          <p className="text-xs text-concrete-600 mt-3">
             * Biaya umum (tanpa building tertentu) dibagi rata ke semua building
           </p>
         </div>
@@ -450,12 +450,12 @@ function YearlyView({
       </div>
 
       {/* Monthly chart (bar representation) */}
-      <div className="bg-white rounded-xl border border-gray-200 p-6">
-        <h3 className="font-semibold text-gray-800 mb-5">Tren Bulanan {data.year}</h3>
+      <div className="bg-white rounded-xl border border-concrete-200 p-6">
+        <h3 className="font-semibold text-charcoal-800 mb-5">Tren Bulanan {data.year}</h3>
         <div className="space-y-1">
           {data.months.map((m, idx) => (
             <div key={m.month} className="flex items-center gap-3">
-              <span className="text-xs text-gray-500 w-8 shrink-0">{MONTH_NAMES[idx]}</span>
+              <span className="text-xs text-concrete-600 w-8 shrink-0">{MONTH_NAMES[idx]}</span>
               <div className="flex-1 flex items-center gap-1">
                 <div
                   className="h-4 bg-green-400 rounded-l transition-all relative group"
@@ -480,7 +480,7 @@ function YearlyView({
             </div>
           ))}
         </div>
-        <div className="flex items-center gap-6 mt-4 pt-3 border-t border-gray-100 text-xs text-gray-500">
+        <div className="flex items-center gap-6 mt-4 pt-3 border-t border-concrete-100 text-xs text-concrete-600">
           <div className="flex items-center gap-1.5">
             <div className="w-3 h-3 rounded bg-green-400" /> Pemasukan
           </div>
@@ -491,44 +491,44 @@ function YearlyView({
       </div>
 
       {/* Monthly P&L table */}
-      <div className="bg-white rounded-xl border border-gray-200 p-6">
-        <h3 className="font-semibold text-gray-800 mb-4">Detail per Bulan</h3>
+      <div className="bg-white rounded-xl border border-concrete-200 p-6">
+        <h3 className="font-semibold text-charcoal-800 mb-4">Detail per Bulan</h3>
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
-              <tr className="border-b bg-gray-50">
-                <th className="text-left px-4 py-3 font-medium text-gray-600">Bulan</th>
+              <tr className="border-b bg-concrete-100">
+                <th className="text-left px-4 py-3 font-medium text-charcoal-600">Bulan</th>
                 <th className="text-right px-4 py-3 font-medium text-green-600">Pemasukan</th>
                 <th className="text-right px-4 py-3 font-medium text-red-600">OPEX</th>
-                <th className="text-right px-4 py-3 font-medium text-gray-700">Profit</th>
-                <th className="text-right px-4 py-3 font-medium text-gray-500">Margin</th>
+                <th className="text-right px-4 py-3 font-medium text-charcoal-800">Profit</th>
+                <th className="text-right px-4 py-3 font-medium text-concrete-600">Margin</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-100">
               {data.months.map((m, idx) => {
                 const margin = m.income > 0 ? ((m.profit / m.income) * 100).toFixed(1) : "-";
                 return (
-                  <tr key={m.month} className="hover:bg-gray-50">
+                  <tr key={m.month} className="hover:bg-concrete-100">
                     <td className="px-4 py-3 font-medium">{MONTH_NAMES[idx]} {data.year}</td>
                     <td className="px-4 py-3 text-right text-green-600">{formatCurrency(m.income)}</td>
                     <td className="px-4 py-3 text-right text-red-500">{formatCurrency(m.expenses)}</td>
                     <td className={`px-4 py-3 text-right font-bold ${profitColor(m.profit)}`}>
                       {formatCurrency(m.profit)}
                     </td>
-                    <td className="px-4 py-3 text-right text-gray-500">
+                    <td className="px-4 py-3 text-right text-concrete-600">
                       {margin === "-" ? "-" : `${margin}%`}
                     </td>
                   </tr>
                 );
               })}
-              <tr className="bg-gray-50 font-semibold">
+              <tr className="bg-concrete-100 font-semibold">
                 <td className="px-4 py-3">Total {data.year}</td>
                 <td className="px-4 py-3 text-right text-green-600">{formatCurrency(data.totalIncome)}</td>
                 <td className="px-4 py-3 text-right text-red-600">{formatCurrency(data.totalExpenses)}</td>
                 <td className={`px-4 py-3 text-right ${profitColor(data.netProfit)}`}>
                   {formatCurrency(data.netProfit)}
                 </td>
-                <td className="px-4 py-3 text-right text-gray-500">{data.profitMargin}%</td>
+                <td className="px-4 py-3 text-right text-concrete-600">{data.profitMargin}%</td>
               </tr>
             </tbody>
           </table>
@@ -537,13 +537,13 @@ function YearlyView({
 
       {/* OPEX Breakdown by Category (yearly) */}
       {data.expenseByCategory.length > 0 && (
-        <div className="bg-white rounded-xl border border-gray-200 p-6">
-          <h3 className="font-semibold text-gray-800 mb-4">Rincian OPEX Tahunan per Kategori</h3>
+        <div className="bg-white rounded-xl border border-concrete-200 p-6">
+          <h3 className="font-semibold text-charcoal-800 mb-4">Rincian OPEX Tahunan per Kategori</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {data.expenseByCategory.map((cat) => {
               const pct = data.totalExpenses > 0 ? (cat.total / data.totalExpenses) * 100 : 0;
               return (
-                <div key={cat.id} className="flex items-center gap-3 bg-gray-50 rounded-lg p-3">
+                <div key={cat.id} className="flex items-center gap-3 bg-concrete-100 rounded-lg p-3">
                   <span
                     className="w-10 h-10 rounded-lg flex items-center justify-center text-lg shrink-0"
                     style={{ backgroundColor: `${cat.color}20` }}
@@ -551,10 +551,10 @@ function YearlyView({
                     {cat.icon}
                   </span>
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium text-gray-700 truncate">{cat.name}</p>
-                    <p className="text-xs text-gray-400">{cat.count} transaksi · {pct.toFixed(1)}%</p>
+                    <p className="text-sm font-medium text-charcoal-800 truncate">{cat.name}</p>
+                    <p className="text-xs text-concrete-600">{cat.count} transaksi · {pct.toFixed(1)}%</p>
                   </div>
-                  <span className="text-sm font-bold text-gray-900 whitespace-nowrap">
+                  <span className="text-sm font-bold text-charcoal-800 whitespace-nowrap">
                     {formatCurrency(cat.total)}
                   </span>
                 </div>
@@ -589,11 +589,11 @@ function KPICard({
   return (
     <div className={`rounded-xl border p-5 ${color}`}>
       <div className="flex items-center justify-between mb-2">
-        <p className="text-sm text-gray-600">{label}</p>
+        <p className="text-sm text-charcoal-600">{label}</p>
         <span className="text-xl">{icon}</span>
       </div>
       <p className={`text-2xl font-bold ${valueColor}`}>{value}</p>
-      <p className="text-xs text-gray-500 mt-1">{subtitle}</p>
+      <p className="text-xs text-concrete-600 mt-1">{subtitle}</p>
     </div>
   );
 }
@@ -613,10 +613,10 @@ function BarRow({
   return (
     <div>
       <div className="flex items-center justify-between text-sm mb-1.5">
-        <span className="font-medium text-gray-700">{label}</span>
-        <span className="font-semibold text-gray-900">{formatCurrency(amount)}</span>
+        <span className="font-medium text-charcoal-800">{label}</span>
+        <span className="font-semibold text-charcoal-800">{formatCurrency(amount)}</span>
       </div>
-      <div className="bg-gray-100 rounded-full h-3 overflow-hidden">
+      <div className="bg-concrete-100 rounded-full h-3 overflow-hidden">
         <div className={`h-full rounded-full transition-all ${color}`} style={{ width: `${pct}%` }} />
       </div>
     </div>

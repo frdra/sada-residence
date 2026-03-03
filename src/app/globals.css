@@ -3,37 +3,89 @@
 @tailwind utilities;
 
 @layer base {
+  :root {
+    /* Brand Identity Colors */
+    --terracotta: #A0695A;
+    --terracotta-light: #C4907F;
+    --terracotta-dark: #7A4E42;
+    --concrete: #C8C3BB;
+    --concrete-light: #E8E4DE;
+    --concrete-dark: #9E9A93;
+    --charcoal: #2C2C2C;
+    --charcoal-soft: #4A4A4A;
+    --sage: #7A8B6F;
+    --sage-light: #A3B296;
+    --gold-accent: #B8976A;
+    --cream: #F5F2ED;
+    --white: #FAFAF8;
+  }
+
   html {
     scroll-behavior: smooth;
   }
+
   body {
-    @apply font-body text-navy-900 bg-white antialiased;
+    @apply font-body text-charcoal-800 antialiased;
+    background-color: var(--white);
+  }
+
+  /* Typography hierarchy per brand guidelines */
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-display;
   }
 }
 
 @layer components {
+  /* ── Primary Button: Terracotta (Warm) ── */
   .btn-primary {
-    @apply bg-navy-900 text-white px-6 py-3 rounded-lg font-semibold
-           hover:bg-navy-800 transition-colors duration-200
+    @apply bg-terracotta-500 text-white px-6 py-3 rounded-xl font-body font-semibold
+           hover:bg-terracotta-700 transition-colors duration-200
            disabled:opacity-50 disabled:cursor-not-allowed;
   }
+
+  /* ── Secondary Button: Charcoal ── */
   .btn-secondary {
-    @apply bg-brand-400 text-white px-6 py-3 rounded-lg font-semibold
-           hover:bg-brand-500 transition-colors duration-200;
+    @apply bg-charcoal-800 text-white px-6 py-3 rounded-xl font-body font-semibold
+           hover:bg-charcoal-600 transition-colors duration-200;
   }
+
+  /* ── Outline Button ── */
   .btn-outline {
-    @apply border-2 border-navy-900 text-navy-900 px-6 py-3 rounded-lg font-semibold
-           hover:bg-navy-900 hover:text-white transition-colors duration-200;
+    @apply border-2 border-terracotta-500 text-terracotta-500 px-6 py-3 rounded-xl font-body font-semibold
+           hover:bg-terracotta-500 hover:text-white transition-colors duration-200;
   }
+
+  /* ── Input Field ── */
   .input-field {
-    @apply w-full px-4 py-3 border border-gray-300 rounded-lg
-           focus:ring-2 focus:ring-brand-400 focus:border-brand-400
-           outline-none transition-all duration-200;
+    @apply w-full px-4 py-3 border border-concrete-400 rounded-xl font-body
+           focus:ring-2 focus:ring-terracotta-400 focus:border-terracotta-400
+           outline-none transition-all duration-200
+           placeholder:text-concrete-600;
   }
+
+  /* ── Card ── */
   .card {
-    @apply bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden;
+    @apply bg-white rounded-2xl shadow-sm border border-concrete-200 overflow-hidden;
   }
+
+  /* ── Section Title ── */
   .section-title {
-    @apply font-display text-3xl md:text-4xl font-bold text-navy-900;
+    @apply font-display text-3xl md:text-4xl font-normal text-charcoal-800 tracking-tight;
+  }
+
+  /* ── Section Number (brand accent) ── */
+  .section-number {
+    @apply font-body text-xs font-semibold tracking-widest uppercase text-terracotta-500 mb-4;
+  }
+
+  /* ── Badge styles ── */
+  .badge-terracotta {
+    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-terracotta-100 text-terracotta-700;
+  }
+  .badge-sage {
+    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-sage-100 text-sage-700;
+  }
+  .badge-gold {
+    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gold-100 text-gold-700;
   }
 }

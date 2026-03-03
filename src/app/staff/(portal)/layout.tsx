@@ -41,16 +41,16 @@ export default function StaffPortalLayout({
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col">
+    <div className="min-h-screen bg-concrete-100 flex flex-col">
       {/* Top Header */}
-      <header className="bg-blue-600 text-white px-4 py-3 flex items-center justify-between sticky top-0 z-50">
+      <header className="bg-terracotta-500 text-white px-4 py-3 flex items-center justify-between sticky top-0 z-50">
         <div>
           <h1 className="font-bold text-base">Sada Residence</h1>
-          <p className="text-blue-200 text-xs">{staffName}</p>
+          <p className="text-terracotta-100 text-xs">{staffName}</p>
         </div>
         <button
           onClick={handleLogout}
-          className="text-blue-200 hover:text-white text-sm px-3 py-1 rounded-lg hover:bg-blue-700 transition-colors"
+          className="text-terracotta-100 hover:text-white text-sm px-3 py-1 rounded-lg hover:bg-terracotta-600 transition-colors"
         >
           Keluar
         </button>
@@ -60,7 +60,7 @@ export default function StaffPortalLayout({
       <main className="flex-1 pb-20 overflow-auto">{children}</main>
 
       {/* Bottom Navigation — mobile-friendly */}
-      <nav className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 z-50">
+      <nav className="fixed bottom-0 left-0 right-0 bg-white border-t border-concrete-200 z-50">
         <div className="flex">
           {navItems.map((item) => {
             const isActive =
@@ -71,8 +71,8 @@ export default function StaffPortalLayout({
                 href={item.href}
                 className={`flex-1 flex flex-col items-center py-2 text-xs transition-colors ${
                   isActive
-                    ? "text-blue-600 font-semibold"
-                    : "text-gray-500"
+                    ? "text-terracotta-500 font-semibold"
+                    : "text-concrete-600"
                 }`}
               >
                 <span className="text-xl mb-0.5">{item.icon}</span>

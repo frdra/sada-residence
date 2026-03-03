@@ -136,42 +136,42 @@ function RecordPaymentModal({
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-2xl max-w-lg w-full">
-        <div className="p-6 border-b">
+      <div className="bg-white rounded-2xl max-w-lg w-full shadow-xl">
+        <div className="p-6 border-b border-concrete-200">
           <div className="flex items-center justify-between">
             <h2 className="text-lg font-bold">Catat Pembayaran di Lokasi</h2>
-            <button onClick={onClose} className="text-gray-400 hover:text-gray-600 text-2xl leading-none">&times;</button>
+            <button onClick={onClose} className="text-concrete-600 hover:text-charcoal-800 text-2xl leading-none">&times;</button>
           </div>
         </div>
 
         <form onSubmit={handleSubmit} className="p-6 space-y-5">
           {/* Booking Summary */}
-          <div className="bg-gray-50 rounded-xl p-4 space-y-2">
+          <div className="bg-concrete-100 rounded-2xl p-4 space-y-2">
             <div className="flex justify-between">
-              <span className="text-sm text-gray-500">Kode Booking</span>
+              <span className="text-sm text-concrete-600">Kode Booking</span>
               <span className="text-sm font-mono font-bold">{booking.booking_code}</span>
             </div>
             <div className="flex justify-between">
-              <span className="text-sm text-gray-500">Tamu</span>
+              <span className="text-sm text-concrete-600">Tamu</span>
               <span className="text-sm font-medium">{booking.guest?.full_name}</span>
             </div>
             <div className="flex justify-between">
-              <span className="text-sm text-gray-500">Total</span>
+              <span className="text-sm text-concrete-600">Total</span>
               <span className="text-sm font-medium">{formatCurrency(booking.total_amount)}</span>
             </div>
             <div className="flex justify-between">
-              <span className="text-sm text-gray-500">Sudah Dibayar</span>
+              <span className="text-sm text-concrete-600">Sudah Dibayar</span>
               <span className="text-sm font-medium text-green-600">{formatCurrency(booking.paid_amount || 0)}</span>
             </div>
-            <div className="flex justify-between pt-2 border-t border-gray-200">
-              <span className="text-sm font-medium text-gray-700">Sisa</span>
+            <div className="flex justify-between pt-2 border-t border-concrete-200">
+              <span className="text-sm font-medium text-charcoal-800">Sisa</span>
               <span className="text-sm font-bold text-red-600">{formatCurrency(remaining)}</span>
             </div>
           </div>
 
           {/* Payment Method */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Metode Pembayaran</label>
+            <label className="block text-sm font-medium text-charcoal-800 mb-2">Metode Pembayaran</label>
             <div className="grid grid-cols-3 gap-3">
               {([
                 { value: "cash" as const, label: "Cash", icon: "💵" },
@@ -182,10 +182,10 @@ function RecordPaymentModal({
                   key={m.value}
                   type="button"
                   onClick={() => setOnSiteMethod(m.value)}
-                  className={`p-3 rounded-xl border-2 text-center transition-all ${
+                  className={`p-3 rounded-2xl border-2 text-center transition-all ${
                     onSiteMethod === m.value
-                      ? "border-blue-400 bg-blue-50"
-                      : "border-gray-200 hover:border-gray-300"
+                      ? "border-terracotta-400 bg-terracotta-50"
+                      : "border-concrete-200 hover:border-concrete-300"
                   }`}
                 >
                   <div className="text-xl mb-1">{m.icon}</div>
@@ -197,7 +197,7 @@ function RecordPaymentModal({
 
           {/* Amount */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Jumlah Pembayaran</label>
+            <label className="block text-sm font-medium text-charcoal-800 mb-1">Jumlah Pembayaran</label>
             <input
               type="number"
               className="input-field"
@@ -210,7 +210,7 @@ function RecordPaymentModal({
               <button
                 type="button"
                 onClick={() => setAmount(remaining)}
-                className="text-xs px-3 py-1 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors"
+                className="text-xs px-3 py-1 bg-concrete-100 rounded-lg hover:bg-concrete-200 transition-colors"
               >
                 Bayar Penuh ({formatCurrency(remaining)})
               </button>
@@ -219,7 +219,7 @@ function RecordPaymentModal({
 
           {/* Notes */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Catatan (opsional)</label>
+            <label className="block text-sm font-medium text-charcoal-800 mb-1">Catatan (opsional)</label>
             <textarea
               className="input-field"
               rows={2}
@@ -238,7 +238,7 @@ function RecordPaymentModal({
             <button
               type="button"
               onClick={onClose}
-              className="flex-1 px-4 py-2.5 border border-gray-300 rounded-xl text-sm font-medium hover:bg-gray-50 transition-colors"
+              className="flex-1 px-4 py-2.5 border border-concrete-200 rounded-2xl text-sm font-medium hover:bg-concrete-100 transition-colors"
             >
               Batal
             </button>
@@ -327,34 +327,34 @@ function CheckInModal({
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto">
-        <div className="p-6 border-b">
+      <div className="bg-white rounded-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto shadow-xl">
+        <div className="p-6 border-b border-concrete-200">
           <div className="flex items-center justify-between">
             <h2 className="text-lg font-bold">Check-In Tamu</h2>
-            <button onClick={onClose} className="text-gray-400 hover:text-gray-600 text-2xl leading-none">&times;</button>
+            <button onClick={onClose} className="text-concrete-600 hover:text-charcoal-800 text-2xl leading-none">&times;</button>
           </div>
         </div>
 
         <form onSubmit={handleSubmit} className="p-6 space-y-5">
-          <div className="bg-gray-50 rounded-xl p-4 space-y-2">
+          <div className="bg-concrete-100 rounded-2xl p-4 space-y-2">
             <div className="flex justify-between">
-              <span className="text-sm text-gray-500">Kode Booking</span>
+              <span className="text-sm text-concrete-600">Kode Booking</span>
               <span className="text-sm font-mono font-bold">{booking.booking_code}</span>
             </div>
             <div className="flex justify-between">
-              <span className="text-sm text-gray-500">Nama Tamu</span>
+              <span className="text-sm text-concrete-600">Nama Tamu</span>
               <span className="text-sm font-medium">{booking.guest?.full_name}</span>
             </div>
             <div className="flex justify-between">
-              <span className="text-sm text-gray-500">Telepon</span>
+              <span className="text-sm text-concrete-600">Telepon</span>
               <span className="text-sm">{booking.guest?.phone}</span>
             </div>
             <div className="flex justify-between">
-              <span className="text-sm text-gray-500">Kamar</span>
+              <span className="text-sm text-concrete-600">Kamar</span>
               <span className="text-sm font-medium">{booking.room?.room_number} — {booking.room?.property?.name}</span>
             </div>
             <div className="flex justify-between">
-              <span className="text-sm text-gray-500">Tanggal</span>
+              <span className="text-sm text-concrete-600">Tanggal</span>
               <span className="text-sm">
                 {new Date(booking.check_in).toLocaleDateString("id-ID")} — {new Date(booking.check_out).toLocaleDateString("id-ID")}
               </span>
@@ -362,7 +362,7 @@ function CheckInModal({
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Tipe Identitas</label>
+            <label className="block text-sm font-medium text-charcoal-800 mb-1">Tipe Identitas</label>
             <select className="input-field" value={idType} onChange={(e) => setIdType(e.target.value)}>
               <option value="KTP">KTP</option>
               <option value="SIM">SIM</option>
@@ -372,7 +372,7 @@ function CheckInModal({
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-medium text-charcoal-800 mb-1">
               Nomor {idType} <span className="text-red-500">*</span>
             </label>
             <input
@@ -386,13 +386,13 @@ function CheckInModal({
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-medium text-charcoal-800 mb-1">
               Foto {idType} <span className="text-red-500">*</span>
             </label>
             <input ref={fileRef} type="file" accept="image/*" capture="environment" onChange={handleFileChange} className="hidden" />
             {preview || booking.guest?.id_photo_url ? (
               <div className="relative">
-                <img src={preview || booking.guest?.id_photo_url || ""} alt="ID Preview" className="w-full h-48 object-cover rounded-xl border" />
+                <img src={preview || booking.guest?.id_photo_url || ""} alt="ID Preview" className="w-full h-48 object-cover rounded-2xl border border-concrete-200" />
                 <button type="button" onClick={() => fileRef.current?.click()} className="absolute bottom-2 right-2 bg-white/90 text-sm px-3 py-1 rounded-lg shadow hover:bg-white transition-colors">
                   Ganti Foto
                 </button>
@@ -401,14 +401,14 @@ function CheckInModal({
               <button
                 type="button"
                 onClick={() => fileRef.current?.click()}
-                className="w-full h-48 border-2 border-dashed border-gray-300 rounded-xl flex flex-col items-center justify-center gap-2 hover:border-brand-400 hover:bg-brand-50/50 transition-colors cursor-pointer"
+                className="w-full h-48 border-2 border-dashed border-concrete-300 rounded-2xl flex flex-col items-center justify-center gap-2 hover:border-terracotta-400 hover:bg-terracotta-50/50 transition-colors cursor-pointer"
               >
-                <svg className="w-10 h-10 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <svg className="w-10 h-10 text-concrete-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
                 </svg>
-                <span className="text-sm text-gray-500">Klik untuk foto atau upload {idType}</span>
-                <span className="text-xs text-gray-400">JPG, PNG (maks. 5MB)</span>
+                <span className="text-sm text-concrete-600">Klik untuk foto atau upload {idType}</span>
+                <span className="text-xs text-concrete-600">JPG, PNG (maks. 5MB)</span>
               </button>
             )}
           </div>
@@ -416,7 +416,7 @@ function CheckInModal({
           {error && <div className="bg-red-50 text-red-600 text-sm p-3 rounded-lg">{error}</div>}
 
           <div className="flex gap-3 pt-2">
-            <button type="button" onClick={onClose} className="flex-1 px-4 py-2.5 border border-gray-300 rounded-xl text-sm font-medium hover:bg-gray-50 transition-colors">
+            <button type="button" onClick={onClose} className="flex-1 px-4 py-2.5 border border-concrete-200 rounded-2xl text-sm font-medium hover:bg-concrete-100 transition-colors">
               Batal
             </button>
             <button type="submit" disabled={submitting} className="flex-1 btn-primary !py-2.5 text-sm disabled:opacity-50">
@@ -446,18 +446,18 @@ function GuestDetailModal({ guestId, onClose }: { guestId: string; onClose: () =
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto">
-        <div className="p-6 border-b">
+      <div className="bg-white rounded-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto shadow-xl">
+        <div className="p-6 border-b border-concrete-200">
           <div className="flex items-center justify-between">
             <h2 className="text-lg font-bold">Detail Tamu</h2>
-            <button onClick={onClose} className="text-gray-400 hover:text-gray-600 text-2xl leading-none">&times;</button>
+            <button onClick={onClose} className="text-concrete-600 hover:text-charcoal-800 text-2xl leading-none">&times;</button>
           </div>
         </div>
         <div className="p-6">
           {loading ? (
-            <p className="text-center text-gray-400 py-8">Memuat...</p>
+            <p className="text-center text-concrete-600 py-8">Memuat...</p>
           ) : !guest ? (
-            <p className="text-center text-gray-400 py-8">Data tamu tidak ditemukan.</p>
+            <p className="text-center text-concrete-600 py-8">Data tamu tidak ditemukan.</p>
           ) : (
             <div className="space-y-5">
               <div className="space-y-3">
@@ -468,26 +468,26 @@ function GuestDetailModal({ guestId, onClose }: { guestId: string; onClose: () =
                   { label: "Tipe ID", value: guest.id_type || "—" },
                   { label: "Nomor ID", value: guest.id_number || "—", mono: true },
                 ].map((row) => (
-                  <div key={row.label} className="flex justify-between items-center py-2 border-b">
-                    <span className="text-sm text-gray-500">{row.label}</span>
+                  <div key={row.label} className="flex justify-between items-center py-2 border-b border-concrete-200">
+                    <span className="text-sm text-concrete-600">{row.label}</span>
                     <span className={`text-sm ${row.bold ? "font-semibold" : ""} ${row.mono ? "font-mono" : ""}`}>{row.value}</span>
                   </div>
                 ))}
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Foto Identitas</label>
+                <label className="block text-sm font-medium text-charcoal-800 mb-2">Foto Identitas</label>
                 {guest.id_photo_url ? (
                   <a href={guest.id_photo_url} target="_blank" rel="noopener noreferrer">
-                    <img src={guest.id_photo_url} alt={`${guest.id_type} ${guest.full_name}`} className="w-full h-56 object-cover rounded-xl border hover:opacity-90 transition-opacity cursor-pointer" />
-                    <p className="text-xs text-center text-brand-500 mt-2">Klik untuk lihat ukuran penuh</p>
+                    <img src={guest.id_photo_url} alt={`${guest.id_type} ${guest.full_name}`} className="w-full h-56 object-cover rounded-2xl border border-concrete-200 hover:opacity-90 transition-opacity cursor-pointer" />
+                    <p className="text-xs text-center text-terracotta-500 mt-2">Klik untuk lihat ukuran penuh</p>
                   </a>
                 ) : (
-                  <div className="w-full h-40 bg-gray-100 rounded-xl flex items-center justify-center">
-                    <p className="text-sm text-gray-400">Belum ada foto ID (upload saat check-in)</p>
+                  <div className="w-full h-40 bg-concrete-100 rounded-2xl flex items-center justify-center">
+                    <p className="text-sm text-concrete-600">Belum ada foto ID (upload saat check-in)</p>
                   </div>
                 )}
               </div>
-              <button onClick={onClose} className="w-full px-4 py-2.5 border border-gray-300 rounded-xl text-sm font-medium hover:bg-gray-50 transition-colors">
+              <button onClick={onClose} className="w-full px-4 py-2.5 border border-concrete-200 rounded-2xl text-sm font-medium hover:bg-concrete-100 transition-colors">
                 Tutup
               </button>
             </div>
@@ -596,20 +596,20 @@ function ManualBookingModal({
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-        <div className="p-6 border-b">
+      <div className="bg-white rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-xl">
+        <div className="p-6 border-b border-concrete-200">
           <div className="flex items-center justify-between">
             <h2 className="text-lg font-bold">Booking Manual</h2>
-            <button onClick={onClose} className="text-gray-400 hover:text-gray-600 text-2xl leading-none">&times;</button>
+            <button onClick={onClose} className="text-concrete-600 hover:text-charcoal-800 text-2xl leading-none">&times;</button>
           </div>
-          <p className="text-sm text-gray-500 mt-1">Buat booking langsung dari dashboard admin (walk-in / telepon)</p>
+          <p className="text-sm text-concrete-600 mt-1">Buat booking langsung dari dashboard admin (walk-in / telepon)</p>
         </div>
 
         <form onSubmit={handleSubmit} className="p-6 space-y-5">
           {/* Room Selection */}
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Building <span className="text-red-500">*</span></label>
+              <label className="block text-sm font-medium text-charcoal-800 mb-1">Building <span className="text-red-500">*</span></label>
               <select className="input-field" value={selectedProperty} onChange={(e) => { setSelectedProperty(e.target.value); setSelectedRoom(""); }}>
                 <option value="">Pilih building...</option>
                 {properties.map((p) => (
@@ -618,7 +618,7 @@ function ManualBookingModal({
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Kamar <span className="text-red-500">*</span></label>
+              <label className="block text-sm font-medium text-charcoal-800 mb-1">Kamar <span className="text-red-500">*</span></label>
               <select className="input-field" value={selectedRoom} onChange={(e) => setSelectedRoom(e.target.value)} disabled={!selectedProperty}>
                 <option value="">Pilih kamar...</option>
                 {rooms.map((r) => (
@@ -634,15 +634,15 @@ function ManualBookingModal({
           {/* Dates */}
           <div className="grid grid-cols-3 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Check-In <span className="text-red-500">*</span></label>
+              <label className="block text-sm font-medium text-charcoal-800 mb-1">Check-In <span className="text-red-500">*</span></label>
               <input type="date" className="input-field" value={checkIn} onChange={(e) => setCheckIn(e.target.value)} min={today} />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Check-Out <span className="text-red-500">*</span></label>
+              <label className="block text-sm font-medium text-charcoal-800 mb-1">Check-Out <span className="text-red-500">*</span></label>
               <input type="date" className="input-field" value={checkOut} onChange={(e) => setCheckOut(e.target.value)} min={checkIn || today} />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Tipe Menginap</label>
+              <label className="block text-sm font-medium text-charcoal-800 mb-1">Tipe Menginap</label>
               <select className="input-field" value={stayType} onChange={(e) => setStayType(e.target.value)}>
                 <option value="daily">Harian</option>
                 <option value="monthly">Bulanan</option>
@@ -652,23 +652,23 @@ function ManualBookingModal({
           </div>
 
           {/* Guest Info */}
-          <div className="border-t pt-4">
-            <p className="text-sm font-semibold text-gray-700 mb-3">Data Tamu</p>
+          <div className="border-t border-concrete-200 pt-4">
+            <p className="text-sm font-semibold text-charcoal-800 mb-3">Data Tamu</p>
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Nama Lengkap <span className="text-red-500">*</span></label>
+                <label className="block text-sm font-medium text-charcoal-800 mb-1">Nama Lengkap <span className="text-red-500">*</span></label>
                 <input type="text" className="input-field" value={guestName} onChange={(e) => setGuestName(e.target.value)} placeholder="Nama tamu" />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">No. Telepon <span className="text-red-500">*</span></label>
+                <label className="block text-sm font-medium text-charcoal-800 mb-1">No. Telepon <span className="text-red-500">*</span></label>
                 <input type="tel" className="input-field" value={guestPhone} onChange={(e) => setGuestPhone(e.target.value)} placeholder="08xxx" />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                <label className="block text-sm font-medium text-charcoal-800 mb-1">Email</label>
                 <input type="email" className="input-field" value={guestEmail} onChange={(e) => setGuestEmail(e.target.value)} placeholder="email@contoh.com" />
               </div>
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">No. KTP/Paspor</label>
+                <label className="block text-sm font-medium text-charcoal-800 mb-1">No. KTP/Paspor</label>
                 <input type="text" className="input-field" value={guestIdNumber} onChange={(e) => setGuestIdNumber(e.target.value)} placeholder="Nomor identitas" />
               </div>
             </div>
@@ -677,27 +677,27 @@ function ManualBookingModal({
           {/* Extra */}
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Jumlah Tamu</label>
+              <label className="block text-sm font-medium text-charcoal-800 mb-1">Jumlah Tamu</label>
               <input type="number" className="input-field" value={numGuests} onChange={(e) => setNumGuests(Number(e.target.value))} min={1} max={10} />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Permintaan Khusus</label>
+              <label className="block text-sm font-medium text-charcoal-800 mb-1">Permintaan Khusus</label>
               <input type="text" className="input-field" value={specialRequests} onChange={(e) => setSpecialRequests(e.target.value)} placeholder="Opsional" />
             </div>
           </div>
 
           {/* Payment Toggle */}
-          <div className="border-t pt-4">
+          <div className="border-t border-concrete-200 pt-4">
             <label className="flex items-center gap-3 cursor-pointer">
-              <input type="checkbox" checked={isPaid} onChange={(e) => setIsPaid(e.target.checked)} className="w-5 h-5 rounded border-gray-300 text-blue-600" />
+              <input type="checkbox" checked={isPaid} onChange={(e) => setIsPaid(e.target.checked)} className="w-5 h-5 rounded border-concrete-300 text-terracotta-500" />
               <div>
-                <p className="text-sm font-medium text-gray-700">Sudah bayar sekarang (walk-in)</p>
-                <p className="text-xs text-gray-400">Centang jika tamu langsung membayar saat booking dibuat</p>
+                <p className="text-sm font-medium text-charcoal-800">Sudah bayar sekarang (walk-in)</p>
+                <p className="text-xs text-concrete-600">Centang jika tamu langsung membayar saat booking dibuat</p>
               </div>
             </label>
             {isPaid && (
               <div className="mt-3">
-                <label className="block text-sm font-medium text-gray-700 mb-2">Metode Pembayaran</label>
+                <label className="block text-sm font-medium text-charcoal-800 mb-2">Metode Pembayaran</label>
                 <div className="grid grid-cols-3 gap-3">
                   {([
                     { value: "cash" as const, label: "Cash", icon: "💵" },
@@ -708,8 +708,8 @@ function ManualBookingModal({
                       key={m.value}
                       type="button"
                       onClick={() => setPaidMethod(m.value)}
-                      className={`p-3 rounded-xl border-2 text-center transition-all ${
-                        paidMethod === m.value ? "border-blue-400 bg-blue-50" : "border-gray-200 hover:border-gray-300"
+                      className={`p-3 rounded-2xl border-2 text-center transition-all ${
+                        paidMethod === m.value ? "border-terracotta-400 bg-terracotta-50" : "border-concrete-200 hover:border-concrete-300"
                       }`}
                     >
                       <div className="text-xl mb-1">{m.icon}</div>
@@ -725,7 +725,7 @@ function ManualBookingModal({
           {success && <div className="bg-green-50 text-green-600 text-sm p-3 rounded-lg">{success}</div>}
 
           <div className="flex gap-3 pt-2">
-            <button type="button" onClick={onClose} className="flex-1 px-4 py-2.5 border border-gray-300 rounded-xl text-sm font-medium hover:bg-gray-50 transition-colors">
+            <button type="button" onClick={onClose} className="flex-1 px-4 py-2.5 border border-concrete-200 rounded-2xl text-sm font-medium hover:bg-concrete-100 transition-colors">
               Batal
             </button>
             <button type="submit" disabled={submitting || !!success} className="flex-1 btn-primary !py-2.5 text-sm disabled:opacity-50">
@@ -793,7 +793,7 @@ export default function BookingsPage() {
       <div className="flex flex-wrap gap-3 mb-6">
         <button
           onClick={() => setShowManualBooking(true)}
-          className="px-4 py-2 text-sm font-medium bg-navy-900 text-white rounded-lg hover:bg-navy-800 transition-colors"
+          className="px-4 py-2 text-sm font-medium bg-charcoal-800 text-white rounded-lg hover:bg-charcoal-700 transition-colors"
         >
           + Booking Manual
         </button>
@@ -818,27 +818,27 @@ export default function BookingsPage() {
       </div>
 
       {/* Table */}
-      <div className="bg-white rounded-xl border border-gray-100 overflow-hidden">
+      <div className="bg-white rounded-2xl border border-concrete-200 overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
-            <thead className="bg-gray-50 border-b">
+            <thead className="bg-concrete-100 border-b border-concrete-200">
               <tr>
-                <th className="text-left px-4 py-3 font-medium text-gray-500">Kode</th>
-                <th className="text-left px-4 py-3 font-medium text-gray-500">Tamu</th>
-                <th className="text-left px-4 py-3 font-medium text-gray-500">Kamar</th>
-                <th className="text-left px-4 py-3 font-medium text-gray-500">Tanggal</th>
-                <th className="text-left px-4 py-3 font-medium text-gray-500">Total</th>
-                <th className="text-left px-4 py-3 font-medium text-gray-500">Metode</th>
-                <th className="text-left px-4 py-3 font-medium text-gray-500">Status</th>
-                <th className="text-left px-4 py-3 font-medium text-gray-500">Bayar</th>
-                <th className="text-left px-4 py-3 font-medium text-gray-500">Aksi</th>
+                <th className="text-left px-4 py-3 font-medium text-concrete-600">Kode</th>
+                <th className="text-left px-4 py-3 font-medium text-concrete-600">Tamu</th>
+                <th className="text-left px-4 py-3 font-medium text-concrete-600">Kamar</th>
+                <th className="text-left px-4 py-3 font-medium text-concrete-600">Tanggal</th>
+                <th className="text-left px-4 py-3 font-medium text-concrete-600">Total</th>
+                <th className="text-left px-4 py-3 font-medium text-concrete-600">Metode</th>
+                <th className="text-left px-4 py-3 font-medium text-concrete-600">Status</th>
+                <th className="text-left px-4 py-3 font-medium text-concrete-600">Bayar</th>
+                <th className="text-left px-4 py-3 font-medium text-concrete-600">Aksi</th>
               </tr>
             </thead>
-            <tbody className="divide-y">
+            <tbody className="divide-y divide-concrete-200">
               {loading ? (
-                <tr><td colSpan={9} className="px-4 py-8 text-center text-gray-400">Memuat...</td></tr>
+                <tr><td colSpan={9} className="px-4 py-8 text-center text-concrete-600">Memuat...</td></tr>
               ) : bookings.length === 0 ? (
-                <tr><td colSpan={9} className="px-4 py-8 text-center text-gray-400">Tidak ada booking ditemukan.</td></tr>
+                <tr><td colSpan={9} className="px-4 py-8 text-center text-concrete-600">Tidak ada booking ditemukan.</td></tr>
               ) : (
                 bookings.map((b) => {
                   const pmInfo = paymentMethodTypeLabels[b.payment_method_type] || paymentMethodTypeLabels.online;
@@ -846,17 +846,17 @@ export default function BookingsPage() {
                   const needsPayment = remaining > 0 && b.status !== "cancelled";
 
                   return (
-                    <tr key={b.id} className="hover:bg-gray-50">
+                    <tr key={b.id} className="hover:bg-concrete-50">
                       <td className="px-4 py-3 font-mono text-xs">{b.booking_code}</td>
                       <td className="px-4 py-3">
-                        <button onClick={() => setDetailGuestId(b.guest_id || (b.guest as any)?.id)} className="text-left hover:text-brand-500 transition-colors">
+                        <button onClick={() => setDetailGuestId(b.guest_id || (b.guest as any)?.id)} className="text-left hover:text-terracotta-500 transition-colors">
                           <p className="font-medium">{b.guest?.full_name}</p>
-                          <p className="text-xs text-gray-400">{b.guest?.phone}</p>
+                          <p className="text-xs text-concrete-600">{b.guest?.phone}</p>
                         </button>
                       </td>
                       <td className="px-4 py-3">
                         <p>{b.room?.room_number}</p>
-                        <p className="text-xs text-gray-400">{b.room?.property?.name}</p>
+                        <p className="text-xs text-concrete-600">{b.room?.property?.name}</p>
                       </td>
                       <td className="px-4 py-3 text-xs">
                         {new Date(b.check_in).toLocaleDateString("id-ID")} — {new Date(b.check_out).toLocaleDateString("id-ID")}
@@ -913,8 +913,8 @@ export default function BookingsPage() {
         </div>
 
         {totalPages > 1 && (
-          <div className="flex items-center justify-between px-4 py-3 border-t bg-gray-50">
-            <p className="text-sm text-gray-500">Total: {count} booking</p>
+          <div className="flex items-center justify-between px-4 py-3 border-t border-concrete-200 bg-concrete-100">
+            <p className="text-sm text-concrete-600">Total: {count} booking</p>
             <div className="flex gap-2">
               <button disabled={page <= 1} onClick={() => setPage(page - 1)} className="px-3 py-1 text-sm border rounded disabled:opacity-50">Prev</button>
               <span className="px-3 py-1 text-sm">{page} / {totalPages}</span>

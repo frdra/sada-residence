@@ -118,8 +118,8 @@ export default function NotificationsPage() {
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h1 className="text-2xl font-bold text-navy-900">Notifikasi</h1>
-          <p className="text-sm text-gray-500 mt-1">
+          <h1 className="text-2xl font-bold text-charcoal-800">Notifikasi</h1>
+          <p className="text-sm text-concrete-600 mt-1">
             {unreadCount > 0
               ? `${unreadCount} belum dibaca`
               : "Semua sudah dibaca"}
@@ -128,7 +128,7 @@ export default function NotificationsPage() {
         {unreadCount > 0 && (
           <button
             onClick={markAllRead}
-            className="px-4 py-2 text-sm bg-navy-900 text-white rounded-lg hover:bg-navy-800 transition-colors"
+            className="px-4 py-2 text-sm bg-charcoal-800 text-white rounded-lg hover:bg-charcoal-700 transition-colors"
           >
             Tandai Semua Dibaca
           </button>
@@ -137,13 +137,13 @@ export default function NotificationsPage() {
 
       {/* Filters */}
       <div className="flex flex-wrap gap-3 mb-4">
-        <div className="flex bg-white border border-gray-200 rounded-lg overflow-hidden">
+        <div className="flex bg-white border border-concrete-200 rounded-lg overflow-hidden">
           <button
             onClick={() => setFilter("all")}
             className={`px-4 py-2 text-sm transition-colors ${
               filter === "all"
-                ? "bg-navy-900 text-white"
-                : "text-gray-600 hover:bg-gray-50"
+                ? "bg-charcoal-800 text-white"
+                : "text-charcoal-600 hover:bg-concrete-100"
             }`}
           >
             Semua
@@ -152,8 +152,8 @@ export default function NotificationsPage() {
             onClick={() => setFilter("unread")}
             className={`px-4 py-2 text-sm transition-colors ${
               filter === "unread"
-                ? "bg-navy-900 text-white"
-                : "text-gray-600 hover:bg-gray-50"
+                ? "bg-charcoal-800 text-white"
+                : "text-charcoal-600 hover:bg-concrete-100"
             }`}
           >
             Belum Dibaca
@@ -163,7 +163,7 @@ export default function NotificationsPage() {
         <select
           value={typeFilter}
           onChange={(e) => setTypeFilter(e.target.value)}
-          className="px-3 py-2 text-sm border border-gray-200 rounded-lg bg-white"
+          className="px-3 py-2 text-sm border border-concrete-200 rounded-lg bg-white"
         >
           <option value="all">Semua Tipe</option>
           {types.map((t) => (
@@ -175,11 +175,11 @@ export default function NotificationsPage() {
       </div>
 
       {/* List */}
-      <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+      <div className="bg-white rounded-xl border border-concrete-200 overflow-hidden">
         {loading ? (
-          <div className="py-16 text-center text-gray-400">Memuat...</div>
+          <div className="py-16 text-center text-concrete-600">Memuat...</div>
         ) : filtered.length === 0 ? (
-          <div className="py-16 text-center text-gray-400">
+          <div className="py-16 text-center text-concrete-600">
             {filter === "unread"
               ? "Tidak ada notifikasi yang belum dibaca"
               : "Belum ada notifikasi"}
@@ -189,8 +189,8 @@ export default function NotificationsPage() {
             <button
               key={n.id}
               onClick={() => handleClick(n)}
-              className={`w-full text-left px-5 py-4 hover:bg-gray-50 border-b border-gray-100 transition-colors flex gap-4 items-start ${
-                !n.is_read ? "bg-blue-50/40" : ""
+              className={`w-full text-left px-5 py-4 hover:bg-concrete-100 border-b border-gray-100 transition-colors flex gap-4 items-start ${
+                !n.is_read ? "bg-terracotta-50/40" : ""
               }`}
             >
               <span className="text-2xl shrink-0 mt-0.5">{n.icon}</span>
@@ -199,21 +199,21 @@ export default function NotificationsPage() {
                   <span
                     className={`text-sm ${
                       !n.is_read
-                        ? "font-semibold text-gray-900"
-                        : "text-gray-700"
+                        ? "font-semibold text-charcoal-800"
+                        : "text-charcoal-800"
                     }`}
                   >
                     {n.title}
                   </span>
                   {!n.is_read && (
-                    <span className="w-2 h-2 bg-blue-500 rounded-full shrink-0" />
+                    <span className="w-2 h-2 bg-terracotta-500 rounded-full shrink-0" />
                   )}
-                  <span className="text-xs text-gray-400 ml-auto shrink-0">
+                  <span className="text-xs text-concrete-600 ml-auto shrink-0">
                     {timeAgo(n.created_at)}
                   </span>
                 </div>
-                <p className="text-sm text-gray-500">{n.message}</p>
-                <span className="inline-block mt-1 text-xs px-2 py-0.5 bg-gray-100 text-gray-500 rounded-full">
+                <p className="text-sm text-concrete-600">{n.message}</p>
+                <span className="inline-block mt-1 text-xs px-2 py-0.5 bg-concrete-100 text-concrete-600 rounded-full">
                   {TYPE_LABELS[n.type] || n.type}
                 </span>
               </div>

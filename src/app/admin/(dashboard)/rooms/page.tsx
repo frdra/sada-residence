@@ -98,8 +98,8 @@ function GuestInfoModal({
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-2xl max-w-md w-full">
-        <div className="p-5 border-b">
+      <div className="bg-white rounded-2xl max-w-md w-full border border-concrete-200">
+        <div className="p-5 border-b border-concrete-200">
           <div className="flex items-center justify-between">
             <div>
               <h2 className="text-lg font-bold">
@@ -128,8 +128,8 @@ function GuestInfoModal({
           ) : (
             <div className="space-y-4">
               {/* Guest Info */}
-              <div className="bg-blue-50 rounded-xl p-4">
-                <p className="text-xs text-blue-500 font-medium mb-1">
+              <div className="bg-terracotta-50 rounded-xl p-4">
+                <p className="text-xs text-terracotta-500 font-medium mb-1">
                   Tamu Saat Ini
                 </p>
                 <p className="text-lg font-bold text-gray-900">
@@ -194,7 +194,7 @@ function GuestInfoModal({
 
               <a
                 href={`/admin/bookings`}
-                className="block w-full text-center px-4 py-2.5 bg-navy-900 text-white rounded-xl text-sm font-medium hover:bg-navy-800 transition-colors"
+                className="block w-full text-center px-4 py-2.5 bg-terracotta-500 text-white rounded-xl text-sm font-medium hover:bg-terracotta-600 transition-colors"
               >
                 Lihat di Halaman Booking
               </a>
@@ -203,7 +203,7 @@ function GuestInfoModal({
 
           <button
             onClick={onClose}
-            className="w-full mt-3 px-4 py-2.5 border border-gray-300 rounded-xl text-sm font-medium hover:bg-gray-50 transition-colors"
+            className="w-full mt-3 px-4 py-2.5 border border-concrete-200 rounded-xl text-sm font-medium hover:bg-concrete-100 transition-colors"
           >
             Tutup
           </button>
@@ -269,12 +269,12 @@ export default function RoomsPage() {
       {/* Stats */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-6">
         {[
-          { label: "Total", value: total, color: "bg-gray-50" },
+          { label: "Total", value: total, color: "bg-concrete-100" },
           { label: "Tersedia", value: available, color: "bg-green-50 text-green-700" },
           { label: "Terisi", value: occupied, color: "bg-blue-50 text-blue-700" },
           { label: "Maintenance", value: maintenance, color: "bg-yellow-50 text-yellow-700" },
         ].map((s) => (
-          <div key={s.label} className={`${s.color} rounded-xl p-3 text-center`}>
+          <div key={s.label} className={`${s.color} rounded-2xl p-3 text-center`}>
             <p className="text-2xl font-bold">{s.value}</p>
             <p className="text-xs text-gray-500">{s.label}</p>
           </div>
@@ -298,7 +298,7 @@ export default function RoomsPage() {
 
       {loading ? (
         <div className="flex items-center justify-center h-64">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-navy-900" />
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-terracotta-500" />
         </div>
       ) : (
         Object.entries(grouped).map(([propertyName, propertyRooms]) => (
@@ -315,7 +315,7 @@ export default function RoomsPage() {
                   <div
                     onClick={() => handleRoomClick(room)}
                     className={`p-2 rounded-lg text-center text-xs font-medium transition-all border ${
-                      statusColors[room.status] || "bg-gray-100 text-gray-700 border-gray-200"
+                      statusColors[room.status] || "bg-concrete-100 text-charcoal-600 border-concrete-200"
                     } ${
                       room.status === "occupied"
                         ? "cursor-pointer hover:shadow-md hover:scale-105"
@@ -326,7 +326,7 @@ export default function RoomsPage() {
                   </div>
                   {/* Tooltip with status change */}
                   <div className="absolute z-10 hidden group-hover:block top-full left-1/2 -translate-x-1/2 mt-1">
-                    <div className="bg-white rounded-lg shadow-xl border p-3 min-w-[160px]">
+                    <div className="bg-white rounded-lg shadow-xl border border-concrete-200 p-3 min-w-[160px]">
                       <p className="text-xs font-semibold mb-1">
                         {room.room_number}
                       </p>
@@ -334,12 +334,12 @@ export default function RoomsPage() {
                         {room.room_type?.name} &middot; Lantai {room.floor}
                       </p>
                       {room.status === "occupied" && (
-                        <p className="text-xs text-blue-500 mb-2">
+                        <p className="text-xs text-terracotta-500 mb-2">
                           Klik untuk lihat tamu
                         </p>
                       )}
                       <select
-                        className="text-xs border rounded px-2 py-1 w-full"
+                        className="text-xs border border-concrete-200 rounded px-2 py-1 w-full"
                         value={room.status}
                         onChange={(e) =>
                           handleStatusChange(room.id, e.target.value)

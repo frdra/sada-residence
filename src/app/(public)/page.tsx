@@ -34,16 +34,16 @@ export default async function HomePage() {
   return (
     <>
       {/* Hero */}
-      <section className="relative bg-navy-900 text-white overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-navy-950 via-navy-900 to-navy-800 opacity-90" />
+      <section className="relative bg-charcoal-800 text-white overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-br from-charcoal-800 via-charcoal-700 to-charcoal-600 opacity-90" />
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-32 md:py-40">
           <div className="max-w-2xl">
-            <p className="text-brand-400 font-semibold mb-4 tracking-wider uppercase text-sm">
+            <p className="text-terracotta-400 font-semibold mb-4 tracking-wider uppercase text-sm">
               Premium Accommodation in Jimbaran
             </p>
-            <h1 className="font-display text-4xl md:text-6xl font-bold leading-tight mb-6">
+            <h1 className="font-display text-4xl md:text-6xl font-light leading-tight mb-6">
               Tinggal Nyaman di{" "}
-              <span className="text-brand-400">Sada Residence</span>
+              <span className="text-terracotta-400">Sada Residence</span>
             </h1>
             <p className="text-lg text-gray-300 mb-8 leading-relaxed">
               Akomodasi modern dengan fasilitas lengkap di kawasan Jimbaran, Bali.
@@ -53,7 +53,7 @@ export default async function HomePage() {
               <Link href="/booking" className="btn-secondary">
                 Booking Sekarang
               </Link>
-              <Link href="/rooms" className="btn-outline !border-white !text-white hover:!bg-white hover:!text-navy-900">
+              <Link href="/rooms" className="btn-outline !border-white !text-white hover:!bg-white hover:!text-charcoal-800">
                 Lihat Kamar
               </Link>
             </div>
@@ -62,7 +62,7 @@ export default async function HomePage() {
       </section>
 
       {/* Properties */}
-      <section id="properties" className="py-20 bg-gray-50">
+      <section id="properties" className="py-20 bg-concrete-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 className="section-title mb-4">Properti Kami</h2>
@@ -81,16 +81,16 @@ export default async function HomePage() {
                 ]
             ).map((property: any) => (
               <div key={property.slug} className="card group hover:shadow-lg transition-shadow">
-                <div className="h-48 bg-gradient-to-br from-navy-800 to-navy-600 flex items-center justify-center">
-                  <span className="font-display text-white text-2xl font-bold opacity-80">
+                <div className="h-48 bg-gradient-to-br from-charcoal-700 to-charcoal-600 flex items-center justify-center">
+                  <span className="font-display text-white text-2xl font-light opacity-80">
                     {property.name.split(" ").pop()}
                   </span>
                 </div>
                 <div className="p-6">
-                  <h3 className="font-display text-xl font-bold mb-2">{property.name}</h3>
+                  <h3 className="font-display text-xl font-normal mb-2">{property.name}</h3>
                   <p className="text-gray-600 text-sm mb-4">{property.description}</p>
                   <div className="flex items-center justify-between">
-                    <span className="text-sm text-brand-500 font-semibold">
+                    <span className="text-sm text-terracotta-500 font-semibold">
                       {property.total_rooms} Kamar
                     </span>
                     <div className="flex gap-3">
@@ -98,14 +98,14 @@ export default async function HomePage() {
                         href={`https://www.google.com/maps?q=${property.lat},${property.lng}`}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-sm text-gray-400 hover:text-brand-500 transition-colors"
+                        className="text-sm text-gray-400 hover:text-terracotta-500 transition-colors"
                         title="Buka di Google Maps"
                       >
                         📍
                       </a>
                       <Link
                         href={`/rooms?property=${property.slug}`}
-                        className="text-sm text-navy-600 font-semibold hover:text-navy-900 transition-colors"
+                        className="text-sm text-charcoal-600 font-semibold hover:text-charcoal-800 transition-colors"
                       >
                         Lihat Kamar &rarr;
                       </Link>
@@ -144,11 +144,11 @@ export default async function HomePage() {
               );
               return (
                 <div key={rt.slug} className="card hover:shadow-lg transition-shadow">
-                  <div className="h-40 bg-gradient-to-br from-brand-100 to-brand-50 flex items-center justify-center">
-                    <span className="text-brand-600 text-4xl font-bold">{rt.room_size_sqm}m²</span>
+                  <div className="h-40 bg-gradient-to-br from-terracotta-400 to-terracotta-200 flex items-center justify-center">
+                    <span className="text-terracotta-700 text-4xl font-bold">{rt.room_size_sqm}m²</span>
                   </div>
                   <div className="p-6">
-                    <h3 className="font-display text-xl font-bold mb-2">{rt.name}</h3>
+                    <h3 className="font-display text-xl font-normal mb-2">{rt.name}</h3>
                     <p className="text-gray-600 text-sm mb-4">{rt.description}</p>
                     <div className="flex gap-4 text-xs text-gray-500 mb-4">
                       <span>{rt.max_guests} Tamu</span>
@@ -159,7 +159,7 @@ export default async function HomePage() {
                       <div className="border-t pt-4">
                         <div className="flex justify-between text-sm">
                           <span className="text-gray-500">Mulai dari</span>
-                          <span className="font-bold text-navy-900">
+                          <span className="font-bold text-charcoal-800">
                             {formatCurrency(dailyRate.price)}
                             <span className="text-xs font-normal text-gray-400">/malam</span>
                           </span>
@@ -167,7 +167,7 @@ export default async function HomePage() {
                         {monthlyRate && (
                           <div className="flex justify-between text-sm mt-1">
                             <span className="text-gray-500">Bulanan</span>
-                            <span className="font-semibold text-brand-500">
+                            <span className="font-semibold text-terracotta-500">
                               {formatCurrency(monthlyRate.price)}
                               <span className="text-xs font-normal text-gray-400">/bulan</span>
                             </span>
@@ -190,7 +190,7 @@ export default async function HomePage() {
       </section>
 
       {/* Features */}
-      <section id="features" className="py-20 bg-gray-50">
+      <section id="features" className="py-20 bg-concrete-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
             <h2 className="section-title mb-4">Fasilitas Unggulan</h2>
@@ -217,9 +217,9 @@ export default async function HomePage() {
       </section>
 
       {/* CTA */}
-      <section className="py-20 bg-navy-900 text-white text-center">
+      <section className="py-20 bg-charcoal-800 text-white text-center">
         <div className="max-w-3xl mx-auto px-4">
-          <h2 className="font-display text-3xl md:text-4xl font-bold mb-4">
+          <h2 className="font-display text-3xl md:text-4xl font-light mb-4">
             Siap untuk Tinggal di Sada Residence?
           </h2>
           <p className="text-gray-400 mb-8">
@@ -267,12 +267,12 @@ export default async function HomePage() {
                   />
                 </div>
                 <div className="p-4 text-center">
-                  <h3 className="font-display font-bold text-sm mb-1">{loc.name}</h3>
+                  <h3 className="font-display font-normal text-sm mb-1">{loc.name}</h3>
                   <a
                     href={`https://www.google.com/maps?q=${loc.lat},${loc.lng}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-xs text-brand-500 hover:text-brand-600 font-semibold transition-colors"
+                    className="text-xs text-terracotta-500 hover:text-terracotta-600 font-semibold transition-colors"
                   >
                     Buka di Google Maps &rarr;
                   </a>

@@ -326,7 +326,7 @@ export default function ExpensesPage() {
   if (loading) {
     return (
       <div className="flex items-center justify-center py-20">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600" />
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-terracotta-500" />
       </div>
     );
   }
@@ -336,8 +336,8 @@ export default function ExpensesPage() {
       {/* Header */}
       <div className="flex items-center justify-between flex-wrap gap-3">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Pengeluaran</h1>
-          <p className="text-sm text-gray-500 mt-1">Catat dan kelola semua pengeluaran operasional</p>
+          <h1 className="text-2xl font-bold text-charcoal-800">Pengeluaran</h1>
+          <p className="text-sm text-concrete-600 mt-1">Catat dan kelola semua pengeluaran operasional</p>
         </div>
         <div className="flex gap-2">
           <button
@@ -349,7 +349,7 @@ export default function ExpensesPage() {
           </button>
           <button
             onClick={openCreateModal}
-            className="bg-blue-600 text-white rounded-lg px-4 py-2.5 text-sm font-medium hover:bg-blue-700 transition-colors"
+            className="bg-terracotta-500 text-white rounded-lg px-4 py-2.5 text-sm font-medium hover:bg-terracotta-600 transition-colors"
           >
             + Catat Pengeluaran
           </button>
@@ -366,7 +366,7 @@ export default function ExpensesPage() {
       )}
 
       {/* Tabs */}
-      <div className="border-b border-gray-200">
+      <div className="border-b border-concrete-200">
         <div className="flex gap-0">
           {[
             { key: "list" as const, label: "Daftar", icon: "📋" },
@@ -377,7 +377,7 @@ export default function ExpensesPage() {
               key={t.key}
               onClick={() => setTab(t.key)}
               className={`px-5 py-3 text-sm font-medium border-b-2 transition-colors ${
-                tab === t.key ? "border-blue-600 text-blue-600" : "border-transparent text-gray-500 hover:text-gray-700"
+                tab === t.key ? "border-terracotta-500 text-terracotta-500" : "border-transparent text-concrete-600 hover:text-charcoal-800"
               }`}
             >
               <span className="mr-1.5">{t.icon}</span>
@@ -393,12 +393,12 @@ export default function ExpensesPage() {
           type="month"
           value={filterMonth}
           onChange={(e) => { setFilterMonth(e.target.value); setPage(1); }}
-          className="text-sm border border-gray-300 rounded-lg px-3 py-2"
+          className="text-sm border border-concrete-300 rounded-lg px-3 py-2"
         />
         <select
           value={filterProperty}
           onChange={(e) => { setFilterProperty(e.target.value); setPage(1); }}
-          className="text-sm border border-gray-300 rounded-lg px-3 py-2"
+          className="text-sm border border-concrete-300 rounded-lg px-3 py-2"
         >
           <option value="all">Semua Building</option>
           {properties.map((p) => (
@@ -410,7 +410,7 @@ export default function ExpensesPage() {
             <select
               value={filterCategory}
               onChange={(e) => { setFilterCategory(e.target.value); setPage(1); }}
-              className="text-sm border border-gray-300 rounded-lg px-3 py-2"
+              className="text-sm border border-concrete-300 rounded-lg px-3 py-2"
             >
               <option value="all">Semua Kategori</option>
               {categories.map((c) => (
@@ -422,7 +422,7 @@ export default function ExpensesPage() {
               placeholder="Cari judul..."
               value={searchText}
               onChange={(e) => { setSearchText(e.target.value); setPage(1); }}
-              className="text-sm border border-gray-300 rounded-lg px-3 py-2 w-48"
+              className="text-sm border border-concrete-300 rounded-lg px-3 py-2 w-48"
             />
           </>
         )}
@@ -431,32 +431,32 @@ export default function ExpensesPage() {
       {/* ═══════════════ TAB: Daftar ═══════════════ */}
       {tab === "list" && (
         <div className="space-y-4">
-          <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+          <div className="bg-white rounded-xl border border-concrete-200 overflow-hidden">
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
                 <thead>
-                  <tr className="bg-gray-50 border-b">
-                    <th className="text-left px-4 py-3 font-medium text-gray-600">Tanggal</th>
-                    <th className="text-left px-4 py-3 font-medium text-gray-600">Kategori</th>
-                    <th className="text-left px-4 py-3 font-medium text-gray-600">Judul</th>
-                    <th className="text-left px-4 py-3 font-medium text-gray-600">Building</th>
-                    <th className="text-right px-4 py-3 font-medium text-gray-600">Nominal</th>
-                    <th className="text-center px-4 py-3 font-medium text-gray-600">Metode</th>
-                    <th className="text-center px-4 py-3 font-medium text-gray-600">Bukti</th>
-                    <th className="text-center px-4 py-3 font-medium text-gray-600">Aksi</th>
+                  <tr className="bg-concrete-100 border-b">
+                    <th className="text-left px-4 py-3 font-medium text-charcoal-600">Tanggal</th>
+                    <th className="text-left px-4 py-3 font-medium text-charcoal-600">Kategori</th>
+                    <th className="text-left px-4 py-3 font-medium text-charcoal-600">Judul</th>
+                    <th className="text-left px-4 py-3 font-medium text-charcoal-600">Building</th>
+                    <th className="text-right px-4 py-3 font-medium text-charcoal-600">Nominal</th>
+                    <th className="text-center px-4 py-3 font-medium text-charcoal-600">Metode</th>
+                    <th className="text-center px-4 py-3 font-medium text-charcoal-600">Bukti</th>
+                    <th className="text-center px-4 py-3 font-medium text-charcoal-600">Aksi</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-100">
                   {expenses.length === 0 && (
                     <tr>
-                      <td colSpan={8} className="px-4 py-10 text-center text-gray-400">
+                      <td colSpan={8} className="px-4 py-10 text-center text-concrete-600">
                         Belum ada pengeluaran bulan ini
                       </td>
                     </tr>
                   )}
                   {expenses.map((exp) => (
-                    <tr key={exp.id} className="hover:bg-gray-50">
-                      <td className="px-4 py-3 text-gray-600 whitespace-nowrap">
+                    <tr key={exp.id} className="hover:bg-concrete-100">
+                      <td className="px-4 py-3 text-charcoal-600 whitespace-nowrap">
                         {formatDate(exp.expense_date)}
                       </td>
                       <td className="px-4 py-3 whitespace-nowrap">
@@ -468,33 +468,33 @@ export default function ExpensesPage() {
                         </span>
                       </td>
                       <td className="px-4 py-3">
-                        <div className="font-medium text-gray-900">{exp.title}</div>
+                        <div className="font-medium text-charcoal-800">{exp.title}</div>
                         {exp.description && (
-                          <div className="text-xs text-gray-400 mt-0.5">{exp.description}</div>
+                          <div className="text-xs text-concrete-600 mt-0.5">{exp.description}</div>
                         )}
                         {exp.parent_expense_id && (
                           <span className="text-xs text-amber-600 font-medium">🔄 Auto-generated</span>
                         )}
                       </td>
-                      <td className="px-4 py-3 text-gray-600">
-                        {exp.property?.name || <span className="text-gray-400">Umum</span>}
+                      <td className="px-4 py-3 text-charcoal-600">
+                        {exp.property?.name || <span className="text-concrete-600">Umum</span>}
                       </td>
-                      <td className="px-4 py-3 text-right font-semibold text-gray-900">
+                      <td className="px-4 py-3 text-right font-semibold text-charcoal-800">
                         {formatPrice(exp.amount)}
                       </td>
                       <td className="px-4 py-3 text-center">
-                        <span className="text-xs text-gray-500">{PAYMENT_LABELS[exp.payment_method] || exp.payment_method}</span>
+                        <span className="text-xs text-concrete-600">{PAYMENT_LABELS[exp.payment_method] || exp.payment_method}</span>
                       </td>
                       <td className="px-4 py-3 text-center">
                         {exp.receipt_url ? (
                           <button
                             onClick={() => setPreviewUrl(exp.receipt_url)}
-                            className="text-blue-600 hover:text-blue-800 text-xs font-medium"
+                            className="text-terracotta-500 hover:text-terracotta-700 text-xs font-medium"
                           >
                             📎 Lihat
                           </button>
                         ) : (
-                          <label className="text-gray-400 hover:text-blue-600 text-xs cursor-pointer">
+                          <label className="text-concrete-600 hover:text-terracotta-500 text-xs cursor-pointer">
                             {uploadingReceipt === exp.id ? "⏳" : "📤 Upload"}
                             <input
                               type="file"
@@ -512,7 +512,7 @@ export default function ExpensesPage() {
                         <div className="flex items-center justify-center gap-2">
                           <button
                             onClick={() => openEditModal(exp)}
-                            className="text-blue-600 hover:text-blue-800 text-xs font-medium"
+                            className="text-terracotta-500 hover:text-terracotta-700 text-xs font-medium"
                           >
                             Edit
                           </button>
@@ -533,14 +533,14 @@ export default function ExpensesPage() {
             {/* Pagination */}
             {totalPages > 1 && (
               <div className="flex items-center justify-between px-4 py-3 border-t">
-                <span className="text-xs text-gray-500">{expenseCount} pengeluaran</span>
+                <span className="text-xs text-concrete-600">{expenseCount} pengeluaran</span>
                 <div className="flex gap-1">
                   {Array.from({ length: totalPages }, (_, i) => (
                     <button
                       key={i}
                       onClick={() => setPage(i + 1)}
                       className={`px-3 py-1 text-xs rounded ${
-                        page === i + 1 ? "bg-blue-600 text-white" : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                        page === i + 1 ? "bg-terracotta-500 text-white" : "bg-concrete-100 text-charcoal-600 hover:bg-gray-200"
                       }`}
                     >
                       {i + 1}
@@ -572,7 +572,7 @@ export default function ExpensesPage() {
               .map((cat) => {
                 const pct = summary.grandTotal > 0 ? (cat.total / summary.grandTotal) * 100 : 0;
                 return (
-                  <div key={cat.id} className="bg-white rounded-xl border border-gray-200 p-4">
+                  <div key={cat.id} className="bg-white rounded-xl border border-concrete-200 p-4">
                     <div className="flex items-center gap-3 mb-3">
                       <span
                         className="w-10 h-10 rounded-lg flex items-center justify-center text-lg"
@@ -581,25 +581,25 @@ export default function ExpensesPage() {
                         {cat.icon}
                       </span>
                       <div className="flex-1">
-                        <p className="text-sm font-medium text-gray-800">{cat.name}</p>
-                        <p className="text-xs text-gray-400">{cat.count} transaksi</p>
+                        <p className="text-sm font-medium text-charcoal-800">{cat.name}</p>
+                        <p className="text-xs text-concrete-600">{cat.count} transaksi</p>
                       </div>
                     </div>
-                    <p className="text-lg font-bold text-gray-900">{formatPrice(cat.total)}</p>
-                    <div className="mt-2 bg-gray-100 rounded-full h-2 overflow-hidden">
+                    <p className="text-lg font-bold text-charcoal-800">{formatPrice(cat.total)}</p>
+                    <div className="mt-2 bg-concrete-100 rounded-full h-2 overflow-hidden">
                       <div
                         className="h-full rounded-full transition-all"
                         style={{ width: `${pct}%`, backgroundColor: cat.color }}
                       />
                     </div>
-                    <p className="text-xs text-gray-400 mt-1">{pct.toFixed(1)}% dari total</p>
+                    <p className="text-xs text-concrete-600 mt-1">{pct.toFixed(1)}% dari total</p>
                   </div>
                 );
               })}
           </div>
 
           {summary.byCategory.length === 0 && (
-            <div className="text-center py-10 text-gray-400">
+            <div className="text-center py-10 text-concrete-600">
               Belum ada pengeluaran bulan ini
             </div>
           )}
@@ -615,13 +615,13 @@ export default function ExpensesPage() {
           </div>
 
           {recurring.length === 0 ? (
-            <div className="text-center py-10 text-gray-400">
+            <div className="text-center py-10 text-concrete-600">
               Belum ada pengeluaran berulang. Buat pengeluaran baru dan aktifkan opsi &quot;Berulang&quot;.
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {recurring.map((r) => (
-                <div key={r.id} className="bg-white rounded-xl border border-gray-200 p-5">
+                <div key={r.id} className="bg-white rounded-xl border border-concrete-200 p-5">
                   <div className="flex items-center gap-3 mb-3">
                     <span
                       className="w-10 h-10 rounded-lg flex items-center justify-center text-lg"
@@ -630,14 +630,14 @@ export default function ExpensesPage() {
                       {r.category?.icon}
                     </span>
                     <div className="flex-1">
-                      <p className="font-semibold text-gray-800">{r.title}</p>
-                      <p className="text-xs text-gray-400">
+                      <p className="font-semibold text-charcoal-800">{r.title}</p>
+                      <p className="text-xs text-concrete-600">
                         {r.category?.name} · {r.property?.name || "Umum"}
                       </p>
                     </div>
-                    <span className="text-lg font-bold text-gray-900">{formatPrice(r.amount)}</span>
+                    <span className="text-lg font-bold text-charcoal-800">{formatPrice(r.amount)}</span>
                   </div>
-                  <div className="flex items-center gap-4 text-xs text-gray-500">
+                  <div className="flex items-center gap-4 text-xs text-concrete-600">
                     <span>🔄 {r.recurring_interval === "monthly" ? "Bulanan" : r.recurring_interval === "weekly" ? "Mingguan" : r.recurring_interval === "quarterly" ? "Triwulan" : "Tahunan"}</span>
                     <span>📅 Tgl {r.recurring_day}</span>
                     <span>💳 {PAYMENT_LABELS[r.payment_method] || r.payment_method}</span>
@@ -645,7 +645,7 @@ export default function ExpensesPage() {
                   <div className="flex gap-2 mt-3 pt-3 border-t border-gray-100">
                     <button
                       onClick={() => openEditModal(r)}
-                      className="text-blue-600 hover:text-blue-800 text-xs font-medium"
+                      className="text-terracotta-500 hover:text-terracotta-700 text-xs font-medium"
                     >
                       Edit
                     </button>
@@ -668,17 +668,17 @@ export default function ExpensesPage() {
         <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4">
           <div className="bg-white rounded-xl w-full max-w-lg max-h-[90vh] overflow-y-auto">
             <div className="p-6 space-y-4">
-              <h3 className="text-lg font-semibold text-gray-800">
+              <h3 className="text-lg font-semibold text-charcoal-800">
                 {editingExpense ? "Edit Pengeluaran" : "Catat Pengeluaran Baru"}
               </h3>
 
               {/* Category */}
               <div>
-                <label className="text-sm font-medium text-gray-700 block mb-1.5">Kategori</label>
+                <label className="text-sm font-medium text-charcoal-800 block mb-1.5">Kategori</label>
                 <select
                   value={form.categoryId}
                   onChange={(e) => setForm({ ...form, categoryId: e.target.value })}
-                  className="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm"
+                  className="w-full border border-concrete-300 rounded-lg px-3 py-2.5 text-sm"
                 >
                   {categories.map((c) => (
                     <option key={c.id} value={c.id}>{c.icon} {c.name}</option>
@@ -688,11 +688,11 @@ export default function ExpensesPage() {
 
               {/* Property */}
               <div>
-                <label className="text-sm font-medium text-gray-700 block mb-1.5">Building</label>
+                <label className="text-sm font-medium text-charcoal-800 block mb-1.5">Building</label>
                 <select
                   value={form.propertyId}
                   onChange={(e) => setForm({ ...form, propertyId: e.target.value })}
-                  className="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm"
+                  className="w-full border border-concrete-300 rounded-lg px-3 py-2.5 text-sm"
                 >
                   <option value="">Umum (semua building)</option>
                   {properties.map((p) => (
@@ -703,12 +703,12 @@ export default function ExpensesPage() {
 
               {/* Title */}
               <div>
-                <label className="text-sm font-medium text-gray-700 block mb-1.5">Judul</label>
+                <label className="text-sm font-medium text-charcoal-800 block mb-1.5">Judul</label>
                 <input
                   type="text"
                   value={form.title}
                   onChange={(e) => setForm({ ...form, title: e.target.value })}
-                  className="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm"
+                  className="w-full border border-concrete-300 rounded-lg px-3 py-2.5 text-sm"
                   placeholder="Contoh: Bayar listrik Persada Feb 2026"
                 />
               </div>
@@ -716,29 +716,29 @@ export default function ExpensesPage() {
               {/* Amount + Date row */}
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="text-sm font-medium text-gray-700 block mb-1.5">Nominal (IDR)</label>
+                  <label className="text-sm font-medium text-charcoal-800 block mb-1.5">Nominal (IDR)</label>
                   <input
                     type="number"
                     value={form.amount}
                     onChange={(e) => setForm({ ...form, amount: e.target.value })}
-                    className="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm"
+                    className="w-full border border-concrete-300 rounded-lg px-3 py-2.5 text-sm"
                     placeholder="0"
                   />
                 </div>
                 <div>
-                  <label className="text-sm font-medium text-gray-700 block mb-1.5">Tanggal</label>
+                  <label className="text-sm font-medium text-charcoal-800 block mb-1.5">Tanggal</label>
                   <input
                     type="date"
                     value={form.expenseDate}
                     onChange={(e) => setForm({ ...form, expenseDate: e.target.value })}
-                    className="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm"
+                    className="w-full border border-concrete-300 rounded-lg px-3 py-2.5 text-sm"
                   />
                 </div>
               </div>
 
               {/* Payment method */}
               <div>
-                <label className="text-sm font-medium text-gray-700 block mb-1.5">Metode Pembayaran</label>
+                <label className="text-sm font-medium text-charcoal-800 block mb-1.5">Metode Pembayaran</label>
                 <div className="flex gap-2">
                   {[
                     { val: "cash", label: "💵 Cash" },
@@ -751,8 +751,8 @@ export default function ExpensesPage() {
                       onClick={() => setForm({ ...form, paymentMethod: pm.val })}
                       className={`flex-1 py-2 text-sm rounded-lg border transition-colors ${
                         form.paymentMethod === pm.val
-                          ? "border-blue-500 bg-blue-50 text-blue-700 font-medium"
-                          : "border-gray-200 text-gray-600 hover:bg-gray-50"
+                          ? "border-terracotta-500 bg-terracotta-50 text-terracotta-600 font-medium"
+                          : "border-concrete-200 text-charcoal-600 hover:bg-concrete-100"
                       }`}
                     >
                       {pm.label}
@@ -763,11 +763,11 @@ export default function ExpensesPage() {
 
               {/* Description */}
               <div>
-                <label className="text-sm font-medium text-gray-700 block mb-1.5">Keterangan (opsional)</label>
+                <label className="text-sm font-medium text-charcoal-800 block mb-1.5">Keterangan (opsional)</label>
                 <textarea
                   value={form.description}
                   onChange={(e) => setForm({ ...form, description: e.target.value })}
-                  className="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm"
+                  className="w-full border border-concrete-300 rounded-lg px-3 py-2.5 text-sm"
                   rows={2}
                   placeholder="Detail tambahan..."
                 />
@@ -781,9 +781,9 @@ export default function ExpensesPage() {
                       type="checkbox"
                       checked={form.isRecurring}
                       onChange={(e) => setForm({ ...form, isRecurring: e.target.checked })}
-                      className="w-4 h-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                      className="w-4 h-4 rounded border-concrete-300 text-terracotta-500 focus:ring-blue-500"
                     />
-                    <span className="text-sm font-medium text-gray-700">
+                    <span className="text-sm font-medium text-charcoal-800">
                       🔄 Pengeluaran berulang
                     </span>
                   </label>
@@ -791,11 +791,11 @@ export default function ExpensesPage() {
                   {form.isRecurring && (
                     <div className="grid grid-cols-2 gap-3 pl-7">
                       <div>
-                        <label className="text-xs text-gray-500 block mb-1">Interval</label>
+                        <label className="text-xs text-concrete-600 block mb-1">Interval</label>
                         <select
                           value={form.recurringInterval}
                           onChange={(e) => setForm({ ...form, recurringInterval: e.target.value })}
-                          className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"
+                          className="w-full border border-concrete-300 rounded-lg px-3 py-2 text-sm"
                         >
                           <option value="weekly">Mingguan</option>
                           <option value="monthly">Bulanan</option>
@@ -804,14 +804,14 @@ export default function ExpensesPage() {
                         </select>
                       </div>
                       <div>
-                        <label className="text-xs text-gray-500 block mb-1">Tanggal/Hari ke-</label>
+                        <label className="text-xs text-concrete-600 block mb-1">Tanggal/Hari ke-</label>
                         <input
                           type="number"
                           min={1}
                           max={31}
                           value={form.recurringDay}
                           onChange={(e) => setForm({ ...form, recurringDay: e.target.value })}
-                          className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"
+                          className="w-full border border-concrete-300 rounded-lg px-3 py-2 text-sm"
                         />
                       </div>
                     </div>
@@ -824,13 +824,13 @@ export default function ExpensesPage() {
                 <button
                   onClick={handleSubmit}
                   disabled={saving}
-                  className="flex-1 bg-blue-600 text-white rounded-lg py-2.5 text-sm font-medium hover:bg-blue-700 disabled:opacity-50 transition-colors"
+                  className="flex-1 bg-terracotta-500 text-white rounded-lg py-2.5 text-sm font-medium hover:bg-terracotta-600 disabled:opacity-50 transition-colors"
                 >
                   {saving ? "Menyimpan..." : editingExpense ? "Simpan Perubahan" : "Catat Pengeluaran"}
                 </button>
                 <button
                   onClick={() => setShowModal(false)}
-                  className="flex-1 bg-gray-100 text-gray-700 rounded-lg py-2.5 text-sm font-medium hover:bg-gray-200 transition-colors"
+                  className="flex-1 bg-concrete-100 text-charcoal-800 rounded-lg py-2.5 text-sm font-medium hover:bg-gray-200 transition-colors"
                 >
                   Batal
                 </button>

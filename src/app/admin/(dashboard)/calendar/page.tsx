@@ -25,7 +25,7 @@ export default function CalendarPage() {
         <div className="flex items-center justify-between mb-6">
           <button
             onClick={() => setCurrentMonth(new Date(year, month - 1, 1))}
-            className="px-3 py-1 border rounded text-sm hover:bg-gray-50"
+            className="px-3 py-1 border rounded text-sm hover:bg-concrete-100"
           >
             &larr;
           </button>
@@ -34,7 +34,7 @@ export default function CalendarPage() {
           </h3>
           <button
             onClick={() => setCurrentMonth(new Date(year, month + 1, 1))}
-            className="px-3 py-1 border rounded text-sm hover:bg-gray-50"
+            className="px-3 py-1 border rounded text-sm hover:bg-concrete-100"
           >
             &rarr;
           </button>
@@ -42,7 +42,7 @@ export default function CalendarPage() {
 
         <div className="grid grid-cols-7 gap-1">
           {["Min", "Sen", "Sel", "Rab", "Kam", "Jum", "Sab"].map((d) => (
-            <div key={d} className="text-center text-xs font-medium text-gray-500 py-2">
+            <div key={d} className="text-center text-xs font-medium text-concrete-600 py-2">
               {d}
             </div>
           ))}
@@ -59,8 +59,8 @@ export default function CalendarPage() {
                   !day
                     ? ""
                     : isToday
-                    ? "bg-navy-900 text-white font-bold"
-                    : "hover:bg-gray-50 cursor-pointer"
+                    ? "bg-charcoal-800 text-white font-bold"
+                    : "hover:bg-concrete-100 cursor-pointer"
                 }`}
               >
                 {day || ""}
@@ -69,7 +69,7 @@ export default function CalendarPage() {
           })}
         </div>
 
-        <p className="text-xs text-gray-400 mt-6 text-center">
+        <p className="text-xs text-concrete-600 mt-6 text-center">
           Kalender interaktif dengan data booking akan ditampilkan setelah integrasi database selesai.
           Klik pada tanggal untuk melihat detail booking hari tersebut.
         </p>

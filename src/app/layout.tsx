@@ -1,6 +1,18 @@
 import type { Metadata } from "next";
-import { Inter, Playfair_Display } from "next/font/google";
+import { Jost, Plus_Jakarta_Sans, Inter } from "next/font/google";
 import "./globals.css";
+
+const jost = Jost({
+  subsets: ["latin"],
+  variable: "--font-jost",
+  display: "swap",
+});
+
+const jakarta = Plus_Jakarta_Sans({
+  subsets: ["latin"],
+  variable: "--font-jakarta",
+  display: "swap",
+});
 
 const inter = Inter({
   subsets: ["latin"],
@@ -8,16 +20,10 @@ const inter = Inter({
   display: "swap",
 });
 
-const playfair = Playfair_Display({
-  subsets: ["latin"],
-  variable: "--font-playfair",
-  display: "swap",
-});
-
 export const metadata: Metadata = {
-  title: "Sada Residence — Akomodasi Premium di Jimbaran, Bali",
+  title: "SADA Residence — Selalu Ada. Always Here.",
   description:
-    "Sada Residence menyediakan kamar harian, mingguan & bulanan di kawasan Jimbaran, Bali. Fasilitas lengkap, lokasi strategis, harga terjangkau.",
+    "SADA Residence menyediakan hunian harian, mingguan & bulanan di kawasan Jimbaran, Bali. Warm, Simpel, Peaceful.",
   keywords: ["sada residence", "kos jimbaran", "apartemen bali", "booking kamar bali"],
 };
 
@@ -27,7 +33,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="id" className={`${inter.variable} ${playfair.variable}`}>
+    <html lang="id" className={`${jost.variable} ${jakarta.variable} ${inter.variable}`}>
       <body>{children}</body>
     </html>
   );

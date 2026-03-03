@@ -307,7 +307,7 @@ export default function PricingPage() {
   if (loading) {
     return (
       <div className="flex items-center justify-center py-20">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600" />
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-terracotta-500" />
       </div>
     );
   }
@@ -316,8 +316,8 @@ export default function PricingPage() {
     <div className="max-w-6xl mx-auto space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Manajemen Harga</h1>
-          <p className="text-sm text-gray-500 mt-1">
+          <h1 className="text-2xl font-bold text-charcoal-800">Manajemen Harga</h1>
+          <p className="text-sm text-concrete-600 mt-1">
             Atur harga per building, per kamar, atau bulk kamar kosong
           </p>
         </div>
@@ -337,7 +337,7 @@ export default function PricingPage() {
       )}
 
       {/* Tabs */}
-      <div className="border-b border-gray-200">
+      <div className="border-b border-concrete-200">
         <div className="flex gap-0">
           {[
             { key: "building" as const, label: "Per Building", icon: "🏢" },
@@ -349,8 +349,8 @@ export default function PricingPage() {
               onClick={() => setTab(t.key)}
               className={`px-5 py-3 text-sm font-medium border-b-2 transition-colors ${
                 tab === t.key
-                  ? "border-blue-600 text-blue-600"
-                  : "border-transparent text-gray-500 hover:text-gray-700"
+                  ? "border-terracotta-500 text-terracotta-500"
+                  : "border-transparent text-concrete-600 hover:text-charcoal-800"
               }`}
             >
               <span className="mr-1.5">{t.icon}</span>
@@ -377,11 +377,11 @@ export default function PricingPage() {
 
           {/* Per-Property Rates */}
           <div className="flex items-center gap-3 pt-2">
-            <h3 className="text-lg font-semibold text-gray-800">Harga Per Building</h3>
+            <h3 className="text-lg font-semibold text-charcoal-800">Harga Per Building</h3>
             <select
               value={selectedProperty}
               onChange={(e) => setSelectedProperty(e.target.value)}
-              className="text-sm border border-gray-300 rounded-lg px-3 py-1.5"
+              className="text-sm border border-concrete-300 rounded-lg px-3 py-1.5"
             >
               <option value="all">Semua Building</option>
               {properties.map((p) => (
@@ -429,7 +429,7 @@ export default function PricingPage() {
             <select
               value={roomProperty}
               onChange={(e) => setRoomProperty(e.target.value)}
-              className="text-sm border border-gray-300 rounded-lg px-3 py-2"
+              className="text-sm border border-concrete-300 rounded-lg px-3 py-2"
             >
               <option value="all">Semua Building</option>
               {properties.map((p) => (
@@ -443,9 +443,9 @@ export default function PricingPage() {
               placeholder="Cari no. kamar..."
               value={roomSearch}
               onChange={(e) => setRoomSearch(e.target.value)}
-              className="text-sm border border-gray-300 rounded-lg px-3 py-2 w-48"
+              className="text-sm border border-concrete-300 rounded-lg px-3 py-2 w-48"
             />
-            <span className="text-sm text-gray-500 self-center">
+            <span className="text-sm text-concrete-600 self-center">
               {filteredRooms.length} kamar
             </span>
           </div>
@@ -458,13 +458,13 @@ export default function PricingPage() {
                   Override Harga Kamar {editingOverride.roomNumber}
                 </h3>
                 <div>
-                  <label className="text-sm text-gray-600 block mb-1">Tipe Sewa</label>
+                  <label className="text-sm text-charcoal-600 block mb-1">Tipe Sewa</label>
                   <select
                     value={editingOverride.stayType}
                     onChange={(e) =>
                       setEditingOverride({ ...editingOverride, stayType: e.target.value as StayType })
                     }
-                    className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"
+                    className="w-full border border-concrete-300 rounded-lg px-3 py-2 text-sm"
                   >
                     <option value="daily">Harian</option>
                     <option value="weekly">Mingguan</option>
@@ -472,26 +472,26 @@ export default function PricingPage() {
                   </select>
                 </div>
                 <div>
-                  <label className="text-sm text-gray-600 block mb-1">Harga (IDR)</label>
+                  <label className="text-sm text-charcoal-600 block mb-1">Harga (IDR)</label>
                   <input
                     type="number"
                     value={editingOverride.price}
                     onChange={(e) =>
                       setEditingOverride({ ...editingOverride, price: e.target.value })
                     }
-                    className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"
+                    className="w-full border border-concrete-300 rounded-lg px-3 py-2 text-sm"
                     placeholder="0"
                   />
                 </div>
                 <div>
-                  <label className="text-sm text-gray-600 block mb-1">Catatan (opsional)</label>
+                  <label className="text-sm text-charcoal-600 block mb-1">Catatan (opsional)</label>
                   <input
                     type="text"
                     value={editingOverride.notes}
                     onChange={(e) =>
                       setEditingOverride({ ...editingOverride, notes: e.target.value })
                     }
-                    className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"
+                    className="w-full border border-concrete-300 rounded-lg px-3 py-2 text-sm"
                     placeholder="Alasan harga khusus..."
                   />
                 </div>
@@ -499,13 +499,13 @@ export default function PricingPage() {
                   <button
                     onClick={handleSaveOverride}
                     disabled={saving}
-                    className="flex-1 bg-blue-600 text-white rounded-lg py-2 text-sm font-medium hover:bg-blue-700 disabled:opacity-50"
+                    className="flex-1 bg-terracotta-500 text-white rounded-lg py-2 text-sm font-medium hover:bg-terracotta-600 disabled:opacity-50"
                   >
                     {saving ? "Menyimpan..." : "Simpan"}
                   </button>
                   <button
                     onClick={() => setEditingOverride(null)}
-                    className="flex-1 bg-gray-100 text-gray-700 rounded-lg py-2 text-sm font-medium hover:bg-gray-200"
+                    className="flex-1 bg-concrete-100 text-charcoal-800 rounded-lg py-2 text-sm font-medium hover:bg-gray-200"
                   >
                     Batal
                   </button>
@@ -515,18 +515,18 @@ export default function PricingPage() {
           )}
 
           {/* Room pricing table */}
-          <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+          <div className="bg-white rounded-xl border border-concrete-200 overflow-hidden">
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
                 <thead>
-                  <tr className="bg-gray-50 border-b">
-                    <th className="text-left px-4 py-3 font-medium text-gray-600">Kamar</th>
-                    <th className="text-left px-4 py-3 font-medium text-gray-600">Building</th>
-                    <th className="text-left px-4 py-3 font-medium text-gray-600">Status</th>
-                    <th className="text-right px-4 py-3 font-medium text-gray-600">Harian</th>
-                    <th className="text-right px-4 py-3 font-medium text-gray-600">Mingguan</th>
-                    <th className="text-right px-4 py-3 font-medium text-gray-600">Bulanan</th>
-                    <th className="text-center px-4 py-3 font-medium text-gray-600">Aksi</th>
+                  <tr className="bg-concrete-100 border-b">
+                    <th className="text-left px-4 py-3 font-medium text-charcoal-600">Kamar</th>
+                    <th className="text-left px-4 py-3 font-medium text-charcoal-600">Building</th>
+                    <th className="text-left px-4 py-3 font-medium text-charcoal-600">Status</th>
+                    <th className="text-right px-4 py-3 font-medium text-charcoal-600">Harian</th>
+                    <th className="text-right px-4 py-3 font-medium text-charcoal-600">Mingguan</th>
+                    <th className="text-right px-4 py-3 font-medium text-charcoal-600">Bulanan</th>
+                    <th className="text-center px-4 py-3 font-medium text-charcoal-600">Aksi</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-100">
@@ -536,9 +536,9 @@ export default function PricingPage() {
                     const monthly = getEffectivePrice(room, "monthly");
 
                     return (
-                      <tr key={room.id} className="hover:bg-gray-50">
+                      <tr key={room.id} className="hover:bg-concrete-100">
                         <td className="px-4 py-3 font-medium">{room.room_number}</td>
-                        <td className="px-4 py-3 text-gray-600">
+                        <td className="px-4 py-3 text-charcoal-600">
                           {room.property?.name || "-"}
                         </td>
                         <td className="px-4 py-3">
@@ -558,7 +558,7 @@ export default function PricingPage() {
                                 notes: "",
                               })
                             }
-                            className="text-blue-600 hover:text-blue-800 text-xs font-medium"
+                            className="text-terracotta-500 hover:text-terracotta-700 text-xs font-medium"
                           >
                             Set Harga
                           </button>
@@ -573,8 +573,8 @@ export default function PricingPage() {
 
           {/* Active overrides */}
           {overrides.length > 0 && (
-            <div className="bg-white rounded-xl border border-gray-200 p-5">
-              <h3 className="font-semibold text-gray-800 mb-3">
+            <div className="bg-white rounded-xl border border-concrete-200 p-5">
+              <h3 className="font-semibold text-charcoal-800 mb-3">
                 Override Aktif ({overrides.length})
               </h3>
               <div className="space-y-2">
@@ -587,17 +587,17 @@ export default function PricingPage() {
                       <span className="font-medium">
                         Kamar {ov.room?.room_number}
                       </span>
-                      <span className="text-gray-500 ml-2">
+                      <span className="text-concrete-600 ml-2">
                         {ov.room?.property?.name}
                       </span>
-                      <span className="text-gray-400 mx-2">·</span>
+                      <span className="text-concrete-600 mx-2">·</span>
                       <span>{STAY_LABELS[ov.stay_type]}</span>
-                      <span className="text-gray-400 mx-2">·</span>
+                      <span className="text-concrete-600 mx-2">·</span>
                       <span className="font-semibold text-amber-700">
                         {formatPrice(ov.price)}
                       </span>
                       {ov.notes && (
-                        <span className="text-gray-400 ml-2 text-xs">
+                        <span className="text-concrete-600 ml-2 text-xs">
                           ({ov.notes})
                         </span>
                       )}
@@ -619,12 +619,12 @@ export default function PricingPage() {
       {/* ═══════════════ TAB: Kamar Kosong ═══════════════ */}
       {tab === "empty" && (
         <div className="space-y-6">
-          <div className="bg-white rounded-xl border border-gray-200 p-6 space-y-5">
+          <div className="bg-white rounded-xl border border-concrete-200 p-6 space-y-5">
             <div>
-              <h3 className="text-lg font-semibold text-gray-800">
+              <h3 className="text-lg font-semibold text-charcoal-800">
                 Set Harga Bulk Kamar Kosong
               </h3>
-              <p className="text-sm text-gray-500 mt-1">
+              <p className="text-sm text-concrete-600 mt-1">
                 Atur harga khusus untuk semua kamar kosong (status &quot;Available&quot;) di
                 suatu building sekaligus
               </p>
@@ -632,13 +632,13 @@ export default function PricingPage() {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label className="text-sm font-medium text-gray-700 block mb-1.5">
+                <label className="text-sm font-medium text-charcoal-800 block mb-1.5">
                   Pilih Building
                 </label>
                 <select
                   value={emptyProperty}
                   onChange={(e) => setEmptyProperty(e.target.value)}
-                  className="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm"
+                  className="w-full border border-concrete-300 rounded-lg px-3 py-2.5 text-sm"
                 >
                   {properties.map((p) => (
                     <option key={p.id} value={p.id}>
@@ -648,13 +648,13 @@ export default function PricingPage() {
                 </select>
               </div>
               <div>
-                <label className="text-sm font-medium text-gray-700 block mb-1.5">
+                <label className="text-sm font-medium text-charcoal-800 block mb-1.5">
                   Tipe Sewa
                 </label>
                 <select
                   value={emptyStayType}
                   onChange={(e) => setEmptyStayType(e.target.value as StayType)}
-                  className="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm"
+                  className="w-full border border-concrete-300 rounded-lg px-3 py-2.5 text-sm"
                 >
                   <option value="daily">Harian</option>
                   <option value="weekly">Mingguan</option>
@@ -664,22 +664,22 @@ export default function PricingPage() {
             </div>
 
             <div>
-              <label className="text-sm font-medium text-gray-700 block mb-1.5">
+              <label className="text-sm font-medium text-charcoal-800 block mb-1.5">
                 Harga Baru (IDR)
               </label>
               <input
                 type="number"
                 value={emptyPrice}
                 onChange={(e) => setEmptyPrice(e.target.value)}
-                className="w-full border border-gray-300 rounded-lg px-3 py-2.5 text-sm"
+                className="w-full border border-concrete-300 rounded-lg px-3 py-2.5 text-sm"
                 placeholder="Contoh: 3500000"
               />
             </div>
 
             {/* Preview */}
             {emptyProperty && (
-              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-                <p className="text-sm text-blue-800">
+              <div className="bg-terracotta-50 border border-terracotta-200 rounded-lg p-4">
+                <p className="text-sm text-terracotta-700">
                   <span className="font-semibold">{emptyRoomCount} kamar kosong</span>{" "}
                   ditemukan di{" "}
                   <span className="font-semibold">
@@ -700,7 +700,7 @@ export default function PricingPage() {
                     .map((r) => (
                       <span
                         key={r.id}
-                        className="bg-blue-100 text-blue-700 text-xs px-2 py-0.5 rounded"
+                        className="bg-terracotta-100 text-terracotta-600 text-xs px-2 py-0.5 rounded"
                       >
                         {r.room_number}
                       </span>
@@ -712,7 +712,7 @@ export default function PricingPage() {
             <button
               onClick={handleBulkEmptyRooms}
               disabled={saving || !emptyPrice || !emptyProperty || emptyRoomCount === 0}
-              className="bg-blue-600 text-white rounded-lg px-6 py-2.5 text-sm font-medium hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              className="bg-terracotta-500 text-white rounded-lg px-6 py-2.5 text-sm font-medium hover:bg-terracotta-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
             >
               {saving
                 ? "Menyimpan..."
@@ -778,29 +778,29 @@ function RateCard({
   }, [rates]);
 
   return (
-    <div className="bg-white rounded-xl border border-gray-200 p-5">
+    <div className="bg-white rounded-xl border border-concrete-200 p-5">
       <div className="flex items-center gap-3 mb-4">
         <span className="text-2xl">{icon}</span>
         <div>
-          <h3 className="font-semibold text-gray-800">{title}</h3>
-          <p className="text-xs text-gray-500">{subtitle}</p>
+          <h3 className="font-semibold text-charcoal-800">{title}</h3>
+          <p className="text-xs text-concrete-600">{subtitle}</p>
         </div>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         {stayTypes.map((st) => (
           <div key={st} className="space-y-1.5">
-            <label className="text-xs font-medium text-gray-600 block">
+            <label className="text-xs font-medium text-charcoal-600 block">
               {STAY_LABELS[st]}
               {globalRates && globalRates[st] && !prices[st] && (
-                <span className="text-gray-400 ml-1">
+                <span className="text-concrete-600 ml-1">
                   (global: {formatPrice(globalRates[st]!)})
                 </span>
               )}
             </label>
             <div className="flex gap-2">
               <div className="relative flex-1">
-                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-xs text-gray-400">
+                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-xs text-concrete-600">
                   Rp
                 </span>
                 <input
@@ -809,14 +809,14 @@ function RateCard({
                   onChange={(e) =>
                     setPrices((prev) => ({ ...prev, [st]: e.target.value }))
                   }
-                  className="w-full border border-gray-300 rounded-lg pl-8 pr-3 py-2 text-sm"
+                  className="w-full border border-concrete-300 rounded-lg pl-8 pr-3 py-2 text-sm"
                   placeholder="0"
                 />
               </div>
               <button
                 onClick={() => onSave(propertyId, st, prices[st], roomTypeId)}
                 disabled={saving || !prices[st]}
-                className="bg-blue-600 text-white rounded-lg px-3 py-2 text-xs font-medium hover:bg-blue-700 disabled:opacity-50 whitespace-nowrap"
+                className="bg-terracotta-500 text-white rounded-lg px-3 py-2 text-xs font-medium hover:bg-terracotta-600 disabled:opacity-50 whitespace-nowrap"
               >
                 Simpan
               </button>
@@ -836,7 +836,7 @@ function RateCard({
               )
             }
             disabled={saving || !stayTypes.some((st) => prices[st])}
-            className="text-sm text-blue-600 hover:text-blue-800 font-medium disabled:opacity-50"
+            className="text-sm text-terracotta-500 hover:text-terracotta-700 font-medium disabled:opacity-50"
           >
             Simpan Semua Harga Sekaligus
           </button>
@@ -849,9 +849,9 @@ function RateCard({
 function PriceCell({ data }: { data: { price: number; source: string } }) {
   const colorMap: Record<string, string> = {
     override: "text-amber-700 font-semibold",
-    property: "text-blue-700",
-    global: "text-gray-600",
-    none: "text-gray-400",
+    property: "text-terracotta-600",
+    global: "text-charcoal-600",
+    none: "text-concrete-600",
   };
   const labelMap: Record<string, string> = {
     override: "✦",
@@ -868,7 +868,7 @@ function PriceCell({ data }: { data: { price: number; source: string } }) {
           {formatPrice(data.price)}
         </>
       ) : (
-        <span className="text-gray-400">-</span>
+        <span className="text-concrete-600">-</span>
       )}
     </td>
   );
@@ -877,7 +877,7 @@ function PriceCell({ data }: { data: { price: number; source: string } }) {
 function StatusBadge({ status }: { status: string }) {
   const styles: Record<string, string> = {
     available: "bg-green-100 text-green-700",
-    occupied: "bg-blue-100 text-blue-700",
+    occupied: "bg-terracotta-100 text-terracotta-600",
     maintenance: "bg-yellow-100 text-yellow-700",
     blocked: "bg-red-100 text-red-700",
   };
@@ -890,7 +890,7 @@ function StatusBadge({ status }: { status: string }) {
 
   return (
     <span
-      className={`text-xs px-2 py-0.5 rounded-full font-medium ${styles[status] || "bg-gray-100 text-gray-600"}`}
+      className={`text-xs px-2 py-0.5 rounded-full font-medium ${styles[status] || "bg-concrete-100 text-charcoal-600"}`}
     >
       {labels[status] || status}
     </span>

@@ -44,7 +44,7 @@ function OccupancyChart({ data, totalRooms }: { data: { date: string; occupied: 
 
   if (!data || data.length === 0) {
     return (
-      <div className="h-64 flex items-center justify-center text-gray-400 text-sm">
+      <div className="h-64 flex items-center justify-center text-concrete-600 text-sm">
         Belum ada data
       </div>
     );
@@ -95,13 +95,13 @@ function OccupancyChart({ data, totalRooms }: { data: { date: string; occupied: 
         <path d={areaPath} fill="url(#occupancyGradient)" />
         <defs>
           <linearGradient id="occupancyGradient" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor="#3b82f6" stopOpacity="0.25" />
-            <stop offset="100%" stopColor="#3b82f6" stopOpacity="0.02" />
+            <stop offset="0%" stopColor="#EA6947" stopOpacity="0.25" />
+            <stop offset="100%" stopColor="#EA6947" stopOpacity="0.02" />
           </linearGradient>
         </defs>
 
         {/* Line */}
-        <path d={linePath} fill="none" stroke="#3b82f6" strokeWidth={2.5} strokeLinejoin="round" />
+        <path d={linePath} fill="none" stroke="#EA6947" strokeWidth={2.5} strokeLinejoin="round" />
 
         {/* Data points (interactive) */}
         {points.map((p, i) => (
@@ -110,7 +110,7 @@ function OccupancyChart({ data, totalRooms }: { data: { date: string; occupied: 
             cx={p.x}
             cy={p.y}
             r={data.length <= 31 ? 3.5 : 2}
-            fill="#3b82f6"
+            fill="#EA6947"
             stroke="white"
             strokeWidth={1.5}
             className="cursor-pointer hover:r-5"
@@ -135,7 +135,7 @@ function OccupancyChart({ data, totalRooms }: { data: { date: string; occupied: 
       {/* Tooltip */}
       {tooltip && (
         <div
-          className="absolute bg-navy-900 text-white text-xs rounded-lg px-3 py-2 pointer-events-none shadow-lg"
+          className="absolute bg-charcoal-800 text-white text-xs rounded-lg px-3 py-2 pointer-events-none shadow-lg"
           style={{
             left: `${(tooltip.x / chartW) * 100}%`,
             top: "0",
@@ -175,7 +175,7 @@ function OccupancyRing({ rate, size = 80, label }: { rate: number; size?: number
         />
       </svg>
       <span className="text-lg font-bold -mt-[52px] mb-6">{rate}%</span>
-      {label && <span className="text-xs text-gray-500 mt-1">{label}</span>}
+      {label && <span className="text-xs text-concrete-600 mt-1">{label}</span>}
     </div>
   );
 }
@@ -210,7 +210,7 @@ export default function OverviewPage() {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-navy-900" />
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-charcoal-800" />
       </div>
     );
   }
@@ -220,58 +220,58 @@ export default function OverviewPage() {
       {/* Revenue Stats */}
       {analytics && (
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          <div className="bg-white rounded-xl border border-gray-100 p-6">
-            <p className="text-sm text-gray-500 mb-1">Total Pemasukan</p>
+          <div className="bg-white rounded-2xl border border-concrete-200 p-6">
+            <p className="text-sm text-concrete-600 mb-1">Total Pemasukan</p>
             <p className="text-2xl font-bold text-green-600">
               {formatCurrency(analytics.totalRevenue)}
             </p>
           </div>
-          <div className="bg-white rounded-xl border border-gray-100 p-6">
-            <p className="text-sm text-gray-500 mb-1">Belum Terbayar</p>
+          <div className="bg-white rounded-2xl border border-concrete-200 p-6">
+            <p className="text-sm text-concrete-600 mb-1">Belum Terbayar</p>
             <p className="text-2xl font-bold text-yellow-600">
               {formatCurrency(analytics.pendingRevenue)}
             </p>
           </div>
-          <div className="bg-white rounded-xl border border-gray-100 p-6">
-            <p className="text-sm text-gray-500 mb-1">Booking (30 hari)</p>
+          <div className="bg-white rounded-2xl border border-concrete-200 p-6">
+            <p className="text-sm text-concrete-600 mb-1">Booking (30 hari)</p>
             <p className="text-2xl font-bold text-purple-600">
               {analytics.recentBookings}
             </p>
           </div>
-          <div className="bg-white rounded-xl border border-gray-100 p-6">
-            <p className="text-sm text-gray-500 mb-1">Hari Ini</p>
+          <div className="bg-white rounded-2xl border border-concrete-200 p-6">
+            <p className="text-sm text-concrete-600 mb-1">Hari Ini</p>
             {occupancy ? (
               <>
-                <p className="text-2xl font-bold text-blue-600">
+                <p className="text-2xl font-bold text-terracotta-500">
                   {occupancy.today.rate}%
                 </p>
-                <p className="text-xs text-gray-400">
+                <p className="text-xs text-concrete-600">
                   {occupancy.today.occupied}/{occupancy.totalRooms} kamar terisi
                 </p>
               </>
             ) : (
-              <div className="animate-pulse h-8 bg-gray-100 rounded w-16" />
+              <div className="animate-pulse h-8 bg-concrete-100 rounded w-16" />
             )}
           </div>
         </div>
       )}
 
       {/* Occupancy Section */}
-      <div className="bg-white rounded-xl border border-gray-100 p-6">
+      <div className="bg-white rounded-2xl border border-concrete-200 p-6">
         <div className="flex flex-wrap items-center justify-between gap-4 mb-6">
           <div>
             <h3 className="font-display text-lg font-bold">Tingkat Keterisian</h3>
-            <p className="text-sm text-gray-500">Rata-rata okupansi seluruh properti</p>
+            <p className="text-sm text-concrete-600">Rata-rata okupansi seluruh properti</p>
           </div>
-          <div className="flex bg-gray-100 rounded-lg p-1">
+          <div className="flex bg-concrete-100 rounded-lg p-1">
             {(["7d", "30d", "90d", "365d"] as Period[]).map((p) => (
               <button
                 key={p}
                 onClick={() => setPeriod(p)}
                 className={`px-3 py-1.5 text-xs font-medium rounded-md transition-all ${
                   period === p
-                    ? "bg-white text-navy-900 shadow-sm"
-                    : "text-gray-500 hover:text-gray-700"
+                    ? "bg-white text-charcoal-800 shadow-sm"
+                    : "text-concrete-600 hover:text-charcoal-800"
                 }`}
               >
                 {periodLabels[p]}
@@ -282,18 +282,18 @@ export default function OverviewPage() {
 
         {occLoading ? (
           <div className="flex items-center justify-center h-64">
-            <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-navy-900" />
+            <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-charcoal-800" />
           </div>
         ) : occupancy ? (
           <>
             {/* Average rate badge */}
-            <div className="flex items-center gap-4 mb-6 bg-blue-50 rounded-xl p-4">
+            <div className="flex items-center gap-4 mb-6 bg-terracotta-50 rounded-2xl p-4">
               <OccupancyRing rate={occupancy.average.rate} />
               <div>
-                <p className="font-semibold text-navy-900">
+                <p className="font-semibold text-charcoal-800">
                   Rata-rata {periodLabels[period]}
                 </p>
-                <p className="text-sm text-gray-600">
+                <p className="text-sm text-concrete-600">
                   {occupancy.average.occupied} dari {occupancy.totalRooms} kamar terisi
                 </p>
               </div>
@@ -303,15 +303,15 @@ export default function OverviewPage() {
             <OccupancyChart data={occupancy.chart} totalRooms={occupancy.totalRooms} />
           </>
         ) : (
-          <p className="text-gray-400 text-sm">Gagal memuat data okupansi.</p>
+          <p className="text-concrete-600 text-sm">Gagal memuat data okupansi.</p>
         )}
       </div>
 
       {/* Per-Property Occupancy */}
       {occupancy && occupancy.properties.length > 0 && (
-        <div className="bg-white rounded-xl border border-gray-100 p-6">
+        <div className="bg-white rounded-2xl border border-concrete-200 p-6">
           <h3 className="font-display text-lg font-bold mb-2">Keterisian per Properti</h3>
-          <p className="text-sm text-gray-500 mb-6">
+          <p className="text-sm text-concrete-600 mb-6">
             Rata-rata okupansi {periodLabels[period]} terakhir
           </p>
 
@@ -335,9 +335,9 @@ export default function OverviewPage() {
                   : "bg-red-50";
 
               return (
-                <div key={p.propertyId} className={`rounded-xl p-5 ${bgColor}`}>
+                <div key={p.propertyId} className={`rounded-2xl p-5 ${bgColor}`}>
                   <div className="flex items-start justify-between mb-3">
-                    <h4 className="font-semibold text-sm text-navy-900 leading-tight">
+                    <h4 className="font-semibold text-sm text-charcoal-800 leading-tight">
                       {p.propertyName.replace("Sada Residence ", "")}
                     </h4>
                     <span className={`text-2xl font-bold bg-gradient-to-r ${color} bg-clip-text text-transparent`}>
@@ -353,7 +353,7 @@ export default function OverviewPage() {
                     />
                   </div>
 
-                  <p className="text-xs text-gray-600">
+                  <p className="text-xs text-concrete-600">
                     {p.avgOccupied} dari {p.totalRooms} kamar
                   </p>
                 </div>
@@ -365,7 +365,7 @@ export default function OverviewPage() {
 
       {/* Payment Breakdown */}
       {analytics?.paymentBreakdown && Object.keys(analytics.paymentBreakdown).length > 0 && (
-        <div className="bg-white rounded-xl border border-gray-100 p-6">
+        <div className="bg-white rounded-2xl border border-concrete-200 p-6">
           <h3 className="font-display text-lg font-bold mb-4">Metode Pembayaran</h3>
           <div className="space-y-3">
             {Object.entries(analytics.paymentBreakdown).map(([method, amount]) => {
@@ -379,8 +379,8 @@ export default function OverviewPage() {
                     <span className="font-medium">{label}</span>
                     <span>{formatCurrency(amount)} ({pct}%)</span>
                   </div>
-                  <div className="w-full bg-gray-100 rounded-full h-2">
-                    <div className="bg-brand-400 h-2 rounded-full" style={{ width: `${pct}%` }} />
+                  <div className="w-full bg-concrete-100 rounded-full h-2">
+                    <div className="bg-terracotta-400 h-2 rounded-full" style={{ width: `${pct}%` }} />
                   </div>
                 </div>
               );

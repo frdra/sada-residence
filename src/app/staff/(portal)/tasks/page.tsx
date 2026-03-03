@@ -35,8 +35,8 @@ interface ChecklistItem {
 }
 
 const STATUS_LABELS: Record<string, { label: string; color: string }> = {
-  pending: { label: "Menunggu", color: "bg-gray-100 text-gray-700" },
-  in_progress: { label: "Dikerjakan", color: "bg-blue-100 text-blue-700" },
+  pending: { label: "Menunggu", color: "bg-concrete-100 text-charcoal-800" },
+  in_progress: { label: "Dikerjakan", color: "bg-terracotta-100 text-terracotta-700" },
   completed: { label: "Selesai", color: "bg-green-100 text-green-700" },
   needs_review: { label: "Menunggu Review", color: "bg-yellow-100 text-yellow-700" },
   approved: { label: "Disetujui", color: "bg-emerald-100 text-emerald-700" },
@@ -193,7 +193,7 @@ export default function StaffTasksPage() {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
-        <div className="animate-spin w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full" />
+        <div className="animate-spin w-8 h-8 border-4 border-terracotta-500 border-t-transparent rounded-full" />
       </div>
     );
   }
@@ -220,22 +220,22 @@ export default function StaffTasksPage() {
         {/* Back button */}
         <button
           onClick={() => setActiveTask(null)}
-          className="flex items-center gap-2 text-blue-600 text-sm font-medium"
+          className="flex items-center gap-2 text-terracotta-500 text-sm font-medium"
         >
           ← Kembali
         </button>
 
         {/* Task header */}
-        <div className="bg-white rounded-2xl p-4 border border-gray-100 shadow-sm">
+        <div className="bg-white rounded-2xl p-4 border border-concrete-200 shadow-sm">
           <div className="flex items-center justify-between mb-2">
-            <h2 className="font-bold text-lg text-gray-900">
+            <h2 className="font-bold text-lg text-charcoal-800">
               Kamar {activeTask.room?.room_number}
             </h2>
             <span className={`px-3 py-1 rounded-full text-xs font-medium ${STATUS_LABELS[activeTask.status]?.color || "bg-gray-100"}`}>
               {STATUS_LABELS[activeTask.status]?.label || activeTask.status}
             </span>
           </div>
-          <p className="text-sm text-gray-500">
+          <p className="text-sm text-concrete-600">
             {activeTask.property?.name} • Lt. {activeTask.room?.floor} • {TASK_TYPE_LABELS[activeTask.task_type] || activeTask.task_type}
           </p>
           {activeTask.rejection_reason && (
@@ -251,7 +251,7 @@ export default function StaffTasksPage() {
           <button
             onClick={() => handleAction(activeTask.id, "start")}
             disabled={actionLoading}
-            className="w-full py-4 bg-blue-600 text-white font-bold rounded-2xl text-lg hover:bg-blue-700 disabled:opacity-50 transition-colors"
+            className="w-full py-4 bg-terracotta-500 text-white font-bold rounded-2xl text-lg hover:bg-terracotta-600 disabled:opacity-50 transition-colors"
           >
             {actionLoading ? "Memproses..." : "🧹 Mulai Bersihkan"}
           </button>
@@ -259,12 +259,12 @@ export default function StaffTasksPage() {
 
         {/* Photo section (for in_progress) */}
         {activeTask.status === "in_progress" && (
-          <div className="bg-white rounded-2xl p-4 border border-gray-100 shadow-sm">
-            <h3 className="font-semibold text-gray-900 mb-3">Foto Dokumentasi</h3>
+          <div className="bg-white rounded-2xl p-4 border border-concrete-200 shadow-sm">
+            <h3 className="font-semibold text-charcoal-800 mb-3">Foto Dokumentasi</h3>
 
             {/* Before photos */}
             <div className="mb-4">
-              <p className="text-sm font-medium text-gray-700 mb-2">
+              <p className="text-sm font-medium text-charcoal-800 mb-2">
                 Foto Sebelum ({beforePhotos.length})
               </p>
               <div className="flex gap-2 flex-wrap">
@@ -282,7 +282,7 @@ export default function StaffTasksPage() {
                     fileInputRef.current?.click();
                   }}
                   disabled={uploading}
-                  className="w-20 h-20 rounded-lg border-2 border-dashed border-gray-300 flex items-center justify-center text-gray-400 hover:border-blue-400 hover:text-blue-400"
+                  className="w-20 h-20 rounded-lg border-2 border-dashed border-concrete-300 flex items-center justify-center text-concrete-600 hover:border-terracotta-400 hover:text-terracotta-400"
                 >
                   {uploading && photoType === "before" ? "..." : "📷+"}
                 </button>
@@ -291,7 +291,7 @@ export default function StaffTasksPage() {
 
             {/* After photos */}
             <div>
-              <p className="text-sm font-medium text-gray-700 mb-2">
+              <p className="text-sm font-medium text-charcoal-800 mb-2">
                 Foto Sesudah ({afterPhotos.length})
               </p>
               <div className="flex gap-2 flex-wrap">
@@ -309,7 +309,7 @@ export default function StaffTasksPage() {
                     fileInputRef.current?.click();
                   }}
                   disabled={uploading}
-                  className="w-20 h-20 rounded-lg border-2 border-dashed border-gray-300 flex items-center justify-center text-gray-400 hover:border-blue-400 hover:text-blue-400"
+                  className="w-20 h-20 rounded-lg border-2 border-dashed border-concrete-300 flex items-center justify-center text-concrete-600 hover:border-terracotta-400 hover:text-terracotta-400"
                 >
                   {uploading && photoType === "after" ? "..." : "📷+"}
                 </button>
@@ -333,16 +333,16 @@ export default function StaffTasksPage() {
 
         {/* Checklist (for in_progress) */}
         {activeTask.status === "in_progress" && (
-          <div className="bg-white rounded-2xl p-4 border border-gray-100 shadow-sm">
+          <div className="bg-white rounded-2xl p-4 border border-concrete-200 shadow-sm">
             <div className="flex items-center justify-between mb-3">
-              <h3 className="font-semibold text-gray-900">Checklist SOP</h3>
-              <span className="text-sm text-gray-500">{totalChecked}/{totalItems} ({progress}%)</span>
+              <h3 className="font-semibold text-charcoal-800">Checklist SOP</h3>
+              <span className="text-sm text-concrete-600">{totalChecked}/{totalItems} ({progress}%)</span>
             </div>
 
             {/* Progress bar */}
-            <div className="w-full bg-gray-200 rounded-full h-2 mb-4">
+            <div className="w-full bg-concrete-200 rounded-full h-2 mb-4">
               <div
-                className="bg-blue-600 h-2 rounded-full transition-all"
+                className="bg-terracotta-500 h-2 rounded-full transition-all"
                 style={{ width: `${progress}%` }}
               />
             </div>
@@ -354,7 +354,7 @@ export default function StaffTasksPage() {
               })
               .map(([category, items]) => (
               <div key={category} className="mb-4">
-                <h4 className="text-xs font-semibold text-gray-500 uppercase mb-2">
+                <h4 className="text-xs font-semibold text-concrete-600 uppercase mb-2">
                   {CATEGORY_LABELS[category] || category}
                 </h4>
                 <div className="space-y-2">
@@ -373,17 +373,17 @@ export default function StaffTasksPage() {
                             !item.is_completed
                           )
                         }
-                        className="mt-0.5 w-5 h-5 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                        className="mt-0.5 w-5 h-5 rounded border-gray-300 text-terracotta-500 focus:ring-terracotta-500"
                       />
                       <div className="flex-1 min-w-0">
-                        <p className={`text-sm ${item.is_completed ? "line-through text-gray-400" : "text-gray-900"}`}>
+                        <p className={`text-sm ${item.is_completed ? "line-through text-concrete-600" : "text-charcoal-800"}`}>
                           {item.checklist_item?.item_name}
                           {item.checklist_item?.is_required && (
                             <span className="text-red-500 ml-1">*</span>
                           )}
                         </p>
                         {item.checklist_item?.description && (
-                          <p className="text-xs text-gray-400 mt-0.5">
+                          <p className="text-xs text-concrete-600 mt-0.5">
                             {item.checklist_item.description}
                           </p>
                         )}
@@ -416,17 +416,17 @@ export default function StaffTasksPage() {
         {/* Score display for reviewed tasks */}
         {(activeTask.status === "approved" || activeTask.status === "needs_review") &&
           activeTask.total_score !== null && (
-          <div className="bg-white rounded-2xl p-4 border border-gray-100 shadow-sm">
-            <h3 className="font-semibold text-gray-900 mb-3">Skor Penilaian</h3>
+          <div className="bg-white rounded-2xl p-4 border border-concrete-200 shadow-sm">
+            <h3 className="font-semibold text-charcoal-800 mb-3">Skor Penilaian</h3>
             <div className="text-center">
-              <div className="text-4xl font-bold text-blue-600">
+              <div className="text-4xl font-bold text-terracotta-500">
                 {activeTask.total_score}
               </div>
-              <p className="text-sm text-gray-500">dari 100</p>
+              <p className="text-sm text-concrete-600">dari 100</p>
             </div>
             {activeTask.admin_rating && (
               <div className="mt-3 text-center">
-                <p className="text-sm text-gray-500">Rating Admin</p>
+                <p className="text-sm text-concrete-600">Rating Admin</p>
                 <p className="text-xl">
                   {"⭐".repeat(activeTask.admin_rating)}{"☆".repeat(5 - activeTask.admin_rating)}
                 </p>
@@ -442,19 +442,19 @@ export default function StaffTasksPage() {
   if (showCreate) {
     return (
       <div className="p-4 space-y-4">
-        <button onClick={() => setShowCreate(false)} className="flex items-center gap-2 text-blue-600 text-sm font-medium">
+        <button onClick={() => setShowCreate(false)} className="flex items-center gap-2 text-terracotta-500 text-sm font-medium">
           ← Kembali
         </button>
-        <h2 className="font-bold text-lg text-gray-900">Buat Tugas Baru</h2>
+        <h2 className="font-bold text-lg text-charcoal-800">Buat Tugas Baru</h2>
 
         <div className="space-y-4">
           {/* Property */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Building</label>
+            <label className="block text-sm font-medium text-charcoal-800 mb-1">Building</label>
             <select
               value={selectedProperty}
               onChange={(e) => { setSelectedProperty(e.target.value); setSelectedRoom(""); }}
-              className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-blue-500 text-base"
+              className="w-full px-4 py-3 rounded-xl border border-concrete-300 focus:ring-2 focus:ring-terracotta-500 text-base"
             >
               <option value="">Pilih building</option>
               {properties.map((p: any) => (
@@ -465,11 +465,11 @@ export default function StaffTasksPage() {
 
           {/* Room */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Kamar</label>
+            <label className="block text-sm font-medium text-charcoal-800 mb-1">Kamar</label>
             <select
               value={selectedRoom}
               onChange={(e) => setSelectedRoom(e.target.value)}
-              className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-blue-500 text-base"
+              className="w-full px-4 py-3 rounded-xl border border-concrete-300 focus:ring-2 focus:ring-terracotta-500 text-base"
               disabled={!selectedProperty}
             >
               <option value="">Pilih kamar</option>
@@ -481,7 +481,7 @@ export default function StaffTasksPage() {
 
           {/* Task Type */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Jenis Tugas</label>
+            <label className="block text-sm font-medium text-charcoal-800 mb-2">Jenis Tugas</label>
             <div className="grid grid-cols-2 gap-2">
               {[
                 { value: "occupied_clean", label: "Harian", icon: "🧹" },
@@ -495,8 +495,8 @@ export default function StaffTasksPage() {
                   onClick={() => setTaskType(t.value)}
                   className={`p-3 rounded-xl border text-sm text-center transition-colors ${
                     taskType === t.value
-                      ? "border-blue-500 bg-blue-50 text-blue-700"
-                      : "border-gray-200 text-gray-600"
+                      ? "border-terracotta-500 bg-terracotta-50 text-terracotta-700"
+                      : "border-concrete-200 text-charcoal-600"
                   }`}
                 >
                   <span className="text-xl block mb-1">{t.icon}</span>
@@ -509,7 +509,7 @@ export default function StaffTasksPage() {
           <button
             onClick={handleCreateTask}
             disabled={creating || !selectedRoom}
-            className="w-full py-4 bg-blue-600 text-white font-bold rounded-2xl text-lg hover:bg-blue-700 disabled:opacity-50 transition-colors"
+            className="w-full py-4 bg-terracotta-500 text-white font-bold rounded-2xl text-lg hover:bg-terracotta-600 disabled:opacity-50 transition-colors"
           >
             {creating ? "Membuat..." : "🧹 Buat Tugas"}
           </button>
@@ -522,10 +522,10 @@ export default function StaffTasksPage() {
   return (
     <div className="p-4 space-y-4">
       <div className="flex items-center justify-between">
-        <h2 className="font-bold text-lg text-gray-900">Tugas Hari Ini</h2>
+        <h2 className="font-bold text-lg text-charcoal-800">Tugas Hari Ini</h2>
         <button
           onClick={() => setShowCreate(true)}
-          className="px-4 py-2 bg-blue-600 text-white text-sm font-semibold rounded-xl hover:bg-blue-700 transition-colors"
+          className="px-4 py-2 bg-terracotta-500 text-white text-sm font-semibold rounded-xl hover:bg-terracotta-600 transition-colors"
         >
           + Tugas
         </button>
@@ -534,10 +534,10 @@ export default function StaffTasksPage() {
       {tasks.length === 0 ? (
         <div className="text-center py-12">
           <span className="text-4xl">✨</span>
-          <p className="text-gray-500 mt-3">Belum ada tugas hari ini</p>
+          <p className="text-concrete-600 mt-3">Belum ada tugas hari ini</p>
           <button
             onClick={() => setShowCreate(true)}
-            className="mt-4 px-6 py-3 bg-blue-600 text-white font-semibold rounded-xl hover:bg-blue-700 transition-colors"
+            className="mt-4 px-6 py-3 bg-terracotta-500 text-white font-semibold rounded-xl hover:bg-terracotta-600 transition-colors"
           >
             🧹 Buat Tugas Pertama
           </button>
@@ -548,22 +548,22 @@ export default function StaffTasksPage() {
             <button
               key={task.id}
               onClick={() => setActiveTask(task)}
-              className="w-full text-left bg-white rounded-2xl p-4 border border-gray-100 shadow-sm hover:border-blue-200 transition-colors"
+              className="w-full text-left bg-white rounded-2xl p-4 border border-concrete-200 shadow-sm hover:border-terracotta-200 transition-colors"
             >
               <div className="flex items-center justify-between mb-1">
-                <span className="font-semibold text-gray-900">
+                <span className="font-semibold text-charcoal-800">
                   Kamar {task.room?.room_number}
                 </span>
                 <span className={`px-2.5 py-0.5 rounded-full text-xs font-medium ${STATUS_LABELS[task.status]?.color || "bg-gray-100"}`}>
                   {STATUS_LABELS[task.status]?.label || task.status}
                 </span>
               </div>
-              <p className="text-sm text-gray-500">
+              <p className="text-sm text-concrete-600">
                 {task.property?.name} • Lt. {task.room?.floor} • {TASK_TYPE_LABELS[task.task_type] || task.task_type}
               </p>
               {task.total_score !== null && (
                 <div className="mt-2 flex items-center gap-2">
-                  <div className="flex-1 bg-gray-200 rounded-full h-1.5">
+                  <div className="flex-1 bg-concrete-200 rounded-full h-1.5">
                     <div
                       className={`h-1.5 rounded-full ${
                         task.total_score >= 80
@@ -575,7 +575,7 @@ export default function StaffTasksPage() {
                       style={{ width: `${task.total_score}%` }}
                     />
                   </div>
-                  <span className="text-xs text-gray-500 font-medium">{task.total_score}</span>
+                  <span className="text-xs text-concrete-600 font-medium">{task.total_score}</span>
                 </div>
               )}
             </button>

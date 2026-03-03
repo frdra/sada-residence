@@ -49,7 +49,7 @@ export default async function RoomsPage({
             href="/rooms"
             className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
               !params.type && !params.property
-                ? "bg-navy-900 text-white"
+                ? "bg-charcoal-800 text-white"
                 : "bg-gray-100 text-gray-600 hover:bg-gray-200"
             }`}
           >
@@ -61,7 +61,7 @@ export default async function RoomsPage({
               href={`/rooms?type=${rt.slug}`}
               className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
                 params.type === rt.slug
-                  ? "bg-navy-900 text-white"
+                  ? "bg-charcoal-800 text-white"
                   : "bg-gray-100 text-gray-600 hover:bg-gray-200"
               }`}
             >
@@ -80,14 +80,14 @@ export default async function RoomsPage({
 
               return (
                 <div key={rt.id} className="card lg:flex">
-                  <div className="lg:w-2/5 h-64 lg:h-auto bg-gradient-to-br from-navy-800 to-navy-600 flex items-center justify-center">
+                  <div className="lg:w-2/5 h-64 lg:h-auto bg-gradient-to-br from-charcoal-700 to-charcoal-600 flex items-center justify-center">
                     <div className="text-center text-white">
                       <p className="text-5xl font-bold mb-2">{rt.room_size_sqm}m²</p>
                       <p className="text-sm opacity-70">{rt.bed_type} Bed</p>
                     </div>
                   </div>
                   <div className="lg:w-3/5 p-8">
-                    <h2 className="font-display text-2xl font-bold mb-3">{rt.name}</h2>
+                    <h2 className="font-display text-2xl font-normal mb-3">{rt.name}</h2>
                     <p className="text-gray-600 mb-4">{rt.description}</p>
 
                     <div className="flex gap-4 text-sm text-gray-500 mb-4">
@@ -101,7 +101,7 @@ export default async function RoomsPage({
                         {amenities.map((a: string) => (
                           <span
                             key={a}
-                            className="px-3 py-1 bg-brand-50 text-brand-700 text-xs rounded-full"
+                            className="px-3 py-1 bg-terracotta-100 text-terracotta-700 text-xs rounded-full"
                           >
                             {a}
                           </span>
@@ -111,7 +111,7 @@ export default async function RoomsPage({
 
                     {/* Pricing table */}
                     {rtRates.length > 0 && (
-                      <div className="bg-gray-50 rounded-lg p-4 mb-6">
+                      <div className="bg-concrete-100 rounded-lg p-4 mb-6">
                         <h4 className="font-semibold text-sm mb-3">Harga</h4>
                         <div className="grid grid-cols-3 gap-4 text-center">
                           {rtRates.map((rate) => (
@@ -123,7 +123,7 @@ export default async function RoomsPage({
                                   ? "Mingguan"
                                   : "Bulanan"}
                               </p>
-                              <p className="font-bold text-navy-900">
+                              <p className="font-bold text-charcoal-800">
                                 {formatCurrency(rate.price)}
                               </p>
                               <p className="text-xs text-gray-400">

@@ -12,18 +12,18 @@ const ISSUE_TYPES = [
 ];
 
 const SEVERITY_LABELS: Record<string, { label: string; color: string }> = {
-  low: { label: "Rendah", color: "bg-gray-100 text-gray-700" },
+  low: { label: "Rendah", color: "bg-concrete-100 text-charcoal-800" },
   medium: { label: "Sedang", color: "bg-yellow-100 text-yellow-700" },
   high: { label: "Tinggi", color: "bg-orange-100 text-orange-700" },
   critical: { label: "Kritis", color: "bg-red-100 text-red-700" },
 };
 
 const STATUS_LABELS: Record<string, { label: string; color: string }> = {
-  reported: { label: "Dilaporkan", color: "bg-blue-100 text-blue-700" },
+  reported: { label: "Dilaporkan", color: "bg-terracotta-100 text-terracotta-700" },
   acknowledged: { label: "Diterima", color: "bg-yellow-100 text-yellow-700" },
   in_progress: { label: "Diperbaiki", color: "bg-orange-100 text-orange-700" },
   resolved: { label: "Selesai", color: "bg-green-100 text-green-700" },
-  closed: { label: "Ditutup", color: "bg-gray-100 text-gray-600" },
+  closed: { label: "Ditutup", color: "bg-concrete-100 text-charcoal-600" },
 };
 
 export default function StaffIssuesPage() {
@@ -107,7 +107,7 @@ export default function StaffIssuesPage() {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
-        <div className="animate-spin w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full" />
+        <div className="animate-spin w-8 h-8 border-4 border-terracotta-500 border-t-transparent rounded-full" />
       </div>
     );
   }
@@ -115,20 +115,20 @@ export default function StaffIssuesPage() {
   if (showForm) {
     return (
       <div className="p-4">
-        <button onClick={() => setShowForm(false)} className="flex items-center gap-2 text-blue-600 text-sm font-medium mb-4">
+        <button onClick={() => setShowForm(false)} className="flex items-center gap-2 text-terracotta-500 text-sm font-medium mb-4">
           ← Kembali
         </button>
 
-        <h2 className="font-bold text-lg text-gray-900 mb-4">Lapor Kerusakan</h2>
+        <h2 className="font-bold text-lg text-charcoal-800 mb-4">Lapor Kerusakan</h2>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           {/* Property */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Building</label>
+            <label className="block text-sm font-medium text-charcoal-800 mb-1">Building</label>
             <select
               value={selectedProperty}
               onChange={(e) => { setSelectedProperty(e.target.value); setSelectedRoom(""); }}
-              className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-blue-500 text-base"
+              className="w-full px-4 py-3 rounded-xl border border-concrete-300 focus:ring-2 focus:ring-terracotta-500 text-base"
               required
             >
               <option value="">Pilih building</option>
@@ -140,11 +140,11 @@ export default function StaffIssuesPage() {
 
           {/* Room */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Kamar</label>
+            <label className="block text-sm font-medium text-charcoal-800 mb-1">Kamar</label>
             <select
               value={selectedRoom}
               onChange={(e) => setSelectedRoom(e.target.value)}
-              className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-blue-500 text-base"
+              className="w-full px-4 py-3 rounded-xl border border-concrete-300 focus:ring-2 focus:ring-terracotta-500 text-base"
               required
               disabled={!selectedProperty}
             >
@@ -157,7 +157,7 @@ export default function StaffIssuesPage() {
 
           {/* Issue Type */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Jenis Kerusakan</label>
+            <label className="block text-sm font-medium text-charcoal-800 mb-2">Jenis Kerusakan</label>
             <div className="grid grid-cols-3 gap-2">
               {ISSUE_TYPES.map((t) => (
                 <button
@@ -169,8 +169,8 @@ export default function StaffIssuesPage() {
                   }}
                   className={`p-3 rounded-xl border text-center text-sm transition-colors ${
                     issueType === t.value
-                      ? "border-blue-500 bg-blue-50 text-blue-700"
-                      : "border-gray-200 text-gray-600 hover:border-gray-300"
+                      ? "border-terracotta-500 bg-terracotta-50 text-terracotta-700"
+                      : "border-concrete-200 text-charcoal-600 hover:border-concrete-300"
                   }`}
                 >
                   <span className="text-xl block mb-1">{t.icon}</span>
@@ -182,12 +182,12 @@ export default function StaffIssuesPage() {
 
           {/* Title */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Judul Masalah</label>
+            <label className="block text-sm font-medium text-charcoal-800 mb-1">Judul Masalah</label>
             <input
               type="text"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-blue-500 text-base"
+              className="w-full px-4 py-3 rounded-xl border border-concrete-300 focus:ring-2 focus:ring-terracotta-500 text-base"
               placeholder="Contoh: Lampu kamar mandi mati"
               required
             />
@@ -195,11 +195,11 @@ export default function StaffIssuesPage() {
 
           {/* Description */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Deskripsi (opsional)</label>
+            <label className="block text-sm font-medium text-charcoal-800 mb-1">Deskripsi (opsional)</label>
             <textarea
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:ring-2 focus:ring-blue-500 text-base"
+              className="w-full px-4 py-3 rounded-xl border border-concrete-300 focus:ring-2 focus:ring-terracotta-500 text-base"
               rows={3}
               placeholder="Jelaskan detail kerusakan..."
             />
@@ -207,7 +207,7 @@ export default function StaffIssuesPage() {
 
           {/* Photos */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Foto Kerusakan</label>
+            <label className="block text-sm font-medium text-charcoal-800 mb-2">Foto Kerusakan</label>
             <div className="flex gap-2 flex-wrap">
               {photos.map((p, i) => (
                 <div key={i} className="relative w-20 h-20">
@@ -225,7 +225,7 @@ export default function StaffIssuesPage() {
                 <button
                   type="button"
                   onClick={() => fileRef.current?.click()}
-                  className="w-20 h-20 rounded-lg border-2 border-dashed border-gray-300 flex items-center justify-center text-gray-400"
+                  className="w-20 h-20 rounded-lg border-2 border-dashed border-concrete-300 flex items-center justify-center text-concrete-600"
                 >
                   📷+
                 </button>
@@ -261,7 +261,7 @@ export default function StaffIssuesPage() {
   return (
     <div className="p-4 space-y-4">
       <div className="flex items-center justify-between">
-        <h2 className="font-bold text-lg text-gray-900">Laporan Kerusakan</h2>
+        <h2 className="font-bold text-lg text-charcoal-800">Laporan Kerusakan</h2>
         <button
           onClick={() => setShowForm(true)}
           className="px-4 py-2 bg-red-600 text-white text-sm font-semibold rounded-xl hover:bg-red-700 transition-colors"
@@ -273,16 +273,16 @@ export default function StaffIssuesPage() {
       {issues.length === 0 ? (
         <div className="text-center py-12">
           <span className="text-4xl">✅</span>
-          <p className="text-gray-500 mt-3">Tidak ada laporan kerusakan</p>
+          <p className="text-concrete-600 mt-3">Tidak ada laporan kerusakan</p>
         </div>
       ) : (
         <div className="space-y-3">
           {issues.map((issue: any) => (
-            <div key={issue.id} className="bg-white rounded-2xl p-4 border border-gray-100 shadow-sm">
+            <div key={issue.id} className="bg-white rounded-2xl p-4 border border-concrete-200 shadow-sm">
               <div className="flex items-start justify-between mb-2">
                 <div className="flex-1 min-w-0">
-                  <p className="font-semibold text-gray-900 text-sm">{issue.title}</p>
-                  <p className="text-xs text-gray-500 mt-0.5">
+                  <p className="font-semibold text-charcoal-800 text-sm">{issue.title}</p>
+                  <p className="text-xs text-concrete-600 mt-0.5">
                     {issue.room?.room_number} • {issue.property?.name}
                   </p>
                 </div>
@@ -294,7 +294,7 @@ export default function StaffIssuesPage() {
                 <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${STATUS_LABELS[issue.status]?.color || ""}`}>
                   {STATUS_LABELS[issue.status]?.label || issue.status}
                 </span>
-                <span className="text-xs text-gray-400">
+                <span className="text-xs text-concrete-600">
                   {new Date(issue.created_at).toLocaleDateString("id-ID")}
                 </span>
               </div>

@@ -94,20 +94,20 @@ export default function AdminAttendancePage() {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold text-navy-900 mb-6">Absensi Staff</h1>
+      <h1 className="text-2xl font-bold text-charcoal-800 mb-6">Absensi Staff</h1>
 
       {/* Tabs + Date Picker */}
       <div className="flex flex-wrap gap-3 mb-6 items-center">
-        <div className="flex bg-gray-100 rounded-lg p-0.5">
+        <div className="flex bg-concrete-100 rounded-lg p-0.5">
           <button
             onClick={() => setTab("daily")}
-            className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${tab === "daily" ? "bg-white shadow-sm text-blue-600" : "text-gray-500"}`}
+            className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${tab === "daily" ? "bg-white shadow-sm text-terracotta-500" : "text-concrete-600"}`}
           >
             Harian
           </button>
           <button
             onClick={() => setTab("summary")}
-            className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${tab === "summary" ? "bg-white shadow-sm text-blue-600" : "text-gray-500"}`}
+            className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${tab === "summary" ? "bg-white shadow-sm text-terracotta-500" : "text-concrete-600"}`}
           >
             Rekap Bulanan
           </button>
@@ -130,7 +130,7 @@ export default function AdminAttendancePage() {
       </div>
 
       {loading ? (
-        <div className="text-center py-12 text-gray-400">Memuat...</div>
+        <div className="text-center py-12 text-concrete-600">Memuat...</div>
       ) : tab === "daily" ? (
         /* ── Daily View ── */
         <div className="space-y-4">
@@ -138,41 +138,41 @@ export default function AdminAttendancePage() {
           <div className="grid grid-cols-4 gap-4 mb-6">
             <div className="bg-white rounded-xl p-4 border text-center">
               <p className="text-2xl font-bold text-green-600">{attendance.filter((a) => a.clock_in).length}</p>
-              <p className="text-xs text-gray-500">Hadir</p>
+              <p className="text-xs text-concrete-600">Hadir</p>
             </div>
             <div className="bg-white rounded-xl p-4 border text-center">
               <p className="text-2xl font-bold text-yellow-600">{attendance.filter((a) => a.is_late).length}</p>
-              <p className="text-xs text-gray-500">Terlambat</p>
+              <p className="text-xs text-concrete-600">Terlambat</p>
             </div>
             <div className="bg-white rounded-xl p-4 border text-center">
               <p className="text-2xl font-bold text-red-600">{absentStaff.length}</p>
-              <p className="text-xs text-gray-500">Tidak Hadir</p>
+              <p className="text-xs text-concrete-600">Tidak Hadir</p>
             </div>
             <div className="bg-white rounded-xl p-4 border text-center">
-              <p className="text-2xl font-bold text-blue-600">{attendance.filter((a) => a.clock_out).length}</p>
-              <p className="text-xs text-gray-500">Sudah Pulang</p>
+              <p className="text-2xl font-bold text-terracotta-500">{attendance.filter((a) => a.clock_out).length}</p>
+              <p className="text-xs text-concrete-600">Sudah Pulang</p>
             </div>
           </div>
 
           {/* Attendance Table */}
           <div className="bg-white rounded-xl border overflow-hidden">
             <table className="w-full text-sm">
-              <thead className="bg-gray-50 border-b">
+              <thead className="bg-concrete-100 border-b">
                 <tr>
-                  <th className="text-left px-4 py-3 font-medium text-gray-500">Staff</th>
-                  <th className="text-left px-4 py-3 font-medium text-gray-500">Masuk</th>
-                  <th className="text-left px-4 py-3 font-medium text-gray-500">Pulang</th>
-                  <th className="text-left px-4 py-3 font-medium text-gray-500">Durasi</th>
-                  <th className="text-left px-4 py-3 font-medium text-gray-500">Status</th>
-                  <th className="text-left px-4 py-3 font-medium text-gray-500">Foto</th>
-                  <th className="text-left px-4 py-3 font-medium text-gray-500">Lokasi</th>
+                  <th className="text-left px-4 py-3 font-medium text-concrete-600">Staff</th>
+                  <th className="text-left px-4 py-3 font-medium text-concrete-600">Masuk</th>
+                  <th className="text-left px-4 py-3 font-medium text-concrete-600">Pulang</th>
+                  <th className="text-left px-4 py-3 font-medium text-concrete-600">Durasi</th>
+                  <th className="text-left px-4 py-3 font-medium text-concrete-600">Status</th>
+                  <th className="text-left px-4 py-3 font-medium text-concrete-600">Foto</th>
+                  <th className="text-left px-4 py-3 font-medium text-concrete-600">Lokasi</th>
                 </tr>
               </thead>
               <tbody className="divide-y">
                 {attendance.map((a) => {
                   const st = statusLabels[a.status] || statusLabels.present;
                   return (
-                    <tr key={a.id} className="hover:bg-gray-50">
+                    <tr key={a.id} className="hover:bg-concrete-100">
                       <td className="px-4 py-3 font-medium">{a.staff?.full_name || "—"}</td>
                       <td className="px-4 py-3">
                         <span className={a.is_late ? "text-yellow-600 font-medium" : "text-green-600"}>
@@ -180,7 +180,7 @@ export default function AdminAttendancePage() {
                         </span>
                         {a.is_late && <p className="text-[10px] text-yellow-500">+{a.late_minutes}m</p>}
                       </td>
-                      <td className="px-4 py-3 text-blue-600">{formatTime(a.clock_out)}</td>
+                      <td className="px-4 py-3 text-terracotta-500">{formatTime(a.clock_out)}</td>
                       <td className="px-4 py-3">{formatDuration(a.work_duration_minutes)}</td>
                       <td className="px-4 py-3">
                         <span className={`px-2 py-0.5 rounded text-xs font-medium ${st.color}`}>{st.label}</span>
@@ -201,7 +201,7 @@ export default function AdminAttendancePage() {
                       </td>
                       <td className="px-4 py-3 max-w-[200px]">
                         {a.clock_in_address && (
-                          <p className="text-[10px] text-gray-400 truncate" title={a.clock_in_address}>
+                          <p className="text-[10px] text-concrete-600 truncate" title={a.clock_in_address}>
                             📍 {a.clock_in_address}
                           </p>
                         )}
@@ -210,7 +210,7 @@ export default function AdminAttendancePage() {
                             href={`https://maps.google.com/?q=${a.clock_in_latitude},${a.clock_in_longitude}`}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="text-[10px] text-blue-500 hover:underline"
+                            className="text-[10px] text-terracotta-500 hover:underline"
                           >
                             Lihat di Maps
                           </a>
@@ -235,7 +235,7 @@ export default function AdminAttendancePage() {
                 ))}
                 {attendance.length === 0 && absentStaff.length === 0 && (
                   <tr>
-                    <td colSpan={7} className="px-4 py-8 text-center text-gray-400">Tidak ada data</td>
+                    <td colSpan={7} className="px-4 py-8 text-center text-concrete-600">Tidak ada data</td>
                   </tr>
                 )}
               </tbody>
@@ -246,24 +246,24 @@ export default function AdminAttendancePage() {
         /* ── Monthly Summary ── */
         <div className="bg-white rounded-xl border overflow-hidden">
           <table className="w-full text-sm">
-            <thead className="bg-gray-50 border-b">
+            <thead className="bg-concrete-100 border-b">
               <tr>
-                <th className="text-left px-4 py-3 font-medium text-gray-500">Staff</th>
-                <th className="text-center px-4 py-3 font-medium text-gray-500">Hadir</th>
-                <th className="text-center px-4 py-3 font-medium text-gray-500">Terlambat</th>
-                <th className="text-center px-4 py-3 font-medium text-gray-500">Total Telat</th>
-                <th className="text-center px-4 py-3 font-medium text-gray-500">Pulang Awal</th>
-                <th className="text-center px-4 py-3 font-medium text-gray-500">Rata-rata Kerja</th>
+                <th className="text-left px-4 py-3 font-medium text-concrete-600">Staff</th>
+                <th className="text-center px-4 py-3 font-medium text-concrete-600">Hadir</th>
+                <th className="text-center px-4 py-3 font-medium text-concrete-600">Terlambat</th>
+                <th className="text-center px-4 py-3 font-medium text-concrete-600">Total Telat</th>
+                <th className="text-center px-4 py-3 font-medium text-concrete-600">Pulang Awal</th>
+                <th className="text-center px-4 py-3 font-medium text-concrete-600">Rata-rata Kerja</th>
               </tr>
             </thead>
             <tbody className="divide-y">
               {summary.length === 0 ? (
                 <tr>
-                  <td colSpan={6} className="px-4 py-8 text-center text-gray-400">Tidak ada data untuk bulan ini</td>
+                  <td colSpan={6} className="px-4 py-8 text-center text-concrete-600">Tidak ada data untuk bulan ini</td>
                 </tr>
               ) : (
                 summary.map((s) => (
-                  <tr key={s.staffId} className="hover:bg-gray-50">
+                  <tr key={s.staffId} className="hover:bg-concrete-100">
                     <td className="px-4 py-3 font-medium">{s.staffName}</td>
                     <td className="px-4 py-3 text-center">
                       <span className="bg-green-100 text-green-700 px-2 py-0.5 rounded text-xs font-medium">{s.totalPresent} hari</span>

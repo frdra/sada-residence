@@ -38,17 +38,24 @@ export default function AdminLoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-navy-950 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-charcoal-800 flex items-center justify-center p-4">
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
-          <h1 className="font-display text-3xl font-bold text-white mb-2">
-            Sada <span className="text-brand-400">Residence</span>
+          <h1 className="font-display text-4xl font-light tracking-widest text-concrete-100 mb-1">
+            SADA
           </h1>
-          <p className="text-gray-400">Admin Dashboard</p>
+          <p className="font-body text-sm text-terracotta-500 mb-4">
+            RESIDENCE
+          </p>
+          <p className="font-display text-sm italic text-concrete-200">
+            Selalu Ada. Always Here.
+          </p>
         </div>
 
-        <form onSubmit={handleLogin} className="bg-white rounded-xl p-8 shadow-xl">
-          <h2 className="text-xl font-bold mb-6">Masuk ke Dashboard</h2>
+        <form onSubmit={handleLogin} className="bg-concrete-100 rounded-xl p-8 shadow-xl">
+          <h2 className="font-display text-xl font-semibold text-charcoal-800 mb-6">
+            Masuk ke Dashboard
+          </h2>
 
           {error && (
             <div className="bg-red-50 text-red-700 px-4 py-3 rounded-lg mb-4 text-sm">
@@ -58,12 +65,12 @@ export default function AdminLoginPage() {
 
           <div className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block font-body text-sm font-medium text-charcoal-800 mb-1">
                 Email
               </label>
               <input
                 type="email"
-                className="input-field"
+                className="w-full px-4 py-2 font-body border border-concrete-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-terracotta-400 focus:border-transparent text-charcoal-800"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="admin@sadaresidence.com"
@@ -71,12 +78,12 @@ export default function AdminLoginPage() {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block font-body text-sm font-medium text-charcoal-800 mb-1">
                 Password
               </label>
               <input
                 type="password"
-                className="input-field"
+                className="w-full px-4 py-2 font-body border border-concrete-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-terracotta-400 focus:border-transparent text-charcoal-800"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••"
@@ -88,7 +95,7 @@ export default function AdminLoginPage() {
           <button
             type="submit"
             disabled={loading}
-            className="btn-primary w-full mt-6"
+            className="w-full mt-6 px-4 py-2 font-body font-semibold text-white bg-terracotta-500 hover:bg-terracotta-700 disabled:bg-concrete-200 disabled:text-charcoal-800 rounded-lg transition-colors duration-200"
           >
             {loading ? "Memproses..." : "Masuk"}
           </button>

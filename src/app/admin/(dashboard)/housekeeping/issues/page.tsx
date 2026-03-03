@@ -14,7 +14,7 @@ const STATUS_LABELS: Record<string, { label: string; color: string }> = {
   acknowledged: { label: "Diterima", color: "bg-yellow-100 text-yellow-700" },
   in_progress: { label: "Diperbaiki", color: "bg-orange-100 text-orange-700" },
   resolved: { label: "Selesai", color: "bg-green-100 text-green-700" },
-  closed: { label: "Ditutup", color: "bg-gray-100 text-gray-600" },
+  closed: { label: "Ditutup", color: "bg-gray-100 text-charcoal-600" },
 };
 
 const STATUS_FLOW = ["reported", "acknowledged", "in_progress", "resolved", "closed"];
@@ -63,14 +63,14 @@ export default function AdminHousekeepingIssuesPage() {
 
   return (
     <div className="space-y-6">
-      <h1 className="text-2xl font-bold text-gray-900">Laporan Kerusakan</h1>
+      <h1 className="text-2xl font-bold text-charcoal-800">Laporan Kerusakan</h1>
 
       {/* Filters */}
       <div className="flex flex-wrap gap-3">
         <select
           value={filterStatus}
           onChange={(e) => setFilterStatus(e.target.value)}
-          className="px-4 py-2 rounded-lg border border-gray-300 text-sm"
+          className="px-4 py-2 rounded-lg border border-concrete-300 text-sm"
         >
           <option value="">Semua Status</option>
           {Object.entries(STATUS_LABELS).map(([k, v]) => (
@@ -80,7 +80,7 @@ export default function AdminHousekeepingIssuesPage() {
         <select
           value={filterSeverity}
           onChange={(e) => setFilterSeverity(e.target.value)}
-          className="px-4 py-2 rounded-lg border border-gray-300 text-sm"
+          className="px-4 py-2 rounded-lg border border-concrete-300 text-sm"
         >
           <option value="">Semua Severity</option>
           {Object.entries(SEVERITY_LABELS).map(([k, v]) => (
@@ -94,7 +94,7 @@ export default function AdminHousekeepingIssuesPage() {
           <div className="animate-spin w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full" />
         </div>
       ) : issues.length === 0 ? (
-        <div className="text-center py-12 text-gray-500">Tidak ada laporan</div>
+        <div className="text-center py-12 text-concrete-600">Tidak ada laporan</div>
       ) : (
         <div className="grid gap-4">
           {issues.map((issue: any) => {
@@ -105,8 +105,8 @@ export default function AdminHousekeepingIssuesPage() {
               <div key={issue.id} className="bg-white rounded-xl border border-gray-200 p-5">
                 <div className="flex items-start justify-between mb-2">
                   <div>
-                    <p className="font-bold text-gray-900">{issue.title}</p>
-                    <p className="text-sm text-gray-500 mt-0.5">
+                    <p className="font-bold text-charcoal-800">{issue.title}</p>
+                    <p className="text-sm text-concrete-600 mt-0.5">
                       Kamar {issue.room?.room_number} • {issue.property?.name?.replace("Sada Residence ", "")} • Dilaporkan oleh {issue.reporter?.full_name || "–"}
                     </p>
                   </div>
@@ -121,7 +121,7 @@ export default function AdminHousekeepingIssuesPage() {
                 </div>
 
                 {issue.description && (
-                  <p className="text-sm text-gray-600 mt-2">{issue.description}</p>
+                  <p className="text-sm text-charcoal-600 mt-2">{issue.description}</p>
                 )}
 
                 {/* Photos */}
@@ -137,7 +137,7 @@ export default function AdminHousekeepingIssuesPage() {
 
                 {/* Resolution notes */}
                 {issue.resolution_notes && (
-                  <div className="mt-3 bg-green-50 rounded-lg p-3">
+                  <div className="mt-3 bg-terracotta-50 rounded-lg p-3">
                     <p className="text-xs font-medium text-green-700">Catatan Resolusi:</p>
                     <p className="text-sm text-green-600">{issue.resolution_notes}</p>
                   </div>
@@ -146,7 +146,7 @@ export default function AdminHousekeepingIssuesPage() {
                 {/* Status progress */}
                 <div className="flex items-center gap-1 mt-3">
                   {STATUS_FLOW.map((s, i) => (
-                    <div key={s} className={`flex-1 h-1.5 rounded-full ${i <= currentIdx ? "bg-blue-500" : "bg-gray-200"}`} />
+                    <div key={s} className={`flex-1 h-1.5 rounded-full ${i <= currentIdx ? "bg-terracotta-500" : "bg-gray-200"}`} />
                   ))}
                 </div>
 
@@ -154,7 +154,7 @@ export default function AdminHousekeepingIssuesPage() {
                 {nextStatus && nextStatus !== "resolved" && (
                   <button
                     onClick={() => updateStatus(issue.id, nextStatus)}
-                    className="mt-3 px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700"
+                    className="mt-3 px-4 py-2 bg-terracotta-500 text-white text-sm font-medium rounded-lg hover:bg-terracotta-600"
                   >
                     → {STATUS_LABELS[nextStatus]?.label}
                   </button>
@@ -164,7 +164,7 @@ export default function AdminHousekeepingIssuesPage() {
                     <textarea
                       value={resolutionNotes}
                       onChange={(e) => setResolutionNotes(e.target.value)}
-                      className="w-full px-3 py-2 rounded-lg border border-gray-300 text-sm"
+                      className="w-full px-3 py-2 rounded-lg border border-concrete-300 text-sm"
                       placeholder="Catatan resolusi..."
                       rows={2}
                     />
@@ -177,7 +177,7 @@ export default function AdminHousekeepingIssuesPage() {
                   </div>
                 )}
 
-                <p className="text-xs text-gray-400 mt-3">
+                <p className="text-xs text-concrete-600 mt-3">
                   {new Date(issue.created_at).toLocaleString("id-ID")}
                 </p>
               </div>

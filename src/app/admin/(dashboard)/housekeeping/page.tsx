@@ -31,14 +31,14 @@ export default function AdminHousekeepingPage() {
     <div className="space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-gray-900">Housekeeping</h1>
-        <div className="flex gap-1 bg-gray-100 rounded-lg p-1">
+        <h1 className="text-2xl font-bold text-charcoal-800">Housekeeping</h1>
+        <div className="flex gap-1 bg-concrete-100 rounded-lg p-1">
           {["7d", "30d", "90d"].map((p) => (
             <button
               key={p}
               onClick={() => setPeriod(p)}
               className={`px-3 py-1.5 rounded-md text-xs font-medium transition-colors ${
-                period === p ? "bg-white shadow text-gray-900" : "text-gray-500 hover:text-gray-700"
+                period === p ? "bg-white shadow text-charcoal-800" : "text-concrete-600 hover:text-gray-700"
               }`}
             >
               {p === "7d" ? "7 Hari" : p === "30d" ? "30 Hari" : "3 Bulan"}
@@ -57,9 +57,9 @@ export default function AdminHousekeepingPage() {
           <div className="text-2xl font-bold text-red-600">{issueStats.total}</div>
           <div className="text-xs text-red-700 mt-1">Kerusakan Terbuka</div>
         </Link>
-        <Link href="/admin/housekeeping/laundry" className="bg-blue-50 border border-blue-200 rounded-xl p-4 hover:bg-blue-100 transition-colors">
-          <div className="text-2xl font-bold text-blue-600">{pendingLaundry}</div>
-          <div className="text-xs text-blue-700 mt-1">Laundry Pending</div>
+        <Link href="/admin/housekeeping/laundry" className="bg-terracotta-50 border border-terracotta-200 rounded-xl p-4 hover:bg-terracotta-100 transition-colors">
+          <div className="text-2xl font-bold text-terracotta-500">{pendingLaundry}</div>
+          <div className="text-xs text-terracotta-500 mt-1">Laundry Pending</div>
         </Link>
         <Link href="/admin/housekeeping/attendance" className="bg-purple-50 border border-purple-200 rounded-xl p-4 hover:bg-purple-100 transition-colors">
           <div className="text-2xl">📸</div>
@@ -72,20 +72,20 @@ export default function AdminHousekeepingPage() {
       </div>
 
       {/* Today Overview */}
-      <div className="bg-white rounded-xl border border-gray-200 p-6">
-        <h3 className="font-semibold text-gray-900 mb-4">Tugas Hari Ini</h3>
+      <div className="bg-white rounded-xl border border-concrete-200 p-6">
+        <h3 className="font-semibold text-charcoal-800 mb-4">Tugas Hari Ini</h3>
         <div className="grid grid-cols-3 md:grid-cols-6 gap-4">
           {[
-            { label: "Total", value: today.total, color: "text-gray-900" },
-            { label: "Menunggu", value: today.pending, color: "text-gray-500" },
-            { label: "Dikerjakan", value: today.inProgress, color: "text-blue-600" },
+            { label: "Total", value: today.total, color: "text-charcoal-800" },
+            { label: "Menunggu", value: today.pending, color: "text-concrete-600" },
+            { label: "Dikerjakan", value: today.inProgress, color: "text-terracotta-500" },
             { label: "Review", value: today.needsReview, color: "text-yellow-600" },
             { label: "Disetujui", value: today.approved, color: "text-green-600" },
             { label: "Ditolak", value: today.rejected, color: "text-red-600" },
           ].map((stat) => (
             <div key={stat.label} className="text-center">
               <div className={`text-2xl font-bold ${stat.color}`}>{stat.value}</div>
-              <div className="text-xs text-gray-500 mt-1">{stat.label}</div>
+              <div className="text-xs text-concrete-600 mt-1">{stat.label}</div>
             </div>
           ))}
         </div>
@@ -93,7 +93,7 @@ export default function AdminHousekeepingPage() {
         {/* Progress bar */}
         {today.total > 0 && (
           <div className="mt-4">
-            <div className="flex h-3 rounded-full overflow-hidden bg-gray-100">
+            <div className="flex h-3 rounded-full overflow-hidden bg-concrete-100">
               {today.approved > 0 && (
                 <div className="bg-green-500" style={{ width: `${(today.approved / today.total) * 100}%` }} />
               )}
@@ -112,15 +112,15 @@ export default function AdminHousekeepingPage() {
       </div>
 
       {/* Per-Property */}
-      <div className="bg-white rounded-xl border border-gray-200 p-6">
-        <h3 className="font-semibold text-gray-900 mb-4">Per Building</h3>
+      <div className="bg-white rounded-xl border border-concrete-200 p-6">
+        <h3 className="font-semibold text-charcoal-800 mb-4">Per Building</h3>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           {propertyStats.map((p: any) => (
-            <div key={p.propertyId} className="bg-gray-50 rounded-xl p-4">
-              <p className="font-medium text-gray-900 text-sm">{p.propertyName.replace("Sada Residence ", "")}</p>
+            <div key={p.propertyId} className="bg-concrete-100 rounded-xl p-4">
+              <p className="font-medium text-charcoal-800 text-sm">{p.propertyName.replace("Sada Residence ", "")}</p>
               <div className="flex items-end gap-2 mt-2">
-                <span className="text-2xl font-bold text-gray-900">{p.completed}</span>
-                <span className="text-sm text-gray-500 mb-0.5">/ {p.todayTasks} tugas</span>
+                <span className="text-2xl font-bold text-charcoal-800">{p.completed}</span>
+                <span className="text-sm text-concrete-600 mb-0.5">/ {p.todayTasks} tugas</span>
               </div>
               {p.todayTasks > 0 && (
                 <div className="mt-2 bg-gray-200 rounded-full h-2">
@@ -137,17 +137,17 @@ export default function AdminHousekeepingPage() {
 
       {/* Staff Performance */}
       {staffPerformance.length > 0 && (
-        <div className="bg-white rounded-xl border border-gray-200 p-6">
-          <h3 className="font-semibold text-gray-900 mb-4">Performa Karyawan ({periodData.days} Hari)</h3>
+        <div className="bg-white rounded-xl border border-concrete-200 p-6">
+          <h3 className="font-semibold text-charcoal-800 mb-4">Performa Karyawan ({periodData.days} Hari)</h3>
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
-                <tr className="border-b border-gray-200">
-                  <th className="text-left py-3 px-2 text-gray-500 font-medium">Nama</th>
-                  <th className="text-center py-3 px-2 text-gray-500 font-medium">Tugas</th>
-                  <th className="text-center py-3 px-2 text-gray-500 font-medium">Disetujui</th>
-                  <th className="text-center py-3 px-2 text-gray-500 font-medium">Ditolak</th>
-                  <th className="text-center py-3 px-2 text-gray-500 font-medium">Skor</th>
+                <tr className="border-b border-concrete-200">
+                  <th className="text-left py-3 px-2 text-concrete-600 font-medium">Nama</th>
+                  <th className="text-center py-3 px-2 text-concrete-600 font-medium">Tugas</th>
+                  <th className="text-center py-3 px-2 text-concrete-600 font-medium">Disetujui</th>
+                  <th className="text-center py-3 px-2 text-concrete-600 font-medium">Ditolak</th>
+                  <th className="text-center py-3 px-2 text-concrete-600 font-medium">Skor</th>
                 </tr>
               </thead>
               <tbody>
@@ -155,7 +155,7 @@ export default function AdminHousekeepingPage() {
                   .sort((a: any, b: any) => b.avgScore - a.avgScore)
                   .map((s: any) => (
                   <tr key={s.staffId} className="border-b border-gray-100">
-                    <td className="py-3 px-2 font-medium text-gray-900">{s.fullName}</td>
+                    <td className="py-3 px-2 font-medium text-charcoal-800">{s.fullName}</td>
                     <td className="py-3 px-2 text-center">{s.tasks}</td>
                     <td className="py-3 px-2 text-center text-green-600">{s.approved}</td>
                     <td className="py-3 px-2 text-center text-red-600">{s.rejected}</td>
@@ -178,10 +178,10 @@ export default function AdminHousekeepingPage() {
 
       {/* Issues Summary */}
       {issueStats.total > 0 && (
-        <div className="bg-white rounded-xl border border-gray-200 p-6">
+        <div className="bg-white rounded-xl border border-concrete-200 p-6">
           <div className="flex items-center justify-between mb-4">
-            <h3 className="font-semibold text-gray-900">Kerusakan Terbuka</h3>
-            <Link href="/admin/housekeeping/issues" className="text-sm text-blue-600 hover:underline">
+            <h3 className="font-semibold text-charcoal-800">Kerusakan Terbuka</h3>
+            <Link href="/admin/housekeeping/issues" className="text-sm text-terracotta-500 hover:underline">
               Lihat Semua →
             </Link>
           </div>
@@ -190,7 +190,7 @@ export default function AdminHousekeepingPage() {
               { label: "Kritis", value: issueStats.critical, color: "text-red-600 bg-red-50" },
               { label: "Tinggi", value: issueStats.high, color: "text-orange-600 bg-orange-50" },
               { label: "Sedang", value: issueStats.medium, color: "text-yellow-600 bg-yellow-50" },
-              { label: "Rendah", value: issueStats.low, color: "text-gray-600 bg-gray-50" },
+              { label: "Rendah", value: issueStats.low, color: "text-charcoal-600 bg-concrete-100" },
             ].map((s) => (
               <div key={s.label} className={`rounded-xl p-3 text-center ${s.color}`}>
                 <div className="text-xl font-bold">{s.value}</div>

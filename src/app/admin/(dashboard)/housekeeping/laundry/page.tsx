@@ -3,8 +3,8 @@
 import { useEffect, useState } from "react";
 
 const STATUS_LABELS: Record<string, { label: string; color: string; icon: string }> = {
-  pending: { label: "Menunggu", color: "bg-gray-100 text-gray-700", icon: "⏳" },
-  picked_up: { label: "Diambil", color: "bg-blue-100 text-blue-700", icon: "📦" },
+  pending: { label: "Menunggu", color: "bg-concrete-100 text-charcoal-800", icon: "⏳" },
+  picked_up: { label: "Diambil", color: "bg-blue-100 text-terracotta-700", icon: "📦" },
   washing: { label: "Dicuci", color: "bg-indigo-100 text-indigo-700", icon: "🧼" },
   done: { label: "Selesai", color: "bg-green-100 text-green-700", icon: "✅" },
   delivered: { label: "Diantar", color: "bg-emerald-100 text-emerald-700", icon: "🚚" },
@@ -43,13 +43,13 @@ export default function AdminHousekeepingLaundryPage() {
 
   return (
     <div className="space-y-6">
-      <h1 className="text-2xl font-bold text-gray-900">Laundry Management</h1>
+      <h1 className="text-2xl font-bold text-charcoal-800">Laundry Management</h1>
 
       <div className="flex flex-wrap gap-3">
         <select
           value={filterStatus}
           onChange={(e) => setFilterStatus(e.target.value)}
-          className="px-4 py-2 rounded-lg border border-gray-300 text-sm"
+          className="px-4 py-2 rounded-lg border border-concrete-300 text-sm"
         >
           <option value="">Semua Status</option>
           {Object.entries(STATUS_LABELS).map(([k, v]) => (
@@ -60,10 +60,10 @@ export default function AdminHousekeepingLaundryPage() {
 
       {loading ? (
         <div className="flex items-center justify-center h-32">
-          <div className="animate-spin w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full" />
+          <div className="animate-spin w-8 h-8 border-4 border-terracotta-500 border-t-transparent rounded-full" />
         </div>
       ) : requests.length === 0 ? (
-        <div className="text-center py-12 text-gray-500">Tidak ada permintaan laundry</div>
+        <div className="text-center py-12 text-concrete-600">Tidak ada permintaan laundry</div>
       ) : (
         <div className="grid gap-4">
           {requests.map((req: any) => {
@@ -75,13 +75,13 @@ export default function AdminHousekeepingLaundryPage() {
               <div key={req.id} className="bg-white rounded-xl border border-gray-200 p-5">
                 <div className="flex items-start justify-between mb-2">
                   <div>
-                    <p className="font-bold text-gray-900">
+                    <p className="font-bold text-charcoal-800">
                       Kamar {req.room?.room_number}
-                      <span className="font-normal text-gray-500 ml-2 text-sm">
+                      <span className="font-normal text-concrete-600 ml-2 text-sm">
                         {req.property?.name?.replace("Sada Residence ", "")}
                       </span>
                     </p>
-                    <p className="text-sm text-gray-500 mt-0.5">
+                    <p className="text-sm text-concrete-600 mt-0.5">
                       Staff: {req.staff?.full_name || "–"} •{" "}
                       {req.request_type === "express" ? (
                         <span className="text-orange-600 font-medium">Express</span>
@@ -96,21 +96,21 @@ export default function AdminHousekeepingLaundryPage() {
                 {/* Items */}
                 <div className="flex flex-wrap gap-2 mt-2">
                   {(req.items || []).map((item: any, i: number) => (
-                    <span key={i} className="bg-gray-100 px-3 py-1 rounded-lg text-sm text-gray-700">
+                    <span key={i} className="bg-concrete-100 px-3 py-1 rounded-lg text-sm text-charcoal-800">
                       {item.name} ×{item.quantity}
                     </span>
                   ))}
-                  <span className="bg-blue-50 px-3 py-1 rounded-lg text-sm text-blue-700 font-medium">
+                  <span className="bg-terracotta-50 px-3 py-1 rounded-lg text-sm text-terracotta-700 font-medium">
                     Total: {req.total_items} item
                   </span>
                 </div>
 
-                {req.notes && <p className="text-sm text-gray-500 mt-2">Catatan: {req.notes}</p>}
+                {req.notes && <p className="text-sm text-concrete-600 mt-2">Catatan: {req.notes}</p>}
 
                 {/* Progress */}
                 <div className="flex items-center gap-1 mt-3">
                   {STATUS_FLOW.map((s, i) => (
-                    <div key={s} className={`flex-1 h-1.5 rounded-full ${i <= currentIdx ? "bg-blue-500" : "bg-gray-200"}`} />
+                    <div key={s} className={`flex-1 h-1.5 rounded-full ${i <= currentIdx ? "bg-terracotta-500" : "bg-gray-200"}`} />
                   ))}
                 </div>
 
@@ -118,13 +118,13 @@ export default function AdminHousekeepingLaundryPage() {
                 {nextStatus && (
                   <button
                     onClick={() => updateStatus(req.id, nextStatus)}
-                    className="mt-3 px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700"
+                    className="mt-3 px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-terracotta-600"
                   >
                     {STATUS_LABELS[nextStatus]?.icon} → {STATUS_LABELS[nextStatus]?.label}
                   </button>
                 )}
 
-                <p className="text-xs text-gray-400 mt-2">
+                <p className="text-xs text-concrete-600 mt-2">
                   {new Date(req.created_at).toLocaleString("id-ID")}
                 </p>
               </div>

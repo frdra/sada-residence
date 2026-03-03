@@ -45,7 +45,7 @@ export default async function ConfirmationPage({
             {isPaid ? "Booking Dikonfirmasi!" : "Menunggu Pembayaran"}
           </h1>
           <p className="text-gray-600">
-            Kode Booking: <strong className="text-navy-900">{booking.booking_code}</strong>
+            Kode Booking: <strong className="text-charcoal-800">{booking.booking_code}</strong>
           </p>
         </div>
 
@@ -109,7 +109,7 @@ export default async function ConfirmationPage({
               )}
               <div className="flex justify-between border-t pt-2 font-bold text-lg">
                 <span>Total</span>
-                <span className="text-brand-500">{formatCurrency(booking.total_amount)}</span>
+                <span className="text-terracotta-500">{formatCurrency(booking.total_amount)}</span>
               </div>
               <div className="flex justify-between text-sm">
                 <span className="text-gray-500">Sudah Dibayar</span>

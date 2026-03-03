@@ -4,8 +4,8 @@ import { Suspense, useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 
 const STATUS_LABELS: Record<string, { label: string; color: string }> = {
-  pending: { label: "Menunggu", color: "bg-gray-100 text-gray-700" },
-  in_progress: { label: "Dikerjakan", color: "bg-blue-100 text-blue-700" },
+  pending: { label: "Menunggu", color: "bg-concrete-100 text-gray-700" },
+  in_progress: { label: "Dikerjakan", color: "bg-blue-100 text-terracotta-700" },
   completed: { label: "Selesai", color: "bg-green-100 text-green-700" },
   needs_review: { label: "Perlu Review", color: "bg-yellow-100 text-yellow-700" },
   approved: { label: "Disetujui", color: "bg-emerald-100 text-emerald-700" },
@@ -14,7 +14,7 @@ const STATUS_LABELS: Record<string, { label: string; color: string }> = {
 
 export default function AdminHousekeepingTasksPage() {
   return (
-    <Suspense fallback={<div className="flex items-center justify-center h-32"><div className="animate-spin w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full" /></div>}>
+    <Suspense fallback={<div className="flex items-center justify-center h-32"><div className="animate-spin w-8 h-8 border-4 border-terracotta-500 border-t-transparent rounded-full" /></div>}>
       <TasksContent />
     </Suspense>
   );
@@ -82,7 +82,7 @@ function TasksContent() {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-gray-900">Review Tugas</h1>
+        <h1 className="text-2xl font-bold text-charcoal-800">Review Tugas</h1>
       </div>
 
       {/* Filters */}
@@ -91,12 +91,12 @@ function TasksContent() {
           type="date"
           value={filterDate}
           onChange={(e) => setFilterDate(e.target.value)}
-          className="px-4 py-2 rounded-lg border border-gray-300 text-sm"
+          className="px-4 py-2 rounded-lg border border-concrete-300 text-sm"
         />
         <select
           value={filterStatus}
           onChange={(e) => setFilterStatus(e.target.value)}
-          className="px-4 py-2 rounded-lg border border-gray-300 text-sm"
+          className="px-4 py-2 rounded-lg border border-concrete-300 text-sm"
         >
           <option value="">Semua Status</option>
           <option value="needs_review">Perlu Review</option>
@@ -109,10 +109,10 @@ function TasksContent() {
 
       {loading ? (
         <div className="flex items-center justify-center h-32">
-          <div className="animate-spin w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full" />
+          <div className="animate-spin w-8 h-8 border-4 border-terracotta-500 border-t-transparent rounded-full" />
         </div>
       ) : tasks.length === 0 ? (
-        <div className="text-center py-12 text-gray-500">Tidak ada tugas</div>
+        <div className="text-center py-12 text-concrete-600">Tidak ada tugas</div>
       ) : (
         <div className="grid gap-4">
           {tasks.map((task: any) => {
@@ -122,16 +122,16 @@ function TasksContent() {
             const completed = checklist.filter((c: any) => c.is_completed).length;
 
             return (
-              <div key={task.id} className="bg-white rounded-xl border border-gray-200 p-5">
+              <div key={task.id} className="bg-white rounded-xl border border-concrete-200 p-5">
                 <div className="flex items-start justify-between mb-3">
                   <div>
-                    <p className="font-bold text-gray-900">
+                    <p className="font-bold text-charcoal-800">
                       Kamar {task.room?.room_number}
-                      <span className="font-normal text-gray-500 ml-2 text-sm">
+                      <span className="font-normal text-concrete-600 ml-2 text-sm">
                         {task.property?.name?.replace("Sada Residence ", "")}
                       </span>
                     </p>
-                    <p className="text-sm text-gray-500 mt-0.5">
+                    <p className="text-sm text-concrete-600 mt-0.5">
                       Staff: {task.staff?.full_name || "–"} • {task.task_date}
                     </p>
                   </div>
@@ -144,7 +144,7 @@ function TasksContent() {
                 {(beforePhotos.length > 0 || afterPhotos.length > 0) && (
                   <div className="grid grid-cols-2 gap-4 mb-4">
                     <div>
-                      <p className="text-xs font-medium text-gray-500 mb-1">SEBELUM</p>
+                      <p className="text-xs font-medium text-concrete-600 mb-1">SEBELUM</p>
                       <div className="flex gap-2 flex-wrap">
                         {beforePhotos.map((p: any) => (
                           <a key={p.id} href={p.photo_url} target="_blank" rel="noopener noreferrer">
@@ -152,14 +152,14 @@ function TasksContent() {
                           </a>
                         ))}
                         {beforePhotos.length === 0 && (
-                          <div className="w-24 h-24 rounded-lg bg-gray-100 flex items-center justify-center text-gray-400 text-xs">
+                          <div className="w-24 h-24 rounded-lg bg-concrete-100 flex items-center justify-center text-concrete-600 text-xs">
                             Tidak ada
                           </div>
                         )}
                       </div>
                     </div>
                     <div>
-                      <p className="text-xs font-medium text-gray-500 mb-1">SESUDAH</p>
+                      <p className="text-xs font-medium text-concrete-600 mb-1">SESUDAH</p>
                       <div className="flex gap-2 flex-wrap">
                         {afterPhotos.map((p: any) => (
                           <a key={p.id} href={p.photo_url} target="_blank" rel="noopener noreferrer">
@@ -167,7 +167,7 @@ function TasksContent() {
                           </a>
                         ))}
                         {afterPhotos.length === 0 && (
-                          <div className="w-24 h-24 rounded-lg bg-gray-100 flex items-center justify-center text-gray-400 text-xs">
+                          <div className="w-24 h-24 rounded-lg bg-concrete-100 flex items-center justify-center text-concrete-600 text-xs">
                             Tidak ada
                           </div>
                         )}
@@ -177,7 +177,7 @@ function TasksContent() {
                 )}
 
                 {/* Checklist summary + scores */}
-                <div className="flex items-center gap-4 text-sm text-gray-600">
+                <div className="flex items-center gap-4 text-sm text-charcoal-600">
                   <span>Checklist: {completed}/{checklist.length}</span>
                   {task.total_score !== null && (
                     <span className={`font-bold ${
@@ -191,7 +191,7 @@ function TasksContent() {
                     <span>{"⭐".repeat(task.admin_rating)}</span>
                   )}
                   {task.started_at && task.completed_at && (
-                    <span className="text-gray-400">
+                    <span className="text-concrete-600">
                       Durasi: {Math.round(
                         (new Date(task.completed_at).getTime() - new Date(task.started_at).getTime()) / 60000
                       )} menit
@@ -253,7 +253,7 @@ function TasksContent() {
               <textarea
                 value={adminNotes}
                 onChange={(e) => setAdminNotes(e.target.value)}
-                className="w-full px-3 py-2 rounded-lg border border-gray-300 text-sm"
+                className="w-full px-3 py-2 rounded-lg border border-concrete-300 text-sm"
                 rows={2}
                 placeholder="Catatan untuk karyawan..."
               />
@@ -276,7 +276,7 @@ function TasksContent() {
             <div className="flex gap-3 mt-6">
               <button
                 onClick={() => setReviewTask(null)}
-                className="flex-1 py-2 border border-gray-300 rounded-lg text-sm text-gray-600 hover:bg-gray-50"
+                className="flex-1 py-2 border border-concrete-300 rounded-lg text-sm text-charcoal-600 hover:bg-gray-50"
               >
                 Batal
               </button>
