@@ -137,17 +137,17 @@ export default async function HomePage() {
             </Link>
           </div>
 
-          {/* Three pillars */}
+          {/* Key highlights */}
           <div className="mt-20 flex justify-center gap-12">
             {[
-              { name: "Warm", sub: "Hangat" },
-              { name: "Simpel", sub: "Sederhana" },
-              { name: "Peaceful", sub: "Damai" },
-            ].map((pillar) => (
-              <div key={pillar.name} className="text-center">
+              { name: "127 Kamar" },
+              { name: "4 Lokasi" },
+              { name: "Jimbaran, Bali" },
+            ].map((item) => (
+              <div key={item.name} className="text-center">
                 <div className="w-1 h-1 rounded-full bg-terracotta-400/60 mx-auto mb-3" />
                 <p className="font-body text-[10px] tracking-[0.3em] uppercase text-white/20">
-                  {pillar.name}
+                  {item.name}
                 </p>
               </div>
             ))}
@@ -167,74 +167,68 @@ export default async function HomePage() {
         {/* Subtle texture */}
         <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-terracotta-400/20 to-transparent" />
 
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <p className="font-body text-[10px] font-semibold tracking-[0.3em] uppercase text-terracotta-500 mb-6">
-            Filosofi Kami
+            Kenapa SADA Residence
           </p>
-          <h2 className="font-display text-3xl md:text-4xl font-light text-charcoal-800 leading-relaxed mb-6">
-            Satu hunian yang <span className="text-terracotta-500">abadi</span> —<br className="hidden md:block" />
-            hangat dalam karakter, simpel dalam desain,<br className="hidden md:block" />
-            dan penuh kedamaian dalam setiap sudutnya.
+          <h2 className="font-display text-3xl md:text-4xl font-light text-charcoal-800 leading-relaxed mb-4">
+            Tinggal nyaman di <span className="text-terracotta-500">Jimbaran</span>,<br className="hidden md:block" />
+            tanpa ribet.
           </h2>
-          <div className="w-10 h-[1px] bg-terracotta-400/30 mx-auto mb-6" />
+          <p className="font-body text-sm text-charcoal-600 max-w-lg mx-auto mb-12">
+            Semua kebutuhan sudah termasuk — langsung masuk, langsung nyaman.
+          </p>
 
-          {/* Three pillars visual */}
-          <div className="grid md:grid-cols-3 gap-8 mt-16">
+          {/* Benefit cards */}
+          <div className="grid md:grid-cols-3 gap-6">
             {[
               {
-                name: "Warm",
-                sub: "Hangat",
-                desc: "Kehangatan yang langsung terasa — terracotta yang memeluk, material jujur, rasa pulang ke rumah.",
-                color: "text-terracotta-500",
+                title: "Siap Huni",
+                desc: "Kamar fully furnished dengan AC, kulkas, kompor, dan kamar mandi dalam. Tinggal bawa koper.",
                 bgColor: "bg-terracotta-50",
                 borderColor: "border-terracotta-200",
+                iconColor: "#A0695A",
                 icon: (
-                  <svg viewBox="0 0 28 28" fill="none" stroke="#A0695A" strokeWidth="1.5" strokeLinecap="round" className="w-7 h-7">
-                    <path d="M14 4c-3 4-6 7-6 10a6 6 0 0012 0c0-3-3-6-6-10z"/>
-                    <path d="M14 17v-4"/>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="#A0695A" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="w-6 h-6">
+                    <path d="M9 12l2 2 4-4"/>
+                    <path d="M3 7v11a2 2 0 002 2h14a2 2 0 002-2V7"/>
+                    <path d="M21 7l-9-4-9 4"/>
                   </svg>
                 ),
               },
               {
-                name: "Simpel",
-                sub: "Sederhana",
-                desc: "Tanpa ornamen berlebihan — keindahan dari kejelasan bentuk dan ruang yang bernapas.",
-                color: "text-charcoal-800",
+                title: "Gratis Laundry & Housekeeping",
+                desc: "Laundry gratis 3 kali seminggu dan layanan housekeeping berkala. Fokus kerja, biar kami yang urus.",
                 bgColor: "bg-concrete-100",
                 borderColor: "border-concrete-300",
+                iconColor: "#2C2C2C",
                 icon: (
-                  <svg viewBox="0 0 28 28" fill="none" stroke="#2C2C2C" strokeWidth="1.5" strokeLinecap="round" className="w-7 h-7">
-                    <line x1="4" y1="14" x2="24" y2="14"/>
-                    <line x1="8" y1="8" x2="20" y2="8"/>
-                    <line x1="8" y1="20" x2="20" y2="20"/>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="#2C2C2C" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="w-6 h-6">
+                    <path d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z"/>
                   </svg>
                 ),
               },
               {
-                name: "Peaceful",
-                sub: "Penuh Kedamaian",
-                desc: "Koneksi dengan alam yang menciptakan ketenangan — tanaman tropis, ruang terbuka yang mengalir.",
-                color: "text-sage-500",
+                title: "Fleksibel",
+                desc: "Sewa harian, mingguan, atau bulanan. Cocok untuk mahasiswa, pekerja, atau wisatawan.",
                 bgColor: "bg-sage-50",
                 borderColor: "border-sage-200",
+                iconColor: "#7A8B6F",
                 icon: (
-                  <svg viewBox="0 0 28 28" fill="none" stroke="#7A8B6F" strokeWidth="1.5" strokeLinecap="round" className="w-7 h-7">
-                    <path d="M3,18 C8,14 13,20 18,16 C22,13 25,16 26,16"/>
-                    <path d="M12,10 C14,6 17,8 18,4"/>
-                    <path d="M8,14 C10,10 13,12 14,8"/>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="#7A8B6F" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="w-6 h-6">
+                    <path d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5"/>
                   </svg>
                 ),
               },
-            ].map((pillar) => (
-              <div key={pillar.name} className={`${pillar.bgColor} rounded-2xl p-8 border ${pillar.borderColor} text-center transition-all duration-300 hover:shadow-md hover:-translate-y-1`}>
+            ].map((item) => (
+              <div key={item.title} className={`${item.bgColor} rounded-2xl p-8 border ${item.borderColor} text-center transition-all duration-300 hover:shadow-md hover:-translate-y-1`}>
                 <div className="flex justify-center mb-5">
-                  <div className={`w-14 h-14 rounded-full ${pillar.bgColor} border ${pillar.borderColor} flex items-center justify-center`}>
-                    {pillar.icon}
+                  <div className={`w-14 h-14 rounded-full bg-white border ${item.borderColor} flex items-center justify-center`}>
+                    {item.icon}
                   </div>
                 </div>
-                <h3 className={`font-display text-2xl font-light ${pillar.color} mb-1`}>{pillar.name}</h3>
-                <p className="font-body text-xs tracking-wider uppercase text-concrete-600 mb-4">{pillar.sub}</p>
-                <p className="font-body text-sm text-charcoal-600 leading-relaxed">{pillar.desc}</p>
+                <h3 className="font-display text-lg font-medium text-charcoal-800 mb-3">{item.title}</h3>
+                <p className="font-body text-sm text-charcoal-600 leading-relaxed">{item.desc}</p>
               </div>
             ))}
           </div>

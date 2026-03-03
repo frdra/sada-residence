@@ -110,9 +110,9 @@ export default function Footer() {
             </p>
           </div>
           <div className="flex items-center gap-6">
-            {/* Three pillars */}
+            {/* Values */}
             <div className="flex items-center gap-4">
-              {["Warm", "Simpel", "Peaceful"].map((pillar, i) => (
+              {["Siap Huni", "Fleksibel", "Terpercaya"].map((pillar, i) => (
                 <span key={pillar} className="font-body text-[9px] tracking-[0.2em] uppercase text-concrete-600/30">
                   {i > 0 && <span className="mr-4 text-terracotta-400/20">·</span>}
                   {pillar}
