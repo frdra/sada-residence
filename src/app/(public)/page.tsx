@@ -39,10 +39,10 @@ export default async function HomePage() {
   }
 
   const fallbackProperties = [
-    { name: "Sada Residence Persada", slug: "persada", description: "Akomodasi modern di pusat kawasan Jimbaran dengan akses mudah ke segala fasilitas.", total_rooms: 30 },
-    { name: "Sada Residence Udayana", slug: "udayana", description: "Lokasi strategis dekat kampus Udayana, ideal untuk mahasiswa dan profesional.", total_rooms: 33 },
-    { name: "Sada Residence Taman Griya", slug: "taman-griya", description: "Hunian asri di lingkungan Taman Griya yang tenang, cocok untuk keluarga.", total_rooms: 33 },
-    { name: "Sada Residence Goa Gong", slug: "goa-gong", description: "Hunian eksklusif di kawasan Goa Gong, dekat pantai dan pusat kuliner Jimbaran.", total_rooms: 24 },
+    { name: "Sada Residence Persada", slug: "persada", description: "Akomodasi modern dan nyaman di pusat kawasan Jimbaran dengan akses mudah ke segala fasilitas.", total_rooms: 30 },
+    { name: "Sada Residence Udayana", slug: "udayana", description: "Lokasi strategis dekat kampus Udayana, ideal untuk mahasiswa dan profesional.", total_rooms: 34 },
+    { name: "Sada Residence Taman Griya", slug: "taman-griya", description: "Hunian asri di lingkungan Taman Griya yang tenang, cocok untuk keluarga dan wisatawan.", total_rooms: 39 },
+    { name: "Sada Residence Goa Gong", slug: "goa-gong", description: "Hunian eksklusif di kawasan Goa Gong dengan akses mudah ke pantai dan pusat kuliner Jimbaran.", total_rooms: 24 },
   ];
 
   const displayProperties = properties.length > 0
@@ -336,7 +336,7 @@ export default async function HomePage() {
           {/* Total rooms badge */}
           <div className="mt-10 text-center">
             <span className="inline-flex items-center gap-3 font-body text-sm text-charcoal-600 bg-white px-6 py-3 rounded-full border border-concrete-200 shadow-sm">
-              <span className="font-display text-2xl font-light text-terracotta-500">120</span>
+              <span className="font-display text-2xl font-light text-terracotta-500">127</span>
               total kamar di 4 lokasi
             </span>
           </div>
@@ -410,8 +410,8 @@ export default async function HomePage() {
                 ),
               },
               {
-                title: "Dapur Bersama",
-                desc: "Fasilitas dapur lengkap di setiap lantai",
+                title: "Dapur dalam Kamar",
+                desc: "Kompor atau dapur kecil di setiap kamar",
                 icon: (
                   <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
                     <path d="M15.362 5.214A8.252 8.252 0 0112 21 8.25 8.25 0 016.038 7.048 8.287 8.287 0 009 9.6a8.983 8.983 0 013.361-6.867 8.21 8.21 0 003 2.48z" />
@@ -420,8 +420,8 @@ export default async function HomePage() {
                 ),
               },
               {
-                title: "Laundry",
-                desc: "Area laundry dengan mesin cuci modern",
+                title: "Laundry Gratis",
+                desc: "Layanan laundry gratis 3 kali seminggu",
                 icon: (
                   <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
                     <path d="M3.75 6A2.25 2.25 0 016 3.75h2.25A2.25 2.25 0 0110.5 6v2.25a2.25 2.25 0 01-2.25 2.25H6a2.25 2.25 0 01-2.25-2.25V6zM3.75 15.75A2.25 2.25 0 016 13.5h2.25a2.25 2.25 0 012.25 2.25V18a2.25 2.25 0 01-2.25 2.25H6A2.25 2.25 0 013.75 18v-2.25zM13.5 6a2.25 2.25 0 012.25-2.25H18A2.25 2.25 0 0120.25 6v2.25A2.25 2.25 0 0118 10.5h-2.25a2.25 2.25 0 01-2.25-2.25V6zM13.5 15.75a2.25 2.25 0 012.25-2.25H18a2.25 2.25 0 012.25 2.25V18A2.25 2.25 0 0118 20.25h-2.25A2.25 2.25 0 0113.5 18v-2.25z" />
@@ -476,7 +476,7 @@ export default async function HomePage() {
             Temukan Rumah Kedua Anda<br className="hidden md:block" /> di <span className="text-terracotta-400">Jimbaran</span>
           </h2>
           <p className="font-body text-sm text-concrete-600 mb-10 max-w-md mx-auto leading-relaxed">
-            120 kamar di 4 lokasi strategis. Harian, mingguan, atau bulanan — kami selalu ada untuk Anda.
+            127 kamar di 4 lokasi strategis. Harian, mingguan, atau bulanan — kami selalu ada untuk Anda.
           </p>
           <div className="flex flex-wrap justify-center gap-4">
             <Link
