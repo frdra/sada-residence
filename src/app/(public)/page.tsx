@@ -117,7 +117,7 @@ export default async function HomePage() {
           {/* Subtitle */}
           <p className="font-body text-sm md:text-base text-concrete-600 max-w-lg mx-auto mb-12 leading-relaxed">
             Hunian harian, mingguan & bulanan di kawasan Jimbaran, Bali.
-            Hangat dalam karakter, simpel dalam desain, penuh kedamaian.
+            Siap huni, fasilitas lengkap, tanpa ribet.
           </p>
 
           {/* CTA buttons */}
