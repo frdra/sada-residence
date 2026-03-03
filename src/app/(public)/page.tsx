@@ -507,55 +507,135 @@ export default async function HomePage() {
               Lokasi
             </p>
             <h2 className="font-display text-3xl md:text-4xl font-light text-charcoal-800 mb-4">
-              Temukan Kami di Jimbaran
+              4 Lokasi Strategis di Jimbaran
             </h2>
-            <p className="font-body text-sm text-charcoal-600">
-              Kuta Selatan, Badung, Bali
+            <p className="font-body text-sm text-charcoal-600 max-w-md mx-auto">
+              Semua properti kami berada di kawasan Jimbaran, Kuta Selatan, Badung, Bali — dekat kampus, pantai, dan pusat kuliner.
             </p>
           </div>
 
-          {/* Main map */}
-          <div className="rounded-2xl overflow-hidden shadow-lg h-80 mb-10 border border-concrete-200">
-            <iframe
-              src="https://maps.google.com/maps?q=-8.797,115.170&z=13&output=embed"
-              className="w-full h-full border-0"
-              loading="lazy"
-              allowFullScreen
-            />
+          {/* Location cover map — SVG illustrated map */}
+          <div className="relative rounded-2xl overflow-hidden border border-concrete-200 shadow-lg bg-gradient-to-br from-sage-50 via-concrete-100 to-terracotta-50">
+            {/* SVG Map illustration */}
+            <svg viewBox="0 0 1200 500" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-auto">
+              {/* Background texture */}
+              <rect width="1200" height="500" fill="#F5F2ED"/>
+
+              {/* Ocean / water area (right side) */}
+              <path d="M850,0 L1200,0 L1200,500 L800,500 C820,450 870,400 850,350 C830,300 880,250 860,200 C840,150 870,100 850,50 Z" fill="#D4E4DB" opacity="0.4"/>
+              <path d="M900,0 L1200,0 L1200,500 L850,500 C870,440 920,380 900,320 C880,260 930,200 910,140 C890,80 920,40 900,0 Z" fill="#B8D4C8" opacity="0.25"/>
+
+              {/* Beach texture */}
+              <path d="M820,500 L870,500 C860,480 840,460 850,440 C860,420 845,400 855,380 C865,360 850,340 860,320 C870,300 855,280 865,260 C875,240 860,220 870,200 C880,180 865,160 875,140 C885,120 870,100 880,80 C890,60 875,40 885,20 L870,0 L820,0 C840,40 830,80 840,120 C850,160 835,200 845,240 C855,280 840,320 850,360 C860,400 845,440 855,480 Z" fill="#E8DED0" opacity="0.5"/>
+
+              {/* Roads */}
+              <line x1="100" y1="250" x2="800" y2="250" stroke="#C8C3BB" strokeWidth="2" strokeDasharray="8 4"/>
+              <line x1="400" y1="50" x2="400" y2="450" stroke="#C8C3BB" strokeWidth="2" strokeDasharray="8 4"/>
+              <line x1="200" y1="100" x2="700" y2="400" stroke="#C8C3BB" strokeWidth="1.5" strokeDasharray="6 4"/>
+              <line x1="150" y1="400" x2="750" y2="100" stroke="#C8C3BB" strokeWidth="1.5" strokeDasharray="6 4"/>
+
+              {/* Road label */}
+              <text x="420" y="240" fontFamily="sans-serif" fontSize="9" fill="#C8C3BB" opacity="0.7">Jl. Raya Jimbaran</text>
+
+              {/* Area labels */}
+              <text x="870" y="250" fontFamily="sans-serif" fontSize="11" fill="#7A8B6F" opacity="0.5" fontWeight="300" letterSpacing="3">PANTAI</text>
+              <text x="870" y="268" fontFamily="sans-serif" fontSize="11" fill="#7A8B6F" opacity="0.5" fontWeight="300" letterSpacing="3">JIMBARAN</text>
+
+              {/* Landmark: Universitas Udayana */}
+              <rect x="520" y="115" width="80" height="30" rx="4" fill="#E8E4DE" stroke="#C8C3BB" strokeWidth="0.5"/>
+              <text x="560" y="134" textAnchor="middle" fontFamily="sans-serif" fontSize="7" fill="#999">Univ. Udayana</text>
+
+              {/* ═══ PROPERTY PINS ═══ */}
+
+              {/* Pin 1: Persada */}
+              <g transform="translate(200, 200)">
+                <circle cx="0" cy="0" r="28" fill="#A0695A" opacity="0.1"/>
+                <circle cx="0" cy="0" r="18" fill="#A0695A" opacity="0.15"/>
+                <circle cx="0" cy="0" r="8" fill="#A0695A"/>
+                <circle cx="0" cy="0" r="3" fill="white"/>
+                <rect x="-52" y="18" width="104" height="44" rx="8" fill="white" stroke="#A0695A" strokeWidth="1" filter="url(#shadow)"/>
+                <text x="0" y="33" textAnchor="middle" fontFamily="sans-serif" fontSize="10" fontWeight="600" fill="#2C2C2C">Persada</text>
+                <text x="0" y="46" textAnchor="middle" fontFamily="sans-serif" fontSize="8" fill="#A0695A">30 Kamar · 20m²</text>
+                <text x="0" y="56" textAnchor="middle" fontFamily="sans-serif" fontSize="7" fill="#999">Jimbaran Pusat</text>
+              </g>
+
+              {/* Pin 2: Udayana */}
+              <g transform="translate(560, 160)">
+                <circle cx="0" cy="0" r="28" fill="#2C2C2C" opacity="0.08"/>
+                <circle cx="0" cy="0" r="18" fill="#2C2C2C" opacity="0.12"/>
+                <circle cx="0" cy="0" r="8" fill="#2C2C2C"/>
+                <circle cx="0" cy="0" r="3" fill="white"/>
+                <rect x="-52" y="18" width="104" height="44" rx="8" fill="white" stroke="#2C2C2C" strokeWidth="1" filter="url(#shadow)"/>
+                <text x="0" y="33" textAnchor="middle" fontFamily="sans-serif" fontSize="10" fontWeight="600" fill="#2C2C2C">Udayana</text>
+                <text x="0" y="46" textAnchor="middle" fontFamily="sans-serif" fontSize="8" fill="#2C2C2C">34 Kamar · 21m²</text>
+                <text x="0" y="56" textAnchor="middle" fontFamily="sans-serif" fontSize="7" fill="#999">Dekat Kampus</text>
+              </g>
+
+              {/* Pin 3: Taman Griya */}
+              <g transform="translate(680, 320)">
+                <circle cx="0" cy="0" r="28" fill="#7A8B6F" opacity="0.1"/>
+                <circle cx="0" cy="0" r="18" fill="#7A8B6F" opacity="0.15"/>
+                <circle cx="0" cy="0" r="8" fill="#7A8B6F"/>
+                <circle cx="0" cy="0" r="3" fill="white"/>
+                <rect x="-56" y="18" width="112" height="44" rx="8" fill="white" stroke="#7A8B6F" strokeWidth="1" filter="url(#shadow)"/>
+                <text x="0" y="33" textAnchor="middle" fontFamily="sans-serif" fontSize="10" fontWeight="600" fill="#2C2C2C">Taman Griya</text>
+                <text x="0" y="46" textAnchor="middle" fontFamily="sans-serif" fontSize="8" fill="#7A8B6F">39 Kamar · 21m²</text>
+                <text x="0" y="56" textAnchor="middle" fontFamily="sans-serif" fontSize="7" fill="#999">Suasana Asri</text>
+              </g>
+
+              {/* Pin 4: Goa Gong */}
+              <g transform="translate(420, 350)">
+                <circle cx="0" cy="0" r="28" fill="#B8976A" opacity="0.1"/>
+                <circle cx="0" cy="0" r="18" fill="#B8976A" opacity="0.15"/>
+                <circle cx="0" cy="0" r="8" fill="#B8976A"/>
+                <circle cx="0" cy="0" r="3" fill="white"/>
+                <rect x="-52" y="18" width="104" height="44" rx="8" fill="white" stroke="#B8976A" strokeWidth="1" filter="url(#shadow)"/>
+                <text x="0" y="33" textAnchor="middle" fontFamily="sans-serif" fontSize="10" fontWeight="600" fill="#2C2C2C">Goa Gong</text>
+                <text x="0" y="46" textAnchor="middle" fontFamily="sans-serif" fontSize="8" fill="#B8976A">24 Kamar · 23m²</text>
+                <text x="0" y="56" textAnchor="middle" fontFamily="sans-serif" fontSize="7" fill="#999">Dekat Pantai</text>
+              </g>
+
+              {/* Area label: Jimbaran */}
+              <text x="350" y="470" fontFamily="sans-serif" fontSize="14" fill="#C8C3BB" opacity="0.6" fontWeight="300" letterSpacing="8">JIMBARAN · BALI</text>
+
+              {/* Shadow filter */}
+              <defs>
+                <filter id="shadow" x="-10%" y="-10%" width="120%" height="130%">
+                  <feDropShadow dx="0" dy="2" stdDeviation="4" floodOpacity="0.08"/>
+                </filter>
+              </defs>
+            </svg>
           </div>
 
-          {/* Property location cards */}
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          {/* Property links below the map */}
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-8">
             {[
-              { name: "Persada", slug: "persada", lat: -8.80276, lng: 115.149165 },
-              { name: "Udayana", slug: "udayana", lat: -8.7966184617018, lng: 115.18042708327252 },
-              { name: "Taman Griya", slug: "taman-griya", lat: -8.789160596129149, lng: 115.19042491449446 },
-              { name: "Goa Gong", slug: "goa-gong", lat: -8.801822363020166, lng: 115.17251562251298 },
+              { name: "Persada", rooms: 30, size: "20m²", accent: "Jimbaran Pusat", color: "border-terracotta-300 hover:border-terracotta-500", textColor: "text-terracotta-500", lat: -8.80276, lng: 115.149165 },
+              { name: "Udayana", rooms: 34, size: "21m²", accent: "Dekat Kampus", color: "border-charcoal-300 hover:border-charcoal-500", textColor: "text-charcoal-600", lat: -8.7966184617018, lng: 115.18042708327252 },
+              { name: "Taman Griya", rooms: 39, size: "21m²", accent: "Suasana Asri", color: "border-sage-300 hover:border-sage-500", textColor: "text-sage-600", lat: -8.789160596129149, lng: 115.19042491449446 },
+              { name: "Goa Gong", rooms: 24, size: "23m²", accent: "Dekat Pantai", color: "border-gold-300 hover:border-gold-500", textColor: "text-gold-600", lat: -8.801822363020166, lng: 115.17251562251298 },
             ].map((loc) => (
-              <div key={loc.slug} className="bg-white rounded-2xl overflow-hidden border border-concrete-200 hover:shadow-lg transition-all duration-300">
-                <div className="h-36 relative">
-                  <iframe
-                    src={encodeURI(`https://maps.google.com/maps?q=${loc.lat},${loc.lng}&z=16&output=embed`)}
-                    className="absolute inset-0 w-full h-full border-0"
-                    loading="lazy"
-                    allowFullScreen
-                  />
+              <a
+                key={loc.name}
+                href={`https://www.google.com/maps?q=${loc.lat},${loc.lng}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={`bg-white rounded-xl p-5 border-2 ${loc.color} transition-all duration-300 hover:shadow-md group`}
+              >
+                <h3 className="font-display text-sm font-medium text-charcoal-800 mb-1">Sada Residence {loc.name}</h3>
+                <p className={`font-body text-xs ${loc.textColor} font-medium mb-2`}>{loc.accent}</p>
+                <p className="font-body text-xs text-concrete-600">{loc.rooms} Kamar · {loc.size}</p>
+                <div className="mt-3 flex items-center gap-1 font-body text-xs text-terracotta-500 group-hover:text-terracotta-700 font-medium transition-colors">
+                  <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.5">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" />
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" />
+                  </svg>
+                  Lihat di Google Maps
+                  <svg className="w-3 h-3 transition-transform group-hover:translate-x-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" />
+                  </svg>
                 </div>
-                <div className="p-4 text-center">
-                  <h3 className="font-display text-sm font-normal text-charcoal-800 mb-1.5">Sada Residence {loc.name}</h3>
-                  <a
-                    href={`https://www.google.com/maps?q=${loc.lat},${loc.lng}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="font-body text-xs text-terracotta-500 hover:text-terracotta-700 font-medium transition-colors inline-flex items-center gap-1"
-                  >
-                    Buka di Maps
-                    <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" />
-                    </svg>
-                  </a>
-                </div>
-              </div>
+              </a>
             ))}
           </div>
         </div>
