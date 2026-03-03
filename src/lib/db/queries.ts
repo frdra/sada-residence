@@ -19,7 +19,29 @@ export async function getProperties(): Promise<Property[]> {
     .select("*")
     .order("sort_order");
   if (error) throw new Error(error.message);
-  return data ?? [];
+
+  // Count actual active rooms per property (more reliable than total_rooms column)
+  const properties = data ?? [];
+  if (properties.length > 0) {
+    const { data: roomCounts } = await supabase
+      .from("rooms")
+      .select("property_id")
+      .eq("is_active", true);
+
+    if (roomCounts) {
+      const countMap: Record<string, number> = {};
+      roomCounts.forEach((r: { property_id: string }) => {
+        countMap[r.property_id] = (countMap[r.property_id] || 0) + 1;
+      });
+      properties.forEach((p: any) => {
+        if (countMap[p.id] !== undefined) {
+          p.total_rooms = countMap[p.id];
+        }
+      });
+    }
+  }
+
+  return properties;
 }
 
 export async function getPropertyBySlug(slug: string): Promise<Property | null> {

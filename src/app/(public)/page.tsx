@@ -57,6 +57,8 @@ export default async function HomePage() {
         lng: PROPERTY_COORDS[p.slug as keyof typeof PROPERTY_COORDS]?.lng,
       }));
 
+  const totalRooms = displayProperties.reduce((sum: number, p: any) => sum + (p.total_rooms || 0), 0);
+
   return (
     <>
       {/* ══════════════════════════════════════════════
@@ -140,7 +142,7 @@ export default async function HomePage() {
           {/* Key highlights */}
           <div className="mt-20 flex justify-center gap-12">
             {[
-              { name: "127 Kamar" },
+              { name: `${totalRooms} Kamar` },
               { name: "4 Lokasi" },
               { name: "Jimbaran, Bali" },
             ].map((item) => (
@@ -330,7 +332,7 @@ export default async function HomePage() {
           {/* Total rooms badge */}
           <div className="mt-10 text-center">
             <span className="inline-flex items-center gap-3 font-body text-sm text-charcoal-600 bg-white px-6 py-3 rounded-full border border-concrete-200 shadow-sm">
-              <span className="font-display text-2xl font-light text-terracotta-500">127</span>
+              <span className="font-display text-2xl font-light text-terracotta-500">{totalRooms}</span>
               total kamar di 4 lokasi
             </span>
           </div>
@@ -470,7 +472,7 @@ export default async function HomePage() {
             Temukan Rumah Kedua Anda<br className="hidden md:block" /> di <span className="text-terracotta-400">Jimbaran</span>
           </h2>
           <p className="font-body text-sm text-concrete-600 mb-10 max-w-md mx-auto leading-relaxed">
-            127 kamar di 4 lokasi strategis. Harian, mingguan, atau bulanan — kami selalu ada untuk Anda.
+            {totalRooms} kamar di 4 lokasi strategis. Harian, mingguan, atau bulanan — kami selalu ada untuk Anda.
           </p>
           <div className="flex flex-wrap justify-center gap-4">
             <Link
